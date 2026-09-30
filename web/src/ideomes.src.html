@@ -721,6 +721,13 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
           <button class="btn secondary small" id="logout" type="button">Changer de compte</button>
           <button class="linkbtn" id="replayTour" type="button">Revoir le guide</button>
       <button class="linkbtn" id="menuAdmin" type="button">Espace administrateur</button>
+          <button class="linkbtn" id="menuSetPw" type="button">Définir un mot de passe</button>
+          <form id="setPwForm" hidden novalidate>
+            <div class="field"><label for="newPw">Nouveau mot de passe <span class="hint">(8 caractères min.)</span></label><input type="password" id="newPw" autocomplete="new-password" maxlength="100"></div>
+            <div class="field"><label for="newPw2">Confirmer</label><input type="password" id="newPw2" autocomplete="new-password" maxlength="100"></div>
+            <div id="setPwMsg" class="msg err" hidden></div>
+            <button class="btn primary small" type="submit">Enregistrer</button>
+          </form>
           <button class="linkbtn" data-policy type="button">Vos données personnelles</button>
         </div>
       </div>
@@ -1064,9 +1071,11 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
     <p class="lead" id="loginLead">Connectez-vous par e-mail pour envoyer une idée. Un lien de connexion à usage unique vous sera envoyé, sans mot de passe.</p>
     <form id="loginForm" novalidate>
       <div class="field"><label for="loginMail">Adresse e-mail</label><input type="text" id="loginMail" inputmode="email" autocomplete="email" maxlength="120" placeholder="nom@exemple.com"></div>
+      <div class="field" id="fPw" hidden><label for="loginPw">Mot de passe</label><input type="password" id="loginPw" autocomplete="current-password" maxlength="100"></div>
       <div id="loginMsg" class="msg err" hidden></div>
-      <button class="btn primary wide" type="submit">Recevoir un lien de connexion</button>
+      <button class="btn primary wide" type="submit" id="loginGo">Recevoir un lien de connexion</button>
     </form>
+    <button class="linkbtn" id="togglePw" type="button">J’ai déjà un mot de passe</button>
     <div class="or">ou</div>
     <button class="btn secondary wide" id="guest" type="button">Continuer la navigation</button>
     <p class="fine">Le lien reçu par e-mail vous connecte automatiquement, sans mot de passe. En continuant, vous acceptez les <button class="linkbtn" type="button" data-cgu-login>conditions d’utilisation</button>. <button class="linkbtn" type="button" data-policy>Vos données personnelles</button></p>
@@ -1262,22 +1271,39 @@ let claudeMe = null, isOwner = false;
 function loggedIn(){ return !!(claudeMe && claudeMe.id); }
 function afterSplash(){ maybeTour(); }
 function showLogin(){ $("login").hidden = false; $("loginMsg").hidden = true; setTimeout(()=>$("loginMail").focus(), 60); }
+let pwMode = false;
+$("togglePw").addEventListener("click", ()=>{
+  pwMode = !pwMode;
+  $("fPw").hidden = !pwMode;
+  $("loginGo").textContent = pwMode ? "Se connecter" : "Recevoir un lien de connexion";
+  $("togglePw").textContent = pwMode ? "Recevoir un lien par e-mail à la place" : "J’ai déjà un mot de passe";
+  $("loginMsg").hidden = true;
+});
 $("loginForm").addEventListener("submit", async e=>{
   e.preventDefault();
   const m = $("loginMsg"); m.className = "msg err"; m.hidden = true;
   const v = $("loginMail").value.trim();
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)){ m.textContent = "Cette adresse e-mail ne semble pas complète. Exemple : nom@gmail.com"; m.hidden = false; return; }
-  const btn = e.target.querySelector("button[type=submit]"); btn.disabled = true;
+  if(pwMode && !$("loginPw").value){ m.textContent = "Entrez votre mot de passe."; m.hidden = false; return; }
+  const btn = $("loginGo"); btn.disabled = true;
   try{
     const auth = window.claude && window.claude.auth;
     if(!auth) throw new Error("no-auth");
-    const { error } = await auth.signInWithOtp({ email: v.toLowerCase(), options: { emailRedirectTo: location.origin + location.pathname } });
-    if(error) throw error;
-    m.className = "msg ok"; m.textContent = "Vérifiez votre boîte mail : cliquez sur le lien reçu pour vous connecter."; m.hidden = false;
+    if(pwMode){
+      const { error } = await auth.signInWithPassword({ email: v.toLowerCase(), password: $("loginPw").value });
+      if(error) throw error;
+      $("loginPw").value = ""; $("login").hidden = true;
+    }else{
+      const { error } = await auth.signInWithOtp({ email: v.toLowerCase(), options: { emailRedirectTo: location.origin + location.pathname } });
+      if(error) throw error;
+      m.className = "msg ok"; m.textContent = "Vérifiez votre boîte mail : cliquez sur le lien reçu pour vous connecter."; m.hidden = false;
+    }
   }catch(err){
-    m.textContent = err && (err.status===429 || err.code==="over_email_send_rate_limit")
-      ? "Trop de tentatives. Réessayez dans quelques minutes."
-      : "L’envoi a échoué. Vérifiez l’adresse et réessayez.";
+    m.textContent = pwMode
+      ? "E-mail ou mot de passe incorrect."
+      : err && (err.status===429 || err.code==="over_email_send_rate_limit")
+        ? "Trop de tentatives. Réessayez dans quelques minutes."
+        : "L’envoi a échoué. Vérifiez l’adresse et réessayez.";
     m.hidden = false;
   }
   finally{ btn.disabled = false; }
@@ -1845,6 +1871,23 @@ addEventListener("resize", ()=>{ if(!$("tour").hidden) tourPlace(); });
 addEventListener("scroll", ()=>{ if(!$("tour").hidden) tourPlace(); }, {passive:true});
 document.addEventListener("keydown", e=>{ if(!$("tour").hidden && e.key==="Escape") endTour(); });
 $("menuAdmin").addEventListener("click", ()=>{ $("acctMenu").hidden = true; showLogin(); });
+$("menuSetPw").addEventListener("click", ()=>{ $("setPwForm").hidden = !$("setPwForm").hidden; $("setPwMsg").hidden = true; });
+$("setPwForm").addEventListener("submit", async e=>{
+  e.preventDefault();
+  const m = $("setPwMsg"); m.className = "msg err"; m.hidden = true;
+  const pw = $("newPw").value, pw2 = $("newPw2").value;
+  if(pw.length < 8){ m.textContent = "8 caractères minimum."; m.hidden = false; return; }
+  if(pw !== pw2){ m.textContent = "Les deux mots de passe ne sont pas identiques."; m.hidden = false; return; }
+  const btn = e.target.querySelector("button[type=submit]"); btn.disabled = true;
+  try{
+    const auth = window.claude && window.claude.auth;
+    const { error } = await auth.updateUser({ password: pw });
+    if(error) throw error;
+    m.className = "msg ok"; m.textContent = "Mot de passe enregistré. Vous pourrez l’utiliser à votre prochaine connexion.";
+    m.hidden = false; $("newPw").value = ""; $("newPw2").value = "";
+  }catch(_){ m.textContent = "L’enregistrement a échoué. Réessayez."; m.hidden = false; }
+  finally{ btn.disabled = false; }
+});
 $("replayTour").addEventListener("click", ()=>{ $("acctMenu").hidden = true; startTour(); });
 
 /* ---------- Construction du formulaire ---------- */
