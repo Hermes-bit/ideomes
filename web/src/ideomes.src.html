@@ -1810,7 +1810,7 @@ function renderCnx(){
   $("cnx-list").innerHTML = recent.length ? recent.map(c=>{
     const p = people[c.uid];
     const when = c.last ? new Date(c.last).toLocaleString("fr-FR",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}) : "";
-    return `<div class="cnx">${p?`<img src="${esc(p.avatarUrl)}" alt="">`:`<span class="ph"></span>`}<div style="min-width:0"><div class="nm">${esc(c.valeur || (p&&p.name) || "Sans compte")}</div><div class="sub">${c.count||0} connexion${(c.count||0)>1?"s":""} · ${esc(when)}</div></div><span class="tag">${esc(TYPE_LBL[c.type]||"")}</span></div>`;
+    return `<div class="cnx">${p&&p.avatarUrl?`<img src="${esc(p.avatarUrl)}" alt="">`:`<span class="ph"></span>`}<div style="min-width:0"><div class="nm">${esc(c.valeur || (p&&p.name) || "Sans compte")}</div><div class="sub">${c.count||0} connexion${(c.count||0)>1?"s":""} · ${esc(when)}</div></div><span class="tag">${esc(TYPE_LBL[c.type]||"")}</span></div>`;
   }).join("") : `<p class="hint" style="margin:0">Aucune connexion pour l’instant.</p>`;
 }
 
@@ -2014,7 +2014,7 @@ function card(d, priv){
   const date = d.createdAt ? new Date(d.createdAt).toLocaleDateString("fr-FR",{day:"numeric",month:"short"}) : "";
   return `<article class="card${priv&&isAdmin?" open":""}" data-uid="${esc(d.uid||"")}" data-id="${esc(d.id||"")}"${priv&&isAdmin?' tabindex="0" role="button" aria-label="Voir le détail de cette idée"':""}>
     ${priv&&isAdmin&&d.id?`<button class="del" type="button" data-del aria-label="Supprimer cette idée"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button>`:""}
-    <div class="who">${p?`<img src="${esc(p.avatarUrl)}" alt="">`:""}<span>${esc((d.identite&&d.identite.valeur) || (d.identite&&d.identite.type==="invite" ? "Sans compte" : "") || (p&&p.name) || "Participant")}</span></div>
+    <div class="who">${p&&p.avatarUrl?`<img src="${esc(p.avatarUrl)}" alt="">`:""}<span>${esc((d.identite&&d.identite.valeur) || (d.identite&&d.identite.type==="invite" ? "Sans compte" : "") || (p&&p.name) || "Participant")}</span></div>
     <div class="meta"><span class="pill dom">${esc(d.domaine)}</span>
       ${d.importance>=4?`<span class="pill hot">${esc(IMP[d.importance-1])}</span>`:""}
       ${d.ville?`<span class="pill">${esc(d.ville)}</span>`:""}
