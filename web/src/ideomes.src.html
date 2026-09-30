@@ -1068,14 +1068,17 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
     <div class="login-logo"><img class="" src="data:image/png;base64,__IDEO__" alt="Logo Idéomès"></div>
     <h2 id="loginTitle">Bienvenue sur <span>Idéomès</span></h2>
     <div id="userLogin" style="display:flex;flex-direction:column;gap:16px">
-    <p class="lead" id="loginLead">Connectez-vous par e-mail pour envoyer une idée. Un lien de connexion à usage unique vous sera envoyé, sans mot de passe.</p>
+    <p class="lead" id="loginLead">Connectez-vous par e-mail pour envoyer une idée.</p>
+    <div class="seg" id="loginModeSeg">
+      <button type="button" data-mode="magic" aria-pressed="true">Lien magique</button>
+      <button type="button" data-mode="password" aria-pressed="false">Mot de passe</button>
+    </div>
     <form id="loginForm" novalidate>
       <div class="field"><label for="loginMail">Adresse e-mail</label><input type="text" id="loginMail" inputmode="email" autocomplete="email" maxlength="120" placeholder="nom@exemple.com"></div>
       <div class="field" id="fPw" hidden><label for="loginPw">Mot de passe</label><input type="password" id="loginPw" autocomplete="current-password" maxlength="100"></div>
       <div id="loginMsg" class="msg err" hidden></div>
       <button class="btn primary wide" type="submit" id="loginGo">Recevoir un lien de connexion</button>
     </form>
-    <button class="btn secondary wide" id="togglePw" type="button">Se connecter avec un mot de passe</button>
     <div class="or">ou</div>
     <button class="btn secondary wide" id="guest" type="button">Continuer la navigation</button>
     <p class="fine">Le lien reçu par e-mail vous connecte automatiquement, sans mot de passe. En continuant, vous acceptez les <button class="linkbtn" type="button" data-cgu-login>conditions d’utilisation</button>. <button class="linkbtn" type="button" data-policy>Vos données personnelles</button></p>
@@ -1272,13 +1275,13 @@ function loggedIn(){ return !!(claudeMe && claudeMe.id); }
 function afterSplash(){ maybeTour(); }
 function showLogin(){ $("login").hidden = false; $("loginMsg").hidden = true; setTimeout(()=>$("loginMail").focus(), 60); }
 let pwMode = false;
-$("togglePw").addEventListener("click", ()=>{
-  pwMode = !pwMode;
+document.querySelectorAll("#loginModeSeg button").forEach(b=>b.addEventListener("click", ()=>{
+  pwMode = b.dataset.mode==="password";
+  document.querySelectorAll("#loginModeSeg button").forEach(x=>x.setAttribute("aria-pressed", String(x===b)));
   $("fPw").hidden = !pwMode;
   $("loginGo").textContent = pwMode ? "Se connecter" : "Recevoir un lien de connexion";
-  $("togglePw").textContent = pwMode ? "Recevoir un lien par e-mail à la place" : "Se connecter avec un mot de passe";
   $("loginMsg").hidden = true;
-});
+}));
 $("loginForm").addEventListener("submit", async e=>{
   e.preventDefault();
   const m = $("loginMsg"); m.className = "msg err"; m.hidden = true;
