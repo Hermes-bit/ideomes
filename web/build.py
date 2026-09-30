@@ -10,11 +10,13 @@ from __future__ import annotations
 
 import base64
 import os
+import shutil
 from pathlib import Path
 
 ICI = Path(__file__).resolve().parent
 SRC, ASSETS, DIST = ICI / "src", ICI / "assets", ICI / "dist"
 SUPABASE_JS_CDN = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+SITE_URL = "https://hermes-bit.github.io/ideomes/"
 
 
 def b64(nom: str) -> str:
@@ -44,15 +46,28 @@ def construire() -> Path:
     i = html.index("<script>")
     html = html[:i] + shim + html[i:]
     if not html.lstrip().lower().startswith("<!doctype"):
+        og_image = SITE_URL + "ideomes-logo.png"
+        og_desc = "Partagez les besoins et les idées qui amélioreraient votre quotidien au Burkina Faso."
         html = (
             '<!doctype html>\n<html lang="fr">\n<head>\n<meta charset="utf-8">\n'
             '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
+            f'<meta property="og:type" content="website">\n'
+            f'<meta property="og:site_name" content="Idéomès">\n'
+            f'<meta property="og:title" content="Idéomès">\n'
+            f'<meta property="og:description" content="{og_desc}">\n'
+            f'<meta property="og:image" content="{og_image}">\n'
+            f'<meta property="og:url" content="{SITE_URL}">\n'
+            f'<meta name="twitter:card" content="summary">\n'
+            f'<meta name="twitter:title" content="Idéomès">\n'
+            f'<meta name="twitter:description" content="{og_desc}">\n'
+            f'<meta name="twitter:image" content="{og_image}">\n'
             + html
             + "\n</html>\n"
         )
     DIST.mkdir(exist_ok=True)
     out = DIST / "index.html"
     out.write_text(html, encoding="utf-8")
+    shutil.copyfile(ASSETS / "ideomes-logo.png", DIST / "ideomes-logo.png")
     return out
 
 
