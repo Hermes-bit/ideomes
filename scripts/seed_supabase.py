@@ -21,11 +21,22 @@ RACINE = Path(__file__).resolve().parents[1]
 BUCKET = "ideomes-public"
 
 
+def _check(r: httpx.Response) -> None:
+    if r.is_error:
+        sys.exit(f"Échec {r.status_code} sur {r.request.url} :\n{r.text}")
+
+
 def main() -> None:
     url = os.environ.get("SUPABASE_URL", "").rstrip("/")
     key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
     if not url or not key:
         sys.exit("SUPABASE_URL et SUPABASE_SERVICE_ROLE_KEY sont requis (variables d'environnement).")
+    if key.startswith("sb_publishable_"):
+        sys.exit(
+            "Ceci est la clé publishable (anon), pas la clé secret. "
+            "Dans Supabase : Project Settings -> API, clé 'secret' (sb_secret_...), "
+            "cliquez sur « Reveal » pour l'afficher."
+        )
 
     headers = {"apikey": key, "Authorization": f"Bearer {key}"}
     with httpx.Client(base_url=url, headers=headers, timeout=120) as h:
@@ -33,36 +44,32 @@ def main() -> None:
         video = RACINE / "web" / "assets" / "ideomes-contexte.mp4"
         poster = RACINE / "web" / "assets" / "ideomes-contexte-poster.jpg"
         video_path, poster_path = "video/contexte.mp4", "video/poster.jpg"
-        r1 = h.post(
+        _check(h.post(
             f"/storage/v1/object/{BUCKET}/{video_path}",
             headers={"Content-Type": "video/mp4", "x-upsert": "true"},
             content=video.read_bytes(),
-        )
-        r1.raise_for_status()
-        r2 = h.post(
+        ))
+        _check(h.post(
             f"/storage/v1/object/{BUCKET}/{poster_path}",
             headers={"Content-Type": "image/jpeg", "x-upsert": "true"},
             content=poster.read_bytes(),
-        )
-        r2.raise_for_status()
+        ))
 
         # 2. config/video
-        r3 = h.post(
+        _check(h.post(
             "/rest/v1/documents",
             headers={"Prefer": "resolution=merge-duplicates"},
             json={"collection": "config", "doc_id": "video", "data": {"assetId": video_path, "posterId": poster_path, "lien": ""}},
-        )
-        r3.raise_for_status()
+        ))
 
         # 3. actus/<id> depuis scripts/seed/actus.json
         actus = json.loads((RACINE / "scripts" / "seed" / "actus.json").read_text(encoding="utf-8"))
         for doc_id, data in actus.items():
-            r = h.post(
+            _check(h.post(
                 "/rest/v1/documents",
                 headers={"Prefer": "resolution=merge-duplicates"},
                 json={"collection": "actus", "doc_id": doc_id, "data": data},
-            )
-            r.raise_for_status()
+            ))
 
     print(f"OK : vidéo + affiche téléversées, {len(actus)} actualités écrites.")
 
