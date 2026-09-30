@@ -1,0 +1,27 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "API Idéomès (uvicorn, rechargement auto)",
+      "type": "debugpy", "request": "launch", "module": "uvicorn",
+      "args": ["app.main:app", "--reload", "--port", "8000"],
+      "cwd": "${workspaceFolder}/api", "envFile": "${workspaceFolder}/.env",
+      "preLaunchTask": "Construire l'appli web", "justMyCode": false
+    },
+    {
+      "name": "Agents : démo complète (Zeus)",
+      "type": "debugpy", "request": "launch", "module": "ideomes_agents.cli", "args": ["demo"],
+      "cwd": "${workspaceFolder}/agents", "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "name": "Hermès : veille des actualités",
+      "type": "debugpy", "request": "launch", "module": "ideomes_agents.cli", "args": ["veille"],
+      "cwd": "${workspaceFolder}/agents", "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "name": "Évaluation des agents",
+      "type": "debugpy", "request": "launch", "module": "ideomes_agents.cli", "args": ["eval"],
+      "cwd": "${workspaceFolder}/agents", "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}

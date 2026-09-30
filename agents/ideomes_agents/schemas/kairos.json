@@ -1,0 +1,124 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "criteres",
+    "justification",
+    "confiance"
+  ],
+  "properties": {
+    "criteres": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "impact",
+        "beneficiaires",
+        "urgence",
+        "faisabilite",
+        "alignement"
+      ],
+      "properties": {
+        "impact": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "note",
+            "justification"
+          ],
+          "properties": {
+            "note": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 5
+            },
+            "justification": {
+              "type": "string"
+            }
+          }
+        },
+        "beneficiaires": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "note",
+            "justification"
+          ],
+          "properties": {
+            "note": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 5
+            },
+            "justification": {
+              "type": "string"
+            }
+          }
+        },
+        "urgence": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "note",
+            "justification"
+          ],
+          "properties": {
+            "note": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 5
+            },
+            "justification": {
+              "type": "string"
+            }
+          }
+        },
+        "faisabilite": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "note",
+            "justification"
+          ],
+          "properties": {
+            "note": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 5
+            },
+            "justification": {
+              "type": "string"
+            }
+          }
+        },
+        "alignement": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "note",
+            "justification"
+          ],
+          "properties": {
+            "note": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 5
+            },
+            "justification": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "justification": {
+      "type": "string",
+      "description": "Justification en langage clair, 1 à 2 phrases, lisible par un citoyen."
+    },
+    "confiance": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Confiance de 0 à 1. Sous 0,7 : revue humaine."
+    }
+  }
+}

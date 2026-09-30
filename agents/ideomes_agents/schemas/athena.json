@@ -1,0 +1,105 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "resume",
+    "categorie",
+    "besoin_reel",
+    "dit_explicitement",
+    "deduit",
+    "causes",
+    "consequences",
+    "acteurs",
+    "niveau_competence",
+    "hors_competence",
+    "confiance"
+  ],
+  "properties": {
+    "resume": {
+      "type": "string",
+      "description": "2 phrases maximum."
+    },
+    "categorie": {
+      "type": "string",
+      "enum": [
+        "Santé",
+        "Éducation",
+        "Agriculture & élevage",
+        "Commerce & argent",
+        "Transport",
+        "Papiers & administration",
+        "Eau & électricité",
+        "Emploi & formation",
+        "Sécurité",
+        "Logement",
+        "Culture & loisirs",
+        "Autre"
+      ]
+    },
+    "besoin_reel": {
+      "type": "string"
+    },
+    "dit_explicitement": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "deduit": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Ce qui est déduit, jamais présenté comme dit."
+    },
+    "causes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "consequences": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "acteurs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "niveau_competence": {
+      "type": "string",
+      "enum": [
+        "commune",
+        "province",
+        "region",
+        "etat",
+        "prive",
+        "inconnu"
+      ]
+    },
+    "hors_competence": {
+      "type": "boolean",
+      "description": "Vrai si la compétence n'appartient pas à la collectivité cliente."
+    },
+    "question_au_contributeur": {
+      "type": "string",
+      "description": "Si ambigu : la question à poser."
+    },
+    "alertes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "confiance": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Confiance de 0 à 1. Sous 0,7 : revue humaine."
+    }
+  }
+}

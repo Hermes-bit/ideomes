@@ -1,0 +1,97 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "pistes",
+    "confiance"
+  ],
+  "properties": {
+    "pistes": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "titre",
+          "description",
+          "cout_estime",
+          "delai",
+          "acteurs",
+          "risques",
+          "faible_cout",
+          "sources"
+        ],
+        "properties": {
+          "titre": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "cout_estime": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "min_fcfa",
+              "max_fcfa",
+              "estime"
+            ],
+            "properties": {
+              "min_fcfa": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "max_fcfa": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "estime": {
+                "type": "boolean",
+                "description": "Toujours vrai sauf chiffre sourcé."
+              }
+            }
+          },
+          "delai": {
+            "type": "string"
+          },
+          "acteurs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "exemples_ailleurs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "risques": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "faible_cout": {
+            "type": "boolean"
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Sources citées, ou 'estimation interne'."
+          }
+        }
+      }
+    },
+    "confiance": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Confiance de 0 à 1. Sous 0,7 : revue humaine."
+    }
+  }
+}

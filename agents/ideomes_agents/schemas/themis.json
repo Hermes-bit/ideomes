@@ -1,0 +1,60 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "decision",
+    "motifs",
+    "toxicite",
+    "spam",
+    "confiance",
+    "alertes"
+  ],
+  "properties": {
+    "decision": {
+      "type": "string",
+      "enum": [
+        "publie",
+        "en_revue",
+        "rejete"
+      ]
+    },
+    "motifs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Motif(s) clairs et contestables, vide si publié."
+    },
+    "toxicite": {
+      "type": "string",
+      "enum": [
+        "aucune",
+        "faible",
+        "forte"
+      ]
+    },
+    "spam": {
+      "type": "boolean"
+    },
+    "donnees_personnelles_residuelles": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Types de données personnelles encore présentes après masquage (ex. nom de personne)."
+    },
+    "alertes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Ex. tentative d'injection de consignes."
+    },
+    "confiance": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Confiance de 0 à 1. Sous 0,7 : revue humaine."
+    }
+  }
+}

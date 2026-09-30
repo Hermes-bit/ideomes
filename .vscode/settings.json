@@ -1,0 +1,12 @@
+{
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+  "python.analysis.extraPaths": ["./agents", "./api"],
+  "python.testing.pytestEnabled": true,
+  "python.testing.pytestArgs": ["agents/tests", "api/tests"],
+  "python.envFile": "${workspaceFolder}/.env",
+  "editor.formatOnSave": true,
+  "[python]": { "editor.defaultFormatter": "charliermarsh.ruff", "editor.rulers": [120] },
+  "files.associations": { "*.src.html": "html" },
+  "files.exclude": { "**/__pycache__": true, "**/.pytest_cache": true, "**/*.egg-info": true },
+  "search.exclude": { "web/dist": true, "web/assets/bf-limites.json": true, "agents/ideomes_agents/data": true }
+}

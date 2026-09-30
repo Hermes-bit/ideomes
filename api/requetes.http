@@ -1,0 +1,24 @@
+### Requêtes de test (extension REST Client de VS Code)
+@api = http://localhost:8000
+@proprio = owner
+
+GET {{api}}/api/sante
+
+### Dossiers traités par les agents
+GET {{api}}/api/dossiers
+X-Dev-User: {{proprio}}
+
+### Détail d'un dossier (remplacez l'id)
+GET {{api}}/api/dossiers/ID_IDEE
+X-Dev-User: {{proprio}}
+
+### Décision du comité
+POST {{api}}/api/dossiers/ID_IDEE/decision
+X-Dev-User: {{proprio}}
+Content-Type: application/json
+
+{ "point": "comite", "decision": "valide", "commentaire": "Commencer par la piste à faible coût", "piste_retenue": 0 }
+
+### Hélios : synthèse pour les décideurs
+GET {{api}}/api/synthese
+X-Dev-User: {{proprio}}

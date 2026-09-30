@@ -1,0 +1,89 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "objectifs_atteints",
+    "beneficiaires",
+    "cout_reel_fcfa",
+    "satisfaction",
+    "enseignements",
+    "mesure_vs_estime"
+  ],
+  "properties": {
+    "objectifs_atteints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "objectif",
+          "atteint",
+          "preuve"
+        ],
+        "properties": {
+          "objectif": {
+            "type": "string"
+          },
+          "atteint": {
+            "type": "string",
+            "enum": [
+              "oui",
+              "partiel",
+              "non",
+              "inconnu"
+            ]
+          },
+          "preuve": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "beneficiaires": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "nombre",
+        "nature"
+      ],
+      "properties": {
+        "nombre": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "nature": {
+          "type": "string",
+          "enum": [
+            "mesure",
+            "estime",
+            "inconnu"
+          ]
+        }
+      }
+    },
+    "cout_reel_fcfa": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "satisfaction": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "enseignements": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "mesure_vs_estime": {
+      "type": "string",
+      "description": "Ce qui est mesuré et ce qui est estimé, en clair."
+    }
+  }
+}

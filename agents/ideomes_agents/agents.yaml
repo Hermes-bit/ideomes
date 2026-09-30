@@ -1,0 +1,142 @@
+# Registre des agents Idéomès
+# Les noms se changent ici et nulle part ailleurs.
+# modele : "fort" (analyse, génération) ou "leger" (tâches simples), voir .env
+# seuil_confiance : en dessous, le dossier part en revue humaine.
+
+orchestrateur:
+  id: ZEUS
+  nom: Zeus
+  role: Orchestrateur
+  mission: Reçoit chaque dossier, décide quel agent appeler, lance les agents en parallèle quand c'est possible, gère les erreurs et les relances (2 au maximum), journalise chaque étape.
+
+auditeur:
+  id: APOLLON
+  nom: Apollon
+  role: Auditeur qualité
+  mission: Contrôle en continu un échantillon de 5 à 10 % des sorties (erreurs factuelles, biais, cohérence entre agents, représentativité territoriale). Rapport mensuel au comité, alerte immédiate sous seuil.
+  modele: fort
+  echantillon: 0.08
+
+veille:
+  id: HERMES
+  nom: Hermès
+  role: Veille des actualités
+  mission: Cherche chaque matin les avancées récentes au Burkina Faso, vérifie chaque chiffre dans l'article d'origine et propose des actualités à l'administrateur. Ne publie jamais seul.
+  modele: fort
+
+agents:
+  - id: A1
+    nom: Déméter
+    role: Collecteur multicanal
+    couche: entree
+    modele: leger
+    llm: false          # structuration déterministe ; transcription et OCR à brancher
+    seuil_confiance: null
+    mission: Recevoir les contributions sur tous les canaux et les transformer en dossier structuré, sans les interpréter.
+    kpi: "Contributions complètes >= 95 % ; accusé de réception < 1 min"
+
+  - id: A2
+    nom: Thémis
+    role: Modération & Conformité
+    couche: entree
+    modele: leger
+    llm: true
+    seuil_confiance: 0.7
+    mission: Protéger les personnes et la plateforme avant toute analyse (données personnelles masquées, toxicité, spam).
+    kpi: "Faux rejets < 2 % ; 100 % des données personnelles masquées"
+
+  - id: A3
+    nom: Athéna
+    role: Analyste des besoins
+    couche: analyse
+    modele: fort
+    llm: true
+    seuil_confiance: 0.7
+    mission: Comprendre ce que la personne demande vraiment.
+    kpi: "Accord avec un analyste humain >= 85 %"
+
+  - id: A4
+    nom: Hestia
+    role: Regroupeur intelligent
+    couche: analyse
+    modele: null
+    llm: false          # similarité vectorielle
+    seuil_similarite: 0.78
+    mission: Repérer les idées similaires pour donner du poids aux demandes partagées. Propose, ne fusionne jamais seul.
+    kpi: "Précision des regroupements >= 90 % ; doublons résiduels < 5 %"
+
+  - id: A5
+    nom: Gaïa
+    role: Analyste territorial
+    couche: analyse
+    modele: null
+    llm: false          # géocodage sur les limites administratives
+    mission: Situer l'idée et la croiser avec les données du territoire.
+    kpi: "Géocodage correct >= 95 %"
+
+  - id: A6
+    nom: Artémis
+    role: Veilleur des tendances
+    couche: analyse
+    modele: fort
+    llm: true
+    volume_minimum: 5
+    mission: Détecter les sujets émergents et les signaux faibles sur l'ensemble des contributions.
+    kpi: "Délai de détection d'un sujet émergent < 7 jours"
+
+  - id: A7
+    nom: Kairos
+    role: Priorisateur
+    couche: decision
+    modele: fort
+    llm: true
+    seuil_confiance: 0.7
+    mission: Calculer un score de priorité transparent et reproductible.
+    kpi: "Même dossier = même score ; accord comité >= 80 % sur le top 10"
+
+  - id: A8
+    nom: Héphaïstos
+    role: Générateur de solutions
+    couche: decision
+    modele: fort
+    llm: true
+    seuil_confiance: 0.7
+    mission: Proposer 2 à 3 pistes concrètes, chiffrées à grands traits, dont au moins une à faible coût.
+    kpi: "Pistes jugées exploitables par le comité >= 70 %"
+
+  - id: A9
+    nom: Héra
+    role: Chef de projet
+    couche: action
+    modele: fort
+    llm: true
+    seuil_confiance: null
+    mission: Transformer une idée validée par le comité en fiche projet. Ne démarre jamais sans validation humaine tracée.
+    kpi: "Fiches acceptées sans refonte majeure >= 75 %"
+
+  - id: A10
+    nom: Iris
+    role: Ambassadeur communautaire
+    couche: action
+    modele: leger
+    llm: true
+    mission: Informer chaque contributeur à chaque étape de la vie de son idée. Mention « réponse générée avec l'aide de l'IA ». Aucun engagement de réalisation.
+    kpi: "100 % des contributeurs informés ; satisfaction >= 4/5"
+
+  - id: A11
+    nom: Niké
+    role: Évaluateur d'impact
+    couche: action
+    modele: fort
+    llm: true
+    mission: Mesurer ce que les projets réalisés ont changé, en distinguant mesuré et estimé.
+    kpi: "Projets évalués 6 mois après réalisation >= 90 %"
+
+  - id: A12
+    nom: Hélios
+    role: Tableau de bord décisionnel
+    couche: action
+    modele: null
+    llm: false          # agrégation déterministe
+    mission: Donner aux décideurs une vue claire et à jour. Chaque chiffre renvoie aux contributions sources anonymisées.
+    kpi: "Utilisation hebdomadaire par au moins 1 décideur"

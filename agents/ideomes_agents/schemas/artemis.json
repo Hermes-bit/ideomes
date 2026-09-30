@@ -1,0 +1,41 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "note_hebdomadaire",
+    "alertes"
+  ],
+  "properties": {
+    "note_hebdomadaire": {
+      "type": "string",
+      "description": "5 lignes maximum, faits chiffrés uniquement."
+    },
+    "alertes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "theme",
+          "territoire",
+          "evolution",
+          "message"
+        ],
+        "properties": {
+          "theme": {
+            "type": "string"
+          },
+          "territoire": {
+            "type": "string"
+          },
+          "evolution": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

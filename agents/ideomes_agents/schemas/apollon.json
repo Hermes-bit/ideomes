@@ -1,0 +1,56 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "verdict",
+    "problemes",
+    "confiance"
+  ],
+  "properties": {
+    "verdict": {
+      "type": "string",
+      "enum": [
+        "conforme",
+        "a_revoir",
+        "erreur"
+      ]
+    },
+    "problemes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "agent",
+          "detail"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "erreur_factuelle",
+              "hallucination",
+              "biais",
+              "incoherence",
+              "representativite",
+              "format"
+            ]
+          },
+          "agent": {
+            "type": "string"
+          },
+          "detail": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "confiance": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Confiance de 0 à 1. Sous 0,7 : revue humaine."
+    }
+  }
+}

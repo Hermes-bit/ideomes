@@ -1,0 +1,75 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "titre",
+    "objectifs",
+    "etapes",
+    "budget",
+    "responsables",
+    "indicateurs_reussite"
+  ],
+  "properties": {
+    "titre": {
+      "type": "string"
+    },
+    "objectifs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "etapes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "intitule",
+          "jalon",
+          "duree"
+        ],
+        "properties": {
+          "intitule": {
+            "type": "string"
+          },
+          "jalon": {
+            "type": "string"
+          },
+          "duree": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "montant_fcfa",
+        "estime"
+      ],
+      "properties": {
+        "montant_fcfa": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "estime": {
+          "type": "boolean"
+        }
+      }
+    },
+    "responsables": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "indicateurs_reussite": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

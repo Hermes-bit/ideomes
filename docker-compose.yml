@@ -1,0 +1,31 @@
+# PostgreSQL + pgvector (production-like) et l'API.
+# Lancer : docker compose up -d   puis  http://localhost:8000
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: ideomes
+      POSTGRES_PASSWORD: ideomes
+      POSTGRES_DB: ideomes
+    ports: ["5432:5432"]
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ideomes"]
+      interval: 5s
+      retries: 10
+
+  api:
+    build: { context: ., dockerfile: api/Dockerfile }
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+psycopg://ideomes:ideomes@db:5432/ideomes
+    ports: ["8000:8000"]
+    depends_on:
+      db: { condition: service_healthy }
+    volumes:
+      - ./data:/app/data
+
+volumes:
+  pgdata:

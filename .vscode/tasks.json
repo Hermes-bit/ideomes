@@ -1,0 +1,10 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    { "label": "Construire l'appli web", "type": "shell", "command": "python web/build.py", "problemMatcher": [] },
+    { "label": "Remplir la base (seed)", "type": "shell", "command": "python scripts/seed.py", "problemMatcher": [] },
+    { "label": "Tests (agents + API)", "type": "shell", "group": { "kind": "test", "isDefault": true },
+      "command": "cd agents && python -m pytest -q && cd ../api && python -m pytest -q", "problemMatcher": [] },
+    { "label": "PostgreSQL (docker compose)", "type": "shell", "command": "docker compose up -d db", "problemMatcher": [] }
+  ]
+}

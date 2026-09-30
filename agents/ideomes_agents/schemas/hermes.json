@@ -1,0 +1,74 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "propositions",
+    "message"
+  ],
+  "properties": {
+    "propositions": {
+      "type": "array",
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "titre",
+          "resume",
+          "texte",
+          "categorie",
+          "date",
+          "source",
+          "lien",
+          "citations"
+        ],
+        "properties": {
+          "titre": {
+            "type": "string"
+          },
+          "resume": {
+            "type": "string"
+          },
+          "texte": {
+            "type": "string"
+          },
+          "categorie": {
+            "type": "string",
+            "enum": [
+              "Numérique",
+              "Agriculture",
+              "Santé",
+              "Éducation",
+              "Énergie",
+              "Eau",
+              "Infrastructures",
+              "Économie",
+              "Culture"
+            ]
+          },
+          "date": {
+            "type": "string",
+            "description": "AAAA-MM-JJ"
+          },
+          "source": {
+            "type": "string"
+          },
+          "lien": {
+            "type": "string"
+          },
+          "citations": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 3,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "message": {
+      "type": "string"
+    }
+  }
+}

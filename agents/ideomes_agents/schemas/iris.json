@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "message",
+    "sensible",
+    "canal"
+  ],
+  "properties": {
+    "message": {
+      "type": "string",
+      "description": "Message court, chaleureux, en français simple. Se termine par la mention IA."
+    },
+    "sensible": {
+      "type": "boolean",
+      "description": "Vrai si sujet sensible : le message sera relu par un humain avant envoi."
+    },
+    "canal": {
+      "type": "string",
+      "enum": [
+        "whatsapp",
+        "sms",
+        "email",
+        "app"
+      ]
+    }
+  }
+}
