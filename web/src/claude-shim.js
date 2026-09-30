@@ -2,7 +2,7 @@
    par Supabase (Postgres + Auth + Storage), interrogé directement depuis le navigateur.
    Le code de l'appli (ideomes.src.html) reste inchangé : même interface db/user/assets/downloads.
    Identité : Supabase Auth (lien magique par e-mail). Toute la sécurité repose sur les policies
-   RLS côté Supabase (voir db/supabase_schema.sql) — il n'y a plus de serveur de confiance ici. */
+   RLS côté Supabase (voir db/supabase_schema.sql). Il n'y a plus de serveur de confiance ici. */
 (function(){
   const SUPABASE_URL = "__SUPABASE_URL__";
   const SUPABASE_ANON_KEY = "__SUPABASE_ANON_KEY__";
