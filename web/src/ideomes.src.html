@@ -128,7 +128,7 @@ button.logo:focus-visible{outline:2px solid var(--teal);outline-offset:4px}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .hero{background:linear-gradient(120deg,#08282C,#0F3E43 30%,#135259 55%,#0F3E43 75%,#082629);background-size:300% 300%}}
 :root[data-theme="dark"] .hero{background:linear-gradient(120deg,#08282C,#0F3E43 30%,#135259 55%,#0F3E43 75%,#082629);background-size:300% 300%}
 .hero > *{position:relative;z-index:1}
-.hero{display:flow-root;isolation:isolate;contain:layout paint;height:auto;min-height:0}
+.hero{display:flow-root;isolation:isolate;height:auto;min-height:0}
 .hero > .hero-deco{position:absolute;inset:0;z-index:0;overflow:hidden;border-radius:inherit;pointer-events:none}
 .hero .pattern{position:absolute;display:block;right:-44px;top:-34px;width:210px;height:222px;opacity:.2;overflow:hidden}
 .hero .pc{transform-box:fill-box;transform-origin:center;animation:assemble 9s cubic-bezier(.6,0,.2,1) infinite;animation-delay:var(--d)}
