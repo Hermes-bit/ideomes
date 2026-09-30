@@ -166,7 +166,7 @@ button.logo:focus-visible{outline:2px solid var(--teal);outline-offset:4px}
 .hero .badges span{font-size:.78rem;padding:5px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22)}
 
 /* ---------- ONGLETS ---------- */
-.tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;margin:0 0 20px;background:var(--surface);padding:5px;border-radius:20px;border:1px solid var(--line);width:100%;box-shadow:var(--shadow)}
+.tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;margin:0 0 20px;background:var(--surface);padding:5px;border-radius:20px;border:1px solid var(--line);width:100%;box-shadow:var(--shadow)}
 .tabs button{display:flex;align-items:center;justify-content:center;gap:9px;min-width:0;border:0;background:none;color:var(--muted);font-weight:500;font-size:.92rem;padding:12px 10px;border-radius:15px;cursor:pointer;transition:background .2s,color .2s}
 .tabs button span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .tabs button svg{width:19px;height:19px;flex:none}
@@ -650,7 +650,7 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
   .hero .pattern{width:260px;height:275px;right:-40px;top:-30px}
   .unerail{grid-auto-columns:calc((100% - 12px) / 2)}
   .wizard{padding:32px 32px 28px}
-  .tabs{max-width:720px;margin-inline:auto}
+  .tabs{max-width:860px;margin-inline:auto}
 }
 @media (min-width:1100px){
   :root{--shell:1200px;--gutter:40px}
@@ -670,7 +670,7 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
   .hero h1{font-size:4.6rem}
   .hero p{font-size:1.22rem;max-width:56ch}
   .unerail{grid-auto-columns:calc((100% - 24px) / 3);gap:12px}
-  .tabs{max-width:760px}
+  .tabs{max-width:900px}
   .list{grid-template-columns:repeat(3,minmax(0,1fr))}
   .two.four{grid-template-columns:repeat(4,minmax(0,1fr))}
   .mapgrid{grid-template-columns:minmax(0,1fr) 300px}
@@ -751,12 +751,6 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
     <div class="herotitle"><span class="ideotile"><img class="" src="data:image/png;base64,__IDEO__" alt="Logo Idéomès"></span><h1>Idéo<span class="accent">mès</span></h1></div>
     <p>Qu’est-ce qui vous complique la vie au quotidien ? Racontez-le en 2 minutes. Vos réponses guident les applications que nous construisons pour les Burkinabè.</p>
     <div class="badges"><span>2 minutes</span><span>Anonyme si vous le souhaitez</span><button type="button" data-policy>Données protégées</button></div>
-  </section>
-
-  <section class="une" id="une" hidden aria-labelledby="uneTitle">
-    <div class="unehead"><h2 id="uneTitle"><span class="dot"></span>À la une</h2><span class="hint">Les avancées au Burkina Faso</span></div>
-    <div class="unerail" id="uneRail" aria-roledescription="carrousel"></div>
-    <div class="unedots" id="uneDots"></div>
   </section>
 
   <nav class="tabs" role="tablist" id="tabs" hidden>
@@ -1010,6 +1004,12 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
       <h3 class="sec">Historique GitHub</h3>
       <div class="panel"><div class="nalist" id="ghHistory"><p class="hint" style="margin:0">Chargement…</p></div></div>
     </div>
+  </section>
+
+  <section class="une" id="une" hidden aria-labelledby="uneTitle">
+    <div class="unehead"><h2 id="uneTitle"><span class="dot"></span>À la une</h2><span class="hint">Les avancées au Burkina Faso</span></div>
+    <div class="unerail" id="uneRail" aria-roledescription="carrousel"></div>
+    <div class="unedots" id="uneDots"></div>
   </section>
 
   <section class="context" id="contexte">
