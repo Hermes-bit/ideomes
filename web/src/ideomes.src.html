@@ -1075,7 +1075,7 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
       <div id="loginMsg" class="msg err" hidden></div>
       <button class="btn primary wide" type="submit" id="loginGo">Recevoir un lien de connexion</button>
     </form>
-    <button class="linkbtn" id="togglePw" type="button">J’ai déjà un mot de passe</button>
+    <button class="btn secondary wide" id="togglePw" type="button">Se connecter avec un mot de passe</button>
     <div class="or">ou</div>
     <button class="btn secondary wide" id="guest" type="button">Continuer la navigation</button>
     <p class="fine">Le lien reçu par e-mail vous connecte automatiquement, sans mot de passe. En continuant, vous acceptez les <button class="linkbtn" type="button" data-cgu-login>conditions d’utilisation</button>. <button class="linkbtn" type="button" data-policy>Vos données personnelles</button></p>
@@ -1276,7 +1276,7 @@ $("togglePw").addEventListener("click", ()=>{
   pwMode = !pwMode;
   $("fPw").hidden = !pwMode;
   $("loginGo").textContent = pwMode ? "Se connecter" : "Recevoir un lien de connexion";
-  $("togglePw").textContent = pwMode ? "Recevoir un lien par e-mail à la place" : "J’ai déjà un mot de passe";
+  $("togglePw").textContent = pwMode ? "Recevoir un lien par e-mail à la place" : "Se connecter avec un mot de passe";
   $("loginMsg").hidden = true;
 });
 $("loginForm").addEventListener("submit", async e=>{
