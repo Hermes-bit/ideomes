@@ -1274,7 +1274,12 @@ $("loginForm").addEventListener("submit", async e=>{
     const { error } = await auth.signInWithOtp({ email: v.toLowerCase(), options: { emailRedirectTo: location.origin + location.pathname } });
     if(error) throw error;
     m.className = "msg ok"; m.textContent = "Vérifiez votre boîte mail : cliquez sur le lien reçu pour vous connecter."; m.hidden = false;
-  }catch(_){ m.textContent = "L’envoi a échoué. Vérifiez l’adresse et réessayez."; m.hidden = false; }
+  }catch(err){
+    m.textContent = err && (err.status===429 || err.code==="over_email_send_rate_limit")
+      ? "Trop de tentatives. Réessayez dans quelques minutes."
+      : "L’envoi a échoué. Vérifiez l’adresse et réessayez.";
+    m.hidden = false;
+  }
   finally{ btn.disabled = false; }
 });
 $("guest").addEventListener("click", ()=>{ $("login").hidden = true; });
