@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: ideomes
+    runtime: docker
+    plan: free
+    dockerfilePath: ./api/Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/sante
+    envVars:
+      - key: LLM_MODE
+        value: simule
+      - key: PROPRIETAIRE_UID
+        generateValue: true
+      - key: API_JETON_SERVICE
+        generateValue: true
