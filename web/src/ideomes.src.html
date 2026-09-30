@@ -87,6 +87,8 @@ button{font-family:inherit}
 .shell{max-width:var(--shell,880px);margin:0 auto;padding-inline:18px;padding-block:76px 64px}
 .brandbar{display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap}
 .logo{display:flex;align-items:center;gap:12px;min-width:0}
+button.logo{border:0;background:none;padding:0;margin:0;font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;border-radius:8px}
+button.logo:focus-visible{outline:2px solid var(--teal);outline-offset:4px}
 .logo svg{width:34px;height:37px;flex:none}
 .logo img{height:26px;width:auto;max-width:60vw}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .logo img{filter:brightness(0) invert(.92)}}
@@ -699,7 +701,7 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
 
 <div class="shell">
   <div class="brandbar">
-    <div class="logo" aria-label="Geomessen Burkina Faso">
+    <button class="logo" type="button" id="logoHome" aria-label="Geomessen Burkina Faso — retour à l’accueil">
       <svg viewBox="0 0 600 660" aria-hidden="true">
         <g stroke-linecap="round"><line x1="300" y1="80" x2="300" y2="400" stroke="#7FA9A9" stroke-width="16"/><line x1="300" y1="403" x2="46" y2="608" stroke="#7FA9A9" stroke-width="16"/><line x1="300" y1="403" x2="554" y2="608" stroke="#7FA9A9" stroke-width="16"/>
         <g stroke="var(--teal)" stroke-width="26"><line x1="42" y1="612" x2="300" y2="62"/><line x1="558" y1="612" x2="300" y2="62"/><line x1="42" y1="612" x2="558" y2="612"/></g></g>
@@ -707,7 +709,7 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
         <circle cx="300" cy="62" r="62" fill="#E8833A"/>
       </svg>
       <img src="data:image/png;base64,__WORD__" alt="Geomessen Burkina Faso">
-    </div>
+    </button>
       <div class="account">
         <button class="acct-btn" id="acctBtn" type="button" aria-haspopup="true" aria-expanded="false">
           <span class="acct-label" id="acctLabel">Se connecter</span>
@@ -1869,6 +1871,12 @@ function show(view){
   ["form","ideas","dash"].forEach(v=>$("view-"+v).hidden = v!==view);
 }
 document.querySelectorAll(".tabs button").forEach(b=>b.addEventListener("click",()=>show(b.dataset.view)));
+$("logoHome").addEventListener("click", ()=>{
+  closePage();
+  $("acctMenu").hidden = true;
+  show("form");
+  window.scrollTo({top:0, behavior:"smooth"});
+});
 
 /* ---------- Assistant ---------- */
 const STEPS = 4; let step = 0;
