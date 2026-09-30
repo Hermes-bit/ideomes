@@ -648,6 +648,8 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
   .shell > *{grid-column:1 / -1;min-width:0}
   /* Participant : formulaire à gauche, vidéo de contexte à droite, qui reste visible au défilement */
   .shell > #view-form{grid-column:1}
+  /* Admin : pas de vidéo de contexte (colonne de droite vide) → le formulaire reprend toute la largeur */
+  .shell:has(#contexte[hidden]) > #view-form{grid-column:1 / -1}
   /* la colonne occupe toute la hauteur du formulaire ; seule la carte intérieure suit le défilement, sans jamais en sortir */
   .shell > #contexte{grid-column:2;margin-top:0;align-self:stretch}
   #contexte .ctx-card{position:sticky;top:calc(90px + env(safe-area-inset-top,0px));background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:24px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:16px}
