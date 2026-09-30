@@ -763,6 +763,7 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
     <button id="tab-form" role="tab" aria-selected="true" data-view="form"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg><span>Donner une idée</span></button>
     <button id="tab-ideas" role="tab" aria-selected="false" data-view="ideas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.8 7L4 20l1.1-4.6A8 8 0 1 1 21 12z"/><path d="M8.5 10.5h7M8.5 13.5h4"/></svg><span>Idées reçues</span></button>
     <button id="tab-dash" role="tab" aria-selected="false" data-view="dash" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span>Tableau de bord</span></button>
+    <button id="tab-notif" role="tab" aria-selected="false" data-view="notif" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span>Notifications</span></button>
   </nav>
 
   <!-- ASSISTANT -->
@@ -977,6 +978,37 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
     <div class="panel settings" style="margin-top:14px">
       <h3>Compte administrateur</h3>
       <p class="hint" style="margin:0">L’accès administrateur est réservé aux adresses e-mail enregistrées dans la table <code>admins</code> de Supabase. Pour ajouter ou retirer un administrateur, modifiez cette table directement depuis l’éditeur SQL du projet Supabase.</p>
+    </div>
+  </section>
+
+  <!-- NOTIFICATIONS (admin) -->
+  <section id="view-notif" hidden>
+    <div class="row"><h2>Notifications</h2></div>
+
+    <div class="dash-block">
+      <h3 class="sec">Dernières idées reçues</h3>
+      <div class="panel"><div class="nalist" id="notifIdeas"></div></div>
+    </div>
+
+    <div class="dash-block">
+      <h3 class="sec">Annonces de maintenance</h3>
+      <div class="panel">
+        <p class="hint" style="margin:0 0 12px">Visible uniquement par l’administrateur, pour préparer une coupure ou un changement à venir.</p>
+        <form id="maintForm" novalidate>
+          <div class="grid2">
+            <div class="field"><label for="maintDate">Date</label><input type="date" id="maintDate"></div>
+            <div class="field"><label for="maintMsg">Message</label><input type="text" id="maintMsg" maxlength="200" placeholder="Ex. : Maintenance prévue, site indisponible 10 min"></div>
+          </div>
+          <div id="maintFormMsg" class="msg err" hidden></div>
+          <button class="btn primary small" type="submit">Publier l’annonce</button>
+        </form>
+        <div class="nalist" id="maintList" style="margin-top:14px"></div>
+      </div>
+    </div>
+
+    <div class="dash-block">
+      <h3 class="sec">Historique GitHub</h3>
+      <div class="panel"><div class="nalist" id="ghHistory"><p class="hint" style="margin:0">Chargement…</p></div></div>
     </div>
   </section>
 
@@ -1369,7 +1401,7 @@ document.addEventListener("keydown", e=>{ if(e.key==="Escape") $("policy").hidde
 /* ---------- Administrateur : isAdmin suit directement isOwner (table admins Supabase) ---------- */
 function applyAdmin(){
   isAdmin = isOwner;
-  $("tabs").hidden = !isAdmin; $("tab-dash").hidden = !isAdmin;
+  $("tabs").hidden = !isAdmin; $("tab-dash").hidden = !isAdmin; $("tab-notif").hidden = !isAdmin;
   $("exportBox").hidden = !(isAdmin && downloads);
   $("vidAdmin").hidden = !(isAdmin && assets);
   $("contexte").hidden = isAdmin;
@@ -1377,6 +1409,8 @@ function applyAdmin(){
   $("hermesPanel").hidden = !isAdmin;
   renderHermes();
   renderNews();
+  renderRecentIdeas();
+  renderMaint();
   if(!isAdmin) show("form");
   renderAccount(); renderVideo(); renderDash(); renderIdeas();
 }
@@ -1942,8 +1976,9 @@ $("province").addEventListener("change", ()=>{
 /* ---------- Onglets ---------- */
 function show(view){
   setTimeout(()=>{ if(view==="dash" && isAdmin) renderMap(); }, 30);
+  if(view==="notif" && isAdmin) loadGithubHistory();
   document.querySelectorAll(".tabs button").forEach(b=>b.setAttribute("aria-selected", b.dataset.view===view));
-  ["form","ideas","dash"].forEach(v=>$("view-"+v).hidden = v!==view);
+  ["form","ideas","dash","notif"].forEach(v=>$("view-"+v).hidden = v!==view);
 }
 document.querySelectorAll(".tabs button").forEach(b=>b.addEventListener("click",()=>show(b.dataset.view)));
 $("logoHome").addEventListener("click", ()=>{
@@ -2220,6 +2255,58 @@ $("hermesList").addEventListener("click", async e=>{
   }catch(_){ (ok||no).disabled = false; toast("L’opération a échoué. Réessayez."); }
 });
 
+/* ---------- Notifications admin ---------- */
+let maint = [];
+function renderRecentIdeas(){
+  if(!isAdmin) return;
+  const recent = [...ideas].sort((a,b)=>String(b.createdAt||"").localeCompare(String(a.createdAt||""))).slice(0,6);
+  $("notifIdeas").innerHTML = recent.length ? recent.map(it=>{
+    const when = it.createdAt ? new Date(it.createdAt).toLocaleString("fr-FR",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}) : "";
+    const apercu = (it.probleme||"").slice(0,90) + ((it.probleme||"").length>90 ? "…" : "");
+    return `<div class="naitem"><div style="min-width:0"><b>${esc(it.domaine||"Sans domaine")}</b><small>${esc(apercu)} · ${esc(when)}</small></div></div>`;
+  }).join("") : `<p class="hint" style="margin:0">Aucune idée reçue pour l’instant.</p>`;
+}
+function renderMaint(){
+  if(!isAdmin) return;
+  const sorted = [...maint].sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));
+  $("maintList").innerHTML = sorted.length ? sorted.map(m=>`<div class="naitem"><div style="min-width:0"><b>${esc(fmtDay(m.date))}</b><small>${esc(m.message||"")}</small></div>
+    <div class="acts"><button type="button" class="rm" data-maint-rm="${esc(m.id)}">Supprimer</button></div></div>`).join("") : `<p class="hint" style="margin:0">Aucune annonce publiée.</p>`;
+}
+$("maintForm").addEventListener("submit", async e=>{
+  e.preventDefault();
+  const m = $("maintFormMsg"); m.hidden = true;
+  const date = $("maintDate").value, msg = $("maintMsg").value.trim();
+  if(!date){ m.textContent = "Choisissez une date."; m.hidden = false; return; }
+  if(msg.length < 5){ m.textContent = "Décrivez brièvement la maintenance."; m.hidden = false; return; }
+  if(!db){ m.textContent = "Non disponible pour le moment."; m.hidden = false; return; }
+  try{
+    await db.collection("maintenance").add({date, message:msg, createdAt:new Date().toISOString()});
+    $("maintForm").reset();
+    toast("Annonce publiée.");
+  }catch(_){ m.textContent = "La publication a échoué. Réessayez."; m.hidden = false; }
+});
+$("maintList").addEventListener("click", async e=>{
+  const rm = e.target.closest("[data-maint-rm]"); if(!rm) return;
+  if(!rm.classList.contains("sure")){ rm.classList.add("sure"); rm.textContent = "Confirmer ?"; setTimeout(()=>{ if(rm.isConnected){ rm.classList.remove("sure"); rm.textContent = "Supprimer"; } }, 4000); return; }
+  try{ await db.doc("maintenance/"+rm.dataset.maintRm).delete(); toast("Annonce supprimée."); }catch(_){ toast("La suppression a échoué."); }
+});
+let ghLoaded = false;
+async function loadGithubHistory(){
+  if(ghLoaded) return; ghLoaded = true;
+  try{
+    const r = await fetch("https://api.github.com/repos/Hermes-bit/ideomes/commits?per_page=8");
+    if(!r.ok) throw new Error("http " + r.status);
+    const commits = await r.json();
+    $("ghHistory").innerHTML = commits.length ? commits.map(c=>{
+      const msg = ((c.commit && c.commit.message) || "").split("\n")[0];
+      const when = c.commit && c.commit.author && c.commit.author.date ? new Date(c.commit.author.date).toLocaleString("fr-FR",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}) : "";
+      const author = (c.commit && c.commit.author && c.commit.author.name) || "";
+      const sha = (c.sha || "").slice(0, 7);
+      return `<div class="naitem"><div style="min-width:0"><b>${esc(msg)}</b><small>${esc(when)} · ${esc(author)} · ${esc(sha)}</small></div></div>`;
+    }).join("") : `<p class="hint" style="margin:0">Aucun historique disponible.</p>`;
+  }catch(_){ ghLoaded = false; $("ghHistory").innerHTML = `<p class="hint" style="margin:0">Impossible de charger l’historique GitHub pour le moment.</p>`; }
+}
+
 /* Défilement automatique : toutes les 5 s, en pause au toucher ou au survol */
 let uneT = null, uneIdx = 0, unePause = 0;
 function uneGo(i, smooth=true){
@@ -2352,6 +2439,7 @@ async function refreshIdentity(){
     subscribedOwner = true;
     db.collection("veille").onSnapshot(sn=>{ veille = sn.docs.map(d=>({id:d.id, ...(d.data()||{})})); renderHermes(); }, ()=>{});
     db.doc("config/hermes").onSnapshot(sn=>{ hermesMeta = sn.exists ? (sn.data()||{}) : {}; renderHermes(); }, ()=>{});
+    db.collection("maintenance").onSnapshot(sn=>{ maint = sn.docs.map(d=>({id:d.id, ...(d.data()||{})})); renderMaint(); }, ()=>{});
     db.collection("connexions").onSnapshot(async s=>{
       cnx = s.docs.map(d=>({uid:d.id, ...(d.data()||{})}));
       await refreshPeople(); renderDash();
@@ -2363,7 +2451,7 @@ async function refreshIdentity(){
       ideas = all;
       respUids = all.map(x=>x.uid);
       await refreshPeople();
-      renderIdeas(); renderDash();
+      renderIdeas(); renderDash(); renderRecentIdeas();
     }, ()=>{});
   }
   if(myId && db && subscribedUid !== myId){
