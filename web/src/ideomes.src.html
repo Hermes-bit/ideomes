@@ -953,16 +953,8 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
       <div id="vidMsg" class="msg err" hidden></div>
     </div>
     <div class="panel settings" style="margin-top:14px">
-      <h3>Paramètres du compte administrateur</h3>
-      <p class="hint" style="margin:0 0 14px">Changez ici l’e-mail et le mot de passe de connexion à l’espace administrateur.</p>
-      <form id="credForm" novalidate>
-        <div class="field full"><label for="credCur">Mot de passe actuel</label><div class="pw"><input type="password" id="credCur" autocomplete="current-password"><button type="button" data-toggle="credCur">Afficher</button></div></div>
-        <div class="field full"><label for="credMail">Nouvel e-mail administrateur</label><input type="text" id="credMail" inputmode="email" autocomplete="username"></div>
-        <div class="field"><label for="credPw">Nouveau mot de passe <span class="hint">(10 caractères min.)</span></label><input type="password" id="credPw" autocomplete="new-password"></div>
-        <div class="field"><label for="credPw2">Confirmer</label><input type="password" id="credPw2" autocomplete="new-password"></div>
-        <div class="full"><button class="btn primary small" type="submit">Enregistrer</button></div>
-        <div id="credMsg" class="msg err full" hidden></div>
-      </form>
+      <h3>Compte administrateur</h3>
+      <p class="hint" style="margin:0">L’accès administrateur est réservé aux adresses e-mail enregistrées dans la table <code>admins</code> de Supabase. Pour ajouter ou retirer un administrateur, modifiez cette table directement depuis l’éditeur SQL du projet Supabase.</p>
     </div>
   </section>
 
@@ -1018,7 +1010,7 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
       <p>Idéomès est gratuite. Elle s’utilise depuis un navigateur, sur téléphone ou sur ordinateur, avec une connexion internet dont les frais restent à votre charge. Geomessen peut suspendre l’accès pour maintenance ou pour des raisons de sécurité, sans préavis.</p>
       <p>Si vous avez moins de 18 ans, demandez l’accord d’un parent ou d’un tuteur avant de répondre.</p>
       <h2 id="cgu-4">4. Connexion</h2>
-      <p>Vous pouvez vous identifier avec un numéro WhatsApp ou une adresse e-mail, ou continuer sans compte. Aucun mot de passe n’est demandé et ces informations ne sont pas vérifiées : vous vous engagez à indiquer un numéro ou une adresse qui vous appartient. L’espace administrateur est réservé à Geomessen.</p>
+      <p>Vous pouvez consulter Idéomès sans compte. Pour envoyer une idée, connectez-vous avec votre adresse e-mail : un lien de connexion à usage unique vous est envoyé, sans mot de passe. L’espace administrateur est réservé à Geomessen.</p>
       <h2 id="cgu-5">5. Règles de bonne conduite</h2>
       <p>En utilisant Idéomès, vous vous engagez à :</p>
       <ul><li>décrire des besoins réels, de bonne foi ;</li><li>ne pas publier de propos injurieux, diffamatoires, haineux, violents ou contraires à la loi ;</li><li>ne pas donner d’informations personnelles sur d’autres personnes (nom, numéro, adresse, santé…) ;</li><li>ne pas envoyer de publicité ni de messages automatisés ;</li><li>ne pas tenter de perturber le fonctionnement de l’application ou d’accéder aux données d’autrui.</li></ul>
@@ -1067,32 +1059,15 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
     <div class="login-logo"><img class="" src="data:image/png;base64,__IDEO__" alt="Logo Idéomès"></div>
     <h2 id="loginTitle">Bienvenue sur <span>Idéomès</span></h2>
     <div id="userLogin" style="display:flex;flex-direction:column;gap:16px">
-    <p class="lead">Connectez-vous pour qu’on puisse vous recontacter, ou continuez sans compte.</p>
-    <div class="seg">
-      <button type="button" data-mode="whatsapp" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.6-5.3A8.4 8.4 0 1 1 21 11.5z"/><path d="M9 9.5c.5 2 2.5 4 4.5 4.5l1.2-1.2 2 1-.5 1.5c-3.5 0-7.5-4-7.5-7.5L10.2 7l1 2z"/></svg>WhatsApp</button>
-      <button type="button" data-mode="email" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>E-mail</button>
-    </div>
+    <p class="lead" id="loginLead">Connectez-vous par e-mail pour envoyer une idée. Un lien de connexion à usage unique vous sera envoyé, sans mot de passe.</p>
     <form id="loginForm" novalidate>
-      <div class="field" id="fWa"><label for="loginWa">Numéro WhatsApp</label><div class="phone"><span>+226</span><input type="tel" id="loginWa" inputmode="tel" maxlength="20" placeholder="70 12 34 56" autocomplete="tel-national"></div></div>
-      <div class="field" id="fMail" hidden><label for="loginMail">Adresse e-mail</label><input type="text" id="loginMail" inputmode="email" autocomplete="email" maxlength="120" placeholder="nom@gmail.com"></div>
-      <label class="remember"><input type="checkbox" id="remember" checked>Se souvenir de moi sur cet appareil</label>
+      <div class="field"><label for="loginMail">Adresse e-mail</label><input type="text" id="loginMail" inputmode="email" autocomplete="email" maxlength="120" placeholder="nom@exemple.com"></div>
       <div id="loginMsg" class="msg err" hidden></div>
-      <button class="btn primary wide" type="submit">Continuer</button>
+      <button class="btn primary wide" type="submit">Recevoir un lien de connexion</button>
     </form>
     <div class="or">ou</div>
-    <button class="btn secondary wide" id="guest" type="button">Continuer sans compte</button>
-    <p class="fine">Aucun mot de passe. Votre numéro ou e-mail sert seulement à vous recontacter. En continuant, vous acceptez les <button class="linkbtn" type="button" data-cgu-login>conditions d’utilisation</button>. <button class="linkbtn" type="button" data-policy>Vos données personnelles</button></p>
-    <button class="admin-link" id="toAdmin" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Espace administrateur</button>
-    </div>
-    <div id="adminLogin" hidden>
-      <form id="adminForm" novalidate>
-        <p class="lead" style="margin:0">Réservé à l’équipe Geomessen.</p>
-        <div class="field"><label for="admMail">E-mail administrateur</label><input type="text" id="admMail" inputmode="email" autocomplete="username" autocapitalize="off" autocorrect="off" spellcheck="false" maxlength="120" placeholder="admin@geomessen.bf"></div>
-        <div class="field"><label for="admPw">Mot de passe</label><div class="pw"><input type="password" id="admPw" autocomplete="current-password" autocapitalize="off" autocorrect="off" spellcheck="false" maxlength="100"><button type="button" data-toggle="admPw">Afficher</button></div></div>
-        <div id="admMsg" class="msg err" hidden></div>
-        <button class="btn primary wide" type="submit" id="admGo">Se connecter</button>
-        <button class="btn secondary wide" type="button" id="backUser">Retour</button>
-      </form>
+    <button class="btn secondary wide" id="guest" type="button">Continuer la navigation</button>
+    <p class="fine">Le lien reçu par e-mail vous connecte automatiquement, sans mot de passe. En continuant, vous acceptez les <button class="linkbtn" type="button" data-cgu-login>conditions d’utilisation</button>. <button class="linkbtn" type="button" data-policy>Vos données personnelles</button></p>
     </div>
   </div>
 </div>
@@ -1267,7 +1242,7 @@ document.addEventListener("click", e=>{
   if(e.target.closest("[data-cgu-login]")){ $("login").hidden = true; openPage("cgu"); pageFromLogin = true; }
 });
 let pageFromLogin = false;
-document.addEventListener("click", e=>{ if(e.target.closest("[data-back]") && pageFromLogin && !ident){ pageFromLogin = false; $("login").hidden = false; } });
+document.addEventListener("click", e=>{ if(e.target.closest("[data-back]") && pageFromLogin && !loggedIn()){ pageFromLogin = false; $("login").hidden = false; } });
 document.querySelectorAll(".toc a").forEach(a=>a.addEventListener("click", e=>{ e.preventDefault(); const t = document.querySelector(a.getAttribute("href")); if(t) t.scrollIntoView({behavior:"smooth", block:"start"}); }));
 { const h = (location.hash||"").slice(1); const map = {apropos:"apropos", contact:"contact", cgu:"cgu", conditions:"cgu", donnees:"donnees"}; if(map[h]) setTimeout(()=>openPage(map[h]), 0); }
 
@@ -1280,65 +1255,47 @@ document.addEventListener("click", async e=>{
   setTimeout(()=>{ b.textContent = "Copier"; b.classList.remove("ok"); }, 1800);
 });
 
-/* ---------- Connexion ---------- */
-let ident = null, claudeMe = null, loginMode = "whatsapp";
-try{ ident = JSON.parse(store.get("ideomes-ident") || "null"); }catch(_){ ident = null; }
-function afterSplash(){ if(ident && ident.type){ renderAccount(); logConnexion(); if(ident.type!=="admin") maybeTour(); } else showLogin(); }
-function showLogin(){ $("login").hidden = false; setTimeout(()=>(loginMode==="email"?$("loginMail"):$("loginWa")).focus(), 60); }
-function setMode(m){
-  loginMode = m;
-  document.querySelectorAll(".seg button").forEach(b=>b.setAttribute("aria-pressed", String(b.dataset.mode===m)));
-  $("fWa").hidden = m!=="whatsapp"; $("fMail").hidden = m!=="email"; $("loginMsg").hidden = true;
-}
-document.querySelectorAll(".seg button").forEach(b=>b.addEventListener("click",()=>{ setMode(b.dataset.mode); showLogin(); }));
-function signIn(next){
-  ident = next;
-  if($("remember").checked) store.set("ideomes-ident", JSON.stringify(next)); else store.set("ideomes-ident", "");
-  $("login").hidden = true;
-  if(next.type!=="invite" && !$("contact").value) $("contact").value = next.value;
-  renderAccount();
-  cnxLogged = false; logConnexion();
-  if(next.type!=="admin") maybeTour();
-}
-$("loginForm").addEventListener("submit", e=>{
+/* ---------- Connexion (Supabase Auth, lien magique par e-mail) ---------- */
+let claudeMe = null, isOwner = false;
+function loggedIn(){ return !!(claudeMe && claudeMe.id); }
+function afterSplash(){ maybeTour(); }
+function showLogin(){ $("login").hidden = false; $("loginMsg").hidden = true; setTimeout(()=>$("loginMail").focus(), 60); }
+$("loginForm").addEventListener("submit", async e=>{
   e.preventDefault();
-  const m = $("loginMsg"); m.hidden = true;
-  if(loginMode==="whatsapp"){
-    const raw = $("loginWa").value.trim(), digits = raw.replace(/\D/g,"");
-    if(digits.length < 8){ m.textContent = "Entrez votre numéro WhatsApp, par exemple 70 12 34 56."; m.hidden = false; return; }
-    const value = digits.length===8 ? "+226 " + digits.replace(/(\d{2})(?=\d)/g,"$1 ") : "+" + digits.replace(/^00/,"");
-    signIn({type:"whatsapp", value});
-  }else{
-    const v = $("loginMail").value.trim();
-    if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)){ m.textContent = "Cette adresse e-mail ne semble pas complète. Exemple : nom@gmail.com"; m.hidden = false; return; }
-    signIn({type:"email", value:v.toLowerCase()});
-  }
+  const m = $("loginMsg"); m.className = "msg err"; m.hidden = true;
+  const v = $("loginMail").value.trim();
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)){ m.textContent = "Cette adresse e-mail ne semble pas complète. Exemple : nom@gmail.com"; m.hidden = false; return; }
+  const btn = e.target.querySelector("button[type=submit]"); btn.disabled = true;
+  try{
+    const auth = window.claude && window.claude.auth;
+    if(!auth) throw new Error("no-auth");
+    const { error } = await auth.signInWithOtp({ email: v.toLowerCase(), options: { emailRedirectTo: location.origin + location.pathname } });
+    if(error) throw error;
+    m.className = "msg ok"; m.textContent = "Vérifiez votre boîte mail : cliquez sur le lien reçu pour vous connecter."; m.hidden = false;
+  }catch(_){ m.textContent = "L’envoi a échoué. Vérifiez l’adresse et réessayez."; m.hidden = false; }
+  finally{ btn.disabled = false; }
 });
-$("guest").addEventListener("click", ()=>signIn({type:"invite", value:""}));
-$("logout").addEventListener("click", ()=>{
-  store.set("ideomes-ident",""); store.set("ideomes-admin",""); ident = null; adminMode = false; applyAdmin(); $("acctMenu").hidden = true;
-  $("contact").value = ""; $("loginWa").value = ""; $("loginMail").value = "";
-  renderAccount(); showLogin();
+$("guest").addEventListener("click", ()=>{ $("login").hidden = true; });
+$("logout").addEventListener("click", async ()=>{
+  $("acctMenu").hidden = true;
+  const auth = window.claude && window.claude.auth;
+  if(auth && loggedIn()) await auth.signOut();
+  showLogin();
 });
 const ICON_USER = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>';
 function avatarHTML(){
-  if(!ident || ident.type==="invite") return ICON_USER;
-  if(claudeMe && claudeMe.id) return `<img src="${esc(claudeMe.avatarUrl)}" alt="">`;
-  if(ident.type==="email" || ident.type==="admin") return `<span class="ini">${esc(ident.value.slice(0,2).toUpperCase())}</span>`;
-  return `<span class="ini">${esc(ident.value.replace(/\D/g,"").slice(-2))}</span>`;
+  if(!loggedIn()) return ICON_USER;
+  return `<span class="ini">${esc((claudeMe.name||"?").slice(0,2).toUpperCase())}</span>`;
 }
 function renderAccount(){
   const a = avatarHTML();
   $("acctAvatar").innerHTML = a; $("acctImg").innerHTML = a;
   let label = "Se connecter", name = "Pas connecté", role = "";
-  if(ident && ident.type==="email"){ label = ident.value.split("@")[0]; name = ident.value; role = "Connecté par e-mail"; }
-  else if(ident && ident.type==="whatsapp"){ label = ident.value; name = ident.value; role = "Connecté par WhatsApp"; }
-  else if(ident && ident.type==="admin"){ label = "Admin"; name = ident.value; role = ""; }
-  else if(ident){ label = "Invité"; name = "Invité"; role = "Sans compte"; }
-  if(isAdmin) role += (role?" · ":"") + "Administrateur";
+  if(loggedIn()){ label = claudeMe.name.split("@")[0]; name = claudeMe.name; role = "Connecté par e-mail"; }
+  if(isAdmin) role = "Administrateur";
   $("acctLabel").textContent = label; $("acctName").textContent = name;
   $("acctRole").textContent = role; $("acctRole").className = isAdmin ? "admin" : "";
-  $("logout").textContent = ident ? "Changer de compte" : "Se connecter";
+  $("logout").textContent = loggedIn() ? "Se déconnecter" : "Se connecter";
 }
 document.addEventListener("click", e=>{
   if(e.target.closest("[data-policy]")){ $("acctMenu").hidden = true; $("policy").hidden = false; $("policyClose").focus(); }
@@ -1349,21 +1306,9 @@ $("policyClose").addEventListener("click", ()=>{ $("policy").hidden = true; });
 $("policy").addEventListener("click", e=>{ if(e.target.id==="policy") $("policy").hidden = true; });
 document.addEventListener("keydown", e=>{ if(e.key==="Escape") $("policy").hidden = true; });
 
-/* ---------- Administrateur ---------- */
-const DEFAULT_CRED = {email:"admin@geomessen.bf", salt:"d85cee18ba0e3ed1", hash:"bf7f33bbfb246315456a7488cb09dfd85877b3227609903172ac356b799a6d04"};
-let isOwner = false, adminMode = false, cred = DEFAULT_CRED, credDocExists = false;
-let readyResolve; const ready = new Promise(r=>readyResolve=r);
-async function sha(salt, pw){
-  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(salt + ":" + pw));
-  return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,"0")).join("");
-}
-const normPw = pw => String(pw).trim().replace(/[\u2010-\u2015\u2212]/g,"-");
-async function checkPw(email, pw){
-  pw = normPw(pw);
-  return email.trim().toLowerCase().replace(/\s+/g,"") === String(cred.email).toLowerCase() && (await sha(cred.salt, pw)) === cred.hash;
-}
+/* ---------- Administrateur : isAdmin suit directement isOwner (table admins Supabase) ---------- */
 function applyAdmin(){
-  isAdmin = isOwner && adminMode;
+  isAdmin = isOwner;
   $("tabs").hidden = !isAdmin; $("tab-dash").hidden = !isAdmin;
   $("exportBox").hidden = !(isAdmin && downloads);
   $("vidAdmin").hidden = !(isAdmin && assets);
@@ -1375,68 +1320,24 @@ function applyAdmin(){
   if(!isAdmin) show("form");
   renderAccount(); renderVideo(); renderDash(); renderIdeas();
 }
-document.addEventListener("click", e=>{
-  const t = e.target.closest("[data-toggle]"); if(!t) return;
-  const inp = $(t.dataset.toggle); inp.type = inp.type==="password" ? "text" : "password";
-  t.textContent = inp.type==="password" ? "Afficher" : "Masquer";
-});
-function openAdminLogin(){ $("login").hidden = false; $("userLogin").hidden = true; $("adminLogin").hidden = false; $("admMsg").hidden = true; setTimeout(()=>$("admMail").focus(), 60); }
-$("toAdmin").addEventListener("click", openAdminLogin);
-$("backUser").addEventListener("click", ()=>{ $("adminLogin").hidden = true; $("userLogin").hidden = false; if(ident) $("login").hidden = true; });
-$("adminForm").addEventListener("submit", async e=>{
-  e.preventDefault();
-  const m = $("admMsg"); m.hidden = true; $("admGo").disabled = true;
-  try{
-    await ready;
-    if(!isOwner){ m.textContent = "Accès refusé. L’espace administrateur est réservé au compte propriétaire d’Idéomès."; m.hidden = false; return; }
-    if(!(await checkPw($("admMail").value, $("admPw").value))){ m.textContent = "E-mail ou mot de passe incorrect."; m.hidden = false; return; }
-    adminMode = true; store.set("ideomes-admin", "1");
-    $("admPw").value = "";
-    $("adminLogin").hidden = true; $("userLogin").hidden = false;
-    signIn({type:"admin", value:cred.email});
-    applyAdmin(); show("dash");
-  }catch(_){ m.textContent = "La vérification a échoué. Rechargez la page et réessayez."; m.hidden = false; }
-  finally{ $("admGo").disabled = false; }
-});
-$("credForm").addEventListener("submit", async e=>{
-  e.preventDefault();
-  const m = $("credMsg"); m.className = "msg err full"; m.hidden = true;
-  const mail = $("credMail").value.trim().toLowerCase(), pw = $("credPw").value, pw2 = $("credPw2").value;
-  const say = (t, ok) => { m.textContent = t; m.className = ok ? "msg ok full" : "msg err full"; m.hidden = false; };
-  if(!(await checkPw(cred.email, $("credCur").value))) return say("Le mot de passe actuel est incorrect.");
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mail)) return say("Entrez une adresse e-mail complète.");
-  if(pw.length < 10) return say("Le nouveau mot de passe doit contenir au moins 10 caractères.");
-  if(pw !== pw2) return say("Les deux mots de passe ne sont pas identiques.");
-  if(!db) return say("L’enregistrement n’est pas disponible pour le moment.");
-  const salt = [...crypto.getRandomValues(new Uint8Array(8))].map(b=>b.toString(16).padStart(2,"0")).join("");
-  const next = {email:mail, salt, hash: await sha(salt, normPw(pw)), updatedAt:new Date().toISOString()};
-  try{
-    await db.doc("adminconf/credentials").set(next);
-    cred = next; ident = {type:"admin", value:mail}; store.set("ideomes-ident", JSON.stringify(ident)); renderAccount();
-    ["credCur","credMail","credPw","credPw2"].forEach(id=>$(id).value = "");
-    say("Enregistré. Utilisez ce nouvel e-mail et ce mot de passe à votre prochaine connexion.", true);
-  }catch(_){ say("L’enregistrement a échoué. Réessayez."); }
-});
 
 /* ---------- Suivi des connexions ---------- */
 let cnxLogged = false, cnx = [];
 const dayKey = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
 async function logConnexion(){
-  if(cnxLogged || !ident) return; cnxLogged = true;
-  await ready;
-  if(!db || !myId) return;
+  if(cnxLogged || !myId || !db) return; cnxLogged = true;
   const ref = db.doc("connexions/" + myId), now = new Date(), day = dayKey(now);
   try{
     const sn = await ref.get(), o = sn.exists ? (sn.data()||{}) : {};
     const jours = {...(o.jours||{})}; jours[day] = (jours[day]||0) + 1;
     const keys = Object.keys(jours).sort(); while(keys.length > 90) delete jours[keys.shift()];
-    await ref.set({type:ident.type, valeur: ident.type==="invite" ? "" : ident.value, first:o.first||now.toISOString(), last:now.toISOString(), count:(o.count||0)+1, jours});
+    await ref.set({type:"email", valeur: claudeMe.name || "", first:o.first||now.toISOString(), last:now.toISOString(), count:(o.count||0)+1, jours});
   }catch(_){}
 }
 
 /* ---------- Graphiques ---------- */
 const PAL = ["var(--c1)","var(--c2)","var(--c3)","var(--c4)","var(--c5)"];
-const TYPE_LBL = {whatsapp:"WhatsApp", email:"E-mail", invite:"Sans compte", admin:"Administrateur"};
+const TYPE_LBL = {email:"E-mail"};
 function donut(el, entries, unit){
   const total = entries.reduce((a,e)=>a+e[1],0);
   if(!total){ el.innerHTML = `<p class="hint" style="margin:0">Pas encore de données.</p>`; return; }
@@ -1773,7 +1674,7 @@ function rowsIndicateurs(){
 function rowsDomaines(){ const n = ideas.length||1; return count("domaine").map(([k,v])=>({"Domaine":k,"Réponses":v,"Part (%)":Math.round(v/n*1000)/10})); }
 function rowsConnexions(){ return cnx.map(c=>({"ID participant":c.uid||"","Identifiant de connexion":c.valeur||"","Mode":TYPE_LBL[c.type]||"","Avec compte":(c.type==="whatsapp"||c.type==="email")?"Oui":"Non","Nombre de connexions":c.count||0,"Première connexion (UTC)":isoUTC(c.first),"Dernière connexion (UTC)":isoUTC(c.last),"Jours actifs":Object.keys(c.jours||{}).length,"Réponses envoyées":ideas.filter(d=>d.uid===c.uid).length})); }
 function rowsTrace(){
-  const who = (ident && ident.type==="admin") ? ident.value : "Administrateur";
+  const who = (claudeMe && claudeMe.name) || "Administrateur";
   return [
     {"Élément":"Application","Valeur":APP_VERSION},
     {"Élément":"Exporté par","Valeur":who},
@@ -1936,7 +1837,7 @@ $("tourSkip").addEventListener("click", endTour);
 addEventListener("resize", ()=>{ if(!$("tour").hidden) tourPlace(); });
 addEventListener("scroll", ()=>{ if(!$("tour").hidden) tourPlace(); }, {passive:true});
 document.addEventListener("keydown", e=>{ if(!$("tour").hidden && e.key==="Escape") endTour(); });
-$("menuAdmin").addEventListener("click", ()=>{ $("acctMenu").hidden = true; openAdminLogin(); });
+$("menuAdmin").addEventListener("click", ()=>{ $("acctMenu").hidden = true; showLogin(); });
 $("replayTour").addEventListener("click", ()=>{ $("acctMenu").hidden = true; startTour(); });
 
 /* ---------- Construction du formulaire ---------- */
@@ -2010,7 +1911,7 @@ $("f").addEventListener("submit", async e=>{
   const contact = $("contact").value.trim(), okContact = $("consentContact").checked;
   if(!$("consentRgpd").checked){ formErr("Cochez la case sur l’utilisation de vos réponses pour pouvoir envoyer."); return; }
   if(contact && !okContact){ formErr("Cochez la case « J’accepte que Geomessen me recontacte », ou laissez le numéro vide."); return; }
-  if(!db || !myId){ formErr("Connectez-vous avec le bouton en haut à droite pour envoyer votre idée."); $("acctMenu").hidden=false; return; }
+  if(!db || !myId){ formErr("Connectez-vous par e-mail pour envoyer votre idée."); showLogin(); return; }
 
   const now = new Date().toISOString();
   const doc = {
@@ -2026,7 +1927,7 @@ $("f").addEventListener("submit", async e=>{
   try{
     if(doc.aContact){ doc.nom = $("nom").value.trim(); doc.contact = contact; }
     { const gq = geoOf(doc); if(gq){ doc.lon = gq.ll[0]; doc.lat = gq.ll[1]; doc.geoPrecision = gq.prec; } }
-    doc.identite = ident && ident.type!=="invite" ? {type:ident.type, valeur:ident.value} : {type:"invite"};
+    doc.identite = {type:"email", valeur: claudeMe.name || ""};
     doc.id = Date.now().toString(36) + Math.random().toString(36).slice(2,7);
     const ref = db.doc("reponses/" + myId);
     const snap = await ref.get();
@@ -2194,7 +2095,7 @@ function renderNews(){
   const list = sortedNews();
   $("une").hidden = isAdmin || !list.length;
   $("uneRail").innerHTML = list.map(n=>`<button type="button" class="news" data-news="${esc(n.id)}">
-    <div class="img"${n.imageId?` style="background-image:url('/_blob/${esc(n.imageId)}')"`:""}>${n.imageId?"":catArt(n.categorie)}<span class="cat">${esc(n.categorie||"Actualité")}</span>${n.pin?`<span class="pin">Épinglé</span>`:""}</div>
+    <div class="img"${n.imageId?` style="background-image:url('${esc(window.claude.publicUrl(n.imageId))}')"`:""}>${n.imageId?"":catArt(n.categorie)}<span class="cat">${esc(n.categorie||"Actualité")}</span>${n.pin?`<span class="pin">Épinglé</span>`:""}</div>
     <div class="txt"><h3>${esc(n.titre||"")}</h3><p>${esc(n.resume||"")}</p><span class="src">${esc(fmtDay(n.date))}${n.source?` · ${esc(n.source)}`:""}</span></div></button>`).join("");
   $("uneDots").innerHTML = list.length > 1 ? list.map((_,i)=>`<button type="button" aria-label="Actualité ${i+1}" aria-current="${i===0}"></button>`).join("") : "";
   uneIdx = 0; startUne();
@@ -2298,7 +2199,7 @@ $("naList").addEventListener("click", async e=>{
 $("uneRail").addEventListener("click", e=>{
   const b = e.target.closest("[data-news]"); if(!b) return; const n = news.find(x=>x.id===b.dataset.news); if(!n) return;
   $("nmK").textContent = (n.categorie||"Actualité") + " · " + fmtDay(n.date); $("nmTitle").textContent = n.titre||"";
-  $("nmBody").innerHTML = `${n.imageId?`<img class="nm-img" src="/_blob/${esc(n.imageId)}" alt="">`:`<div class="nm-img nm-art">${catArt(n.categorie)}</div>`}<p style="font-weight:500;margin:14px 0 8px">${esc(n.resume||"")}</p>${n.texte?`<p class="dtext" style="background:none;padding:0">${esc(n.texte)}</p>`:""}
+  $("nmBody").innerHTML = `${n.imageId?`<img class="nm-img" src="${esc(window.claude.publicUrl(n.imageId))}" alt="">`:`<div class="nm-img nm-art">${catArt(n.categorie)}</div>`}<p style="font-weight:500;margin:14px 0 8px">${esc(n.resume||"")}</p>${n.texte?`<p class="dtext" style="background:none;padding:0">${esc(n.texte)}</p>`:""}
     ${n.source||n.lien?`<p class="hint" style="margin-top:14px">Source : ${esc(n.source||"")}</p>`:""}${n.lien?`<a class="btn primary small" style="text-decoration:none;margin-top:6px" href="${esc(n.lien)}" target="_blank" rel="noopener">Lire l’article complet</a>`:""}`;
   $("newsModal").hidden = false; $("nmClose").focus();
 });
@@ -2313,9 +2214,9 @@ function renderVideo(){
   const p = $("player");
   $("vidStatus").textContent = video.assetId ? "Une vidéo est en ligne. Téléversez-en une autre pour la remplacer." : video.lien ? "Un lien vidéo est en ligne : " + video.lien : "Aucune vidéo pour l’instant.";
   if(video.assetId){
-    const src = "/_blob/" + video.assetId;
+    const src = window.claude.publicUrl(video.assetId);
     const cur = p.querySelector("video");
-    const poster = video.posterId ? ` poster="/_blob/${esc(video.posterId)}"` : "";
+    const poster = video.posterId ? ` poster="${esc(window.claude.publicUrl(video.posterId))}"` : "";
     if(!cur || cur.getAttribute("src")!==src) p.innerHTML = `<video controls playsinline preload="metadata"${poster} src="${esc(src)}"></video>`;
   }else if(video.lien){
     let host = ""; try{ host = new URL(video.lien).hostname.replace(/^www\./,""); }catch(_){}
@@ -2356,32 +2257,18 @@ $("vidLinkForm").addEventListener("submit", async e=>{
 renderVideo();
 
 renderIdeas();
-(async ()=>{
-  try{ db = await window.claude?.use("db"); }catch(_){ db=null; }
-  try{ user = await window.claude?.use("user"); }catch(_){ user=null; }
-  try{ downloads = await window.claude?.use("downloads"); }catch(_){ downloads=null; }
-  try{ assets = await window.claude?.use("assets"); }catch(_){ assets=null; }
-  /* Compte Claude : photo de profil et rôle */
+let subscribedOwner = false, subscribedUid = null;
+async function refreshIdentity(){
   claudeMe = user ? await user.me() : null;
   myId = claudeMe && claudeMe.id;
   isOwner = !!(claudeMe && claudeMe.isOwner);
-  if(!isOwner && user){ try{ isOwner = !!(await user.isOwner()); }catch(_){} }
-  adminMode = isOwner && store.get("ideomes-admin")==="1" && ident && ident.type==="admin";
-  if(isOwner && db){ try{ const c = await db.doc("adminconf/credentials").get(); if(c.exists){ cred = c.data(); credDocExists = true; } }catch(_){} }
-  readyResolve();
-
-  /* Espace administrateur : réservé au propriétaire */
-  renderVideo();
   applyAdmin();
-  if(!db) return;
-  if(isOwner){
+  if(myId) logConnexion();
+
+  if(isOwner && db && !subscribedOwner){
+    subscribedOwner = true;
     db.collection("veille").onSnapshot(sn=>{ veille = sn.docs.map(d=>({id:d.id, ...(d.data()||{})})); renderHermes(); }, ()=>{});
     db.doc("config/hermes").onSnapshot(sn=>{ hermesMeta = sn.exists ? (sn.data()||{}) : {}; renderHermes(); }, ()=>{});
-  }
-  db.collection("actus").onSnapshot(sn=>{ news = sn.docs.map(d=>({id:d.id, ...(d.data()||{})})); renderNews(); }, ()=>{});
-  db.doc("config/video").onSnapshot(sn=>{ video = sn.exists ? (sn.data()||{}) : {}; renderVideo(); }, ()=>{});
-
-  if(isOwner){
     db.collection("connexions").onSnapshot(async s=>{
       cnx = s.docs.map(d=>({uid:d.id, ...(d.data()||{})}));
       await refreshPeople(); renderDash();
@@ -2396,13 +2283,30 @@ renderIdeas();
       renderIdeas(); renderDash();
     }, ()=>{});
   }
-  if(myId){
+  if(myId && db && subscribedUid !== myId){
+    subscribedUid = myId;
     db.doc("reponses/" + myId).onSnapshot(s=>{
       const n = s.exists ? ((s.data()||{}).items||[]).length : 0;
       $("acctCount").hidden = false;
       $("acctCount").textContent = n ? `Vous avez envoyé ${n} idée${n>1?"s":""}. Merci !` : "Vous n’avez pas encore envoyé d’idée.";
     }, ()=>{});
+    if(!$("contact").value && claudeMe.name) $("contact").value = claudeMe.name;
   }
+}
+(async ()=>{
+  try{ db = await window.claude?.use("db"); }catch(_){ db=null; }
+  try{ user = await window.claude?.use("user"); }catch(_){ user=null; }
+  try{ downloads = await window.claude?.use("downloads"); }catch(_){ downloads=null; }
+  try{ assets = await window.claude?.use("assets"); }catch(_){ assets=null; }
+  renderVideo();
+  await refreshIdentity();
+  if(!db) return;
+  db.collection("actus").onSnapshot(sn=>{ news = sn.docs.map(d=>({id:d.id, ...(d.data()||{})})); renderNews(); }, ()=>{});
+  db.doc("config/video").onSnapshot(sn=>{ video = sn.exists ? (sn.data()||{}) : {}; renderVideo(); }, ()=>{});
   renderIdeas(); renderDash();
 })();
+document.addEventListener("ideomes-auth-change", async ()=>{
+  try{ assets = await window.claude?.use("assets"); }catch(_){ assets=null; }
+  await refreshIdentity();
+});
 </script>

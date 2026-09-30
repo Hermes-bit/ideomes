@@ -1,23 +1,18 @@
 /* Idéomès : remplace localement les capacités de l'artefact claude.ai (window.claude.use)
-   par l'API FastAPI du projet. Le code de l'appli (ideomes.src.html) reste inchangé.
-   Identité de développement : ?user=u_awa dans l'URL (ou localStorage "ideomes-dev-user").
-   Par défaut : "owner" (administrateur). À remplacer par une vraie connexion avant la mise en ligne. */
+   par Supabase (Postgres + Auth + Storage), interrogé directement depuis le navigateur.
+   Le code de l'appli (ideomes.src.html) reste inchangé : même interface db/user/assets/downloads.
+   Identité : Supabase Auth (lien magique par e-mail). Toute la sécurité repose sur les policies
+   RLS côté Supabase (voir db/supabase_schema.sql) — il n'y a plus de serveur de confiance ici. */
 (function(){
-  const API = (window.IDEOMES_API || "").replace(/\/$/, "");
-  const q = new URLSearchParams(location.search).get("user");
-  const ls = { get(k){ try{return localStorage.getItem(k)}catch(_){return null} }, set(k,v){ try{localStorage.setItem(k,v)}catch(_){} } };
-  if(q) ls.set("ideomes-dev-user", q);
-  const UID = ls.get("ideomes-dev-user") || "owner";
-  const H = { "X-Dev-User": UID };
+  const SUPABASE_URL = "__SUPABASE_URL__";
+  const SUPABASE_ANON_KEY = "__SUPABASE_ANON_KEY__";
+  const BUCKET = "ideomes-public";
   const POLL_MS = 3000;
+  const EXT = {"image/png":"png","image/jpeg":"jpg","image/webp":"webp","image/gif":"gif",
+               "image/svg+xml":"svg","video/mp4":"mp4","video/webm":"webm","application/pdf":"pdf"};
+  const MAX = 200 * 1024 * 1024;
 
-  async function req(method, path, body){
-    const r = await fetch(API + path, { method, headers: body ? {...H, "Content-Type":"application/json"} : H, body: body ? JSON.stringify(body) : undefined });
-    if(!r.ok){ const e = new Error("HTTP " + r.status); e.code = r.status===403 ? "permission_denied" : "upstream_error"; throw e; }
-    return r.json();
-  }
-  const docSnap = (id, v) => ({ id, exists: !!(v && v.exists), data: () => v && v.data ? JSON.parse(JSON.stringify(v.data)) : undefined });
-  const colSnap = (docs) => ({ docs: docs.map(d => docSnap(d.id, {exists:true, data:d.data})), size: docs.length, empty: !docs.length });
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   function poll(load, emit, onErr){
     let last = null, stop = false;
@@ -31,45 +26,133 @@
     return () => { stop = true; };
   }
 
+  const docSnap = (id, v) => ({ id, exists: !!(v && v.exists), data: () => v && v.data ? JSON.parse(JSON.stringify(v.data)) : undefined });
+  const colSnap = (docs) => ({ docs: docs.map(d => docSnap(d.id, {exists:true, data:d.data})), size: docs.length, empty: !docs.length });
+
+  function fuseDeep(base, patch){
+    const out = {...(base||{})};
+    for(const k in patch){
+      const v = patch[k];
+      if(v && typeof v === "object" && !Array.isArray(v) && v.__delete__){ delete out[k]; continue; }
+      if(v && typeof v === "object" && !Array.isArray(v) && typeof out[k] === "object" && !Array.isArray(out[k])){ out[k] = fuseDeep(out[k], v); }
+      else out[k] = v;
+    }
+    return out;
+  }
+
+  function errCode(error){ return error && error.code === "42501" ? "permission_denied" : "upstream_error"; }
+
   function docRef(path){
     const i = path.indexOf("/"), col = path.slice(0, i), id = path.slice(i + 1);
-    const url = `/api/db/doc/${encodeURIComponent(col)}/${encodeURIComponent(id)}`;
+    async function fetchRow(){
+      const { data, error } = await sb.from("documents").select("data").eq("collection", col).eq("doc_id", id).maybeSingle();
+      if(error) throw Object.assign(new Error("db"), {code: errCode(error)});
+      return { exists: !!data, data: data ? data.data : undefined };
+    }
     return {
       id, path,
-      async get(){ return docSnap(id, await req("GET", url)); },
-      async set(data){ await req("PUT", url, {data}); },
-      async update(data){ await req("PATCH", url, {data}); },
-      async delete(){ await req("DELETE", url); },
-      onSnapshot(cb, err){ return poll(() => req("GET", url), v => cb(docSnap(id, v)), err); },
+      async get(){ return docSnap(id, await fetchRow()); },
+      async set(data){
+        const { error } = await sb.from("documents").upsert({ collection: col, doc_id: id, data }, { onConflict: "collection,doc_id" });
+        if(error) throw Object.assign(new Error("db"), {code: errCode(error)});
+      },
+      async update(patch){
+        const cur = await fetchRow();
+        await this.set(fuseDeep(cur.data, patch));
+      },
+      async delete(){
+        const { error } = await sb.from("documents").delete().eq("collection", col).eq("doc_id", id);
+        if(error) throw Object.assign(new Error("db"), {code: errCode(error)});
+      },
+      onSnapshot(cb, err){ return poll(fetchRow, v => cb(docSnap(id, v)), err); },
     };
   }
+
   function colRef(col){
-    const url = `/api/db/collection/${encodeURIComponent(col)}`;
+    async function fetchRows(){
+      const { data, error } = await sb.from("documents").select("doc_id,data").eq("collection", col);
+      if(error) throw Object.assign(new Error("db"), {code: errCode(error)});
+      return (data || []).map(r => ({ id: r.doc_id, data: r.data }));
+    }
     return {
       id: col,
-      doc(id){ return docRef(col + "/" + (id || (Date.now().toString(36) + Math.random().toString(36).slice(2, 10)))); },
-      async add(data){ const r = await req("POST", url, {data}); return docRef(col + "/" + r.id); },
-      async get(){ return colSnap((await req("GET", url)).docs); },
-      onSnapshot(cb, err){ return poll(() => req("GET", url).then(r => r.docs), d => cb(colSnap(d)), err); },
+      doc(id){ return docRef(col + "/" + (id || crypto.randomUUID())); },
+      async add(data){
+        const id = crypto.randomUUID();
+        const { error } = await sb.from("documents").insert({ collection: col, doc_id: id, data });
+        if(error) throw Object.assign(new Error("db"), {code: errCode(error)});
+        return docRef(col + "/" + id);
+      },
+      async get(){ return colSnap(await fetchRows()); },
+      onSnapshot(cb, err){ return poll(fetchRows, d => cb(colSnap(d)), err); },
     };
   }
+
   const db = { doc: docRef, collection: colRef };
 
+  let cachedAdmin = null;
+  async function checkAdmin(){
+    if(cachedAdmin !== null) return cachedAdmin;
+    const { data, error } = await sb.rpc("is_admin");
+    cachedAdmin = !error && !!data;
+    return cachedAdmin;
+  }
+
   const user = {
-    async me(){ return req("GET", "/api/me"); },
-    async isOwner(){ return (await req("GET", "/api/me")).isOwner; },
-    async profiles(ids){ return req("POST", "/api/profiles", {ids}); },
+    async me(){
+      const { data: { session } } = await sb.auth.getSession();
+      if(!session) return { id: null, name: null, avatarUrl: null, isOwner: false };
+      const isOwner = await checkAdmin();
+      return { id: session.user.id, name: isOwner ? "Administrateur Geomessen" : session.user.email, avatarUrl: null, isOwner };
+    },
+    async isOwner(){ return (await this.me()).isOwner; },
+    async profiles(ids){
+      if(!ids || !ids.length) return {};
+      const { data, error } = await sb.from("documents").select("doc_id,data").eq("collection", "connexions").in("doc_id", ids);
+      if(error) return {};
+      const out = {};
+      (data || []).forEach(r => { out[r.doc_id] = { id: r.doc_id, name: (r.data || {}).valeur || ("Participant " + r.doc_id.slice(0, 8)), avatarUrl: null }; });
+      return out;
+    },
   };
+
+  function extFor(ct){ return EXT[ct] || "bin"; }
+  function publicUrl(path){
+    if(!path) return "";
+    if(/^https?:\/\//.test(path)) return path;
+    return sb.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
+  }
 
   const assets = {
     async upload(blob, opts){
-      const f = new FormData(); f.append("fichier", blob, blob.name || "fichier"); if(opts && opts.type) f.append("type", opts.type);
-      const r = await fetch(API + "/api/assets", { method:"POST", headers:H, body:f });
-      if(!r.ok) throw Object.assign(new Error("upload"), {code: r.status===413 ? "too_large" : r.status===415 ? "unsupported_type" : "upstream_error"});
-      return r.json();
+      const ct = (opts && opts.type) || blob.type || "application/octet-stream";
+      if(!EXT[ct]) throw Object.assign(new Error("upload"), {code:"unsupported_type"});
+      if(!blob.size || blob.size > MAX) throw Object.assign(new Error("upload"), {code:"too_large"});
+      const prefix = ct.startsWith("video/") ? "video" : "news";
+      const path = `${prefix}/${crypto.randomUUID()}.${extFor(ct)}`;
+      const { error } = await sb.storage.from(BUCKET).upload(path, blob, { contentType: ct, upsert: false });
+      if(error) throw Object.assign(new Error("upload"), {code:"upstream_error"});
+      return { id: path, url: publicUrl(path), sizeBytes: blob.size, contentType: ct };
     },
-    async list(){ return req("GET", "/api/assets"); },
-    async delete(ref){ return req("DELETE", "/api/assets/" + String(ref).split("/").pop()); },
+    async list(){
+      const { data, error } = await sb.storage.from(BUCKET).list("", { limit: 1000, sortBy: { column: "created_at", order: "desc" } });
+      if(error) return { assets: [], usage: { files: 0, bytes: 0 } };
+      const out = [];
+      for(const prefix of ["news", "video"]){
+        const { data: sub } = await sb.storage.from(BUCKET).list(prefix, { limit: 1000 });
+        (sub || []).forEach(f => out.push({
+          id: `${prefix}/${f.name}`, url: publicUrl(`${prefix}/${f.name}`),
+          contentType: (f.metadata && f.metadata.mimetype) || "", sizeBytes: (f.metadata && f.metadata.size) || 0,
+          createdAt: f.created_at || "",
+        }));
+      }
+      return { assets: out, usage: { files: out.length, bytes: out.reduce((a, x) => a + (x.sizeBytes || 0), 0) } };
+    },
+    async delete(ref){
+      const path = String(ref).replace(/^.*\/(news|video)\//, "$1/");
+      const { error } = await sb.storage.from(BUCKET).remove([path]);
+      if(error) throw Object.assign(new Error("delete"), {code:"upstream_error"});
+    },
   };
 
   const downloads = {
@@ -82,9 +165,21 @@
   };
 
   const caps = { db, user, assets: null, downloads };
-  window.claude = { async use(name){
-    if(name === "assets") return (await user.isOwner()) ? assets : null;   // comme l'artefact : réservé à l'éditeur
-    return caps[name] ?? null;
-  } };
-  console.info("[Idéomès] mode local, utilisateur :", UID);
+  window.claude = {
+    async use(name){
+      if(name === "assets") return (await user.isOwner()) ? assets : null;
+      return caps[name] ?? null;
+    },
+    // Construction d'URL publique toujours disponible (pas gatée par isOwner) : les rendus
+    // d'images/vidéo dans ideomes.src.html en ont besoin même pour un visiteur non connecté.
+    publicUrl,
+    auth: sb.auth,
+  };
+
+  sb.auth.onAuthStateChange(() => {
+    cachedAdmin = null;
+    document.dispatchEvent(new Event("ideomes-auth-change"));
+  });
+
+  console.info("[Idéomès] mode Supabase");
 })();

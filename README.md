@@ -10,50 +10,61 @@ le **squelette complet** pour continuer le développement sur votre poste avec V
 
 ---
 
-## 1. Démarrage rapide (10 minutes)
+## 1. Démarrage rapide
 
-Prérequis : **Python 3.11 ou plus**, **VS Code**, Git. Docker est facultatif (PostgreSQL).
+L'appli web (`web/`) est **statique** et parle directement à **Supabase** (Postgres + Auth + Storage) —
+elle ne dépend plus du backend FastAPI de `api/` pour fonctionner (voir § Architecture). Le backend
+`api/` + `agents/` reste dans ce dépôt pour une phase ultérieure (pipeline des 15 agents IA), branché
+séparément sur la même base Supabase.
+
+### 1.a Appli web (Supabase)
+
+Prérequis : **Python 3.11 ou plus**, un projet Supabase (gratuit) — voir § 5 pour le créer et y
+exécuter `db/supabase_schema.sql`.
 
 ```bash
-# 1. Ouvrir le dossier dans VS Code, puis dans le terminal intégré :
-python -m venv .venv
-# Windows :   .venv\Scripts\activate
-# macOS/Linux : source .venv/bin/activate
-pip install -r requirements.txt
-pip install -e agents
-cp .env.example .env          # Windows : copy .env.example .env
+# Windows (PowerShell) :
+$env:SUPABASE_URL = "https://xxxx.supabase.co"
+$env:SUPABASE_ANON_KEY = "eyJ..."
+# macOS/Linux :
+export SUPABASE_URL=https://xxxx.supabase.co SUPABASE_ANON_KEY=eyJ...
 
-# 2. Construire l'appli et lancer l'API
 python web/build.py
-cd api && uvicorn app.main:app --reload --port 8000
-
-# 3. Dans un second terminal : remplir la base (vidéo + 5 actualités « À la une »)
-python scripts/seed.py
+python -m http.server 8000 --directory web/dist
 ```
 
-Ouvrez ensuite :
+Ouvrez http://localhost:8000 : navigation libre (actualités, carte), connexion par e-mail (lien
+magique Supabase) requise pour envoyer une idée. `admin@geomessen.bf` (ou toute adresse ajoutée à la
+table `admins`) voit l'espace administrateur dès sa connexion.
 
-| Adresse | Ce que vous voyez |
-|---|---|
-| http://localhost:8000/?user=u_awa | l'appli vue par une participante |
-| http://localhost:8000/?user=owner | l'appli vue par l'administrateur (puis « Connexion administrateur » : admin@geomessen.bf / ideomes-demo — identifiants de démonstration **à changer immédiatement** via « Réinitialiser le mot de passe » avant tout usage réel) |
-| http://localhost:8000/docs | la documentation interactive de l'API |
+Pour remplir la base une première fois (vidéo de contexte + 5 actualités) :
+`SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... python scripts/seed_supabase.py` (clé service_role,
+jamais celle utilisée pour le build — voir l'en-tête du script).
 
-Guide pas à pas : [docs/prise-en-main-vscode.md](docs/prise-en-main-vscode.md).
+Déploiement public : § 5 « GitHub Pages + Supabase ».
 
-Raccourcis : `scripts/dev.ps1 install|api|seed|test|demo` (Windows), `scripts/dev.sh ...` ou `make ...` (Linux, macOS).
-Dans VS Code : **Exécuter et déboguer** propose « API Idéomès », « Agents : démo complète », « Hermès », « Évaluation ».
+### 1.b Backend API + agents IA (optionnel, phase ultérieure)
 
-### Voir les agents travailler, sans clé ni coût
+`api/` (FastAPI) et `agents/` (pipeline LangGraph + Claude) forment un second backend, autonome,
+pour le traitement des idées par les 15 agents — pas encore branché sur Supabase. Utile dès
+maintenant pour développer/tester le pipeline lui-même :
 
 ```bash
+python -m venv .venv && .venv\Scripts\activate   # macOS/Linux : source .venv/bin/activate
+pip install -r requirements.txt && pip install -e agents
+cp .env.example .env          # Windows : copy .env.example .env
+
 ideomes agents     # liste des 15 agents et de leurs noms
 ideomes demo       # une idée d'exemple traverse tout le pipeline
 pytest agents/tests api/tests
 ```
 
 Par défaut `LLM_MODE=simule` : les agents répondent de façon déterministe (réponses marquées `[simulé]`).
-Pour de vraies analyses, mettez votre clé Anthropic dans `.env` et `LLM_MODE=anthropic`.
+Pour de vraies analyses, mettez votre clé Anthropic dans `.env` et `LLM_MODE=anthropic`. Hébergement
+possible via `render.yaml` (Docker) quand ce pipeline sera reconnecté à la base Supabase.
+
+Guide pas à pas (ancien flux tout-FastAPI, pour référence) : [docs/prise-en-main-vscode.md](docs/prise-en-main-vscode.md).
+Raccourcis : `scripts/dev.ps1 install|api|seed|test|demo` (Windows), `scripts/dev.sh ...` ou `make ...` (Linux, macOS).
 
 ---
 
@@ -61,12 +72,16 @@ Pour de vraies analyses, mettez votre clé Anthropic dans `.env` et `LLM_MODE=an
 
 ```
 ideomes/
-├── web/                     Appli mobile (une page HTML autonome)
-│   ├── src/ideomes.src.html     code source de l'appli (celui de l'artefact, inchangé)
-│   ├── src/claude-shim.js       remplace window.claude.use(...) par l'API locale
+├── web/                     Appli mobile (une page HTML autonome, statique)
+│   ├── src/ideomes.src.html     code source de l'appli
+│   ├── src/claude-shim.js       remplace window.claude.use(...) par Supabase (Postgres + Auth + Storage)
 │   ├── assets/                  logos, vidéo de contexte, limites administratives (13 régions, 45 provinces, 351 communes)
-│   └── build.py                 assemble web/dist/index.html
-├── api/                     FastAPI : base de l'appli, fichiers, dossiers d'agents, décisions humaines
+│   └── build.py                 assemble web/dist/index.html (injecte SUPABASE_URL/SUPABASE_ANON_KEY)
+├── db/supabase_schema.sql  Schéma Postgres + Row Level Security pour Supabase (à exécuter une fois)
+├── .github/workflows/deploy-pages.yml   build + déploiement GitHub Pages à chaque push sur main
+├── scripts/seed_supabase.py Remplit Supabase (vidéo + actualités) via la clé service_role
+│
+├── api/                     FastAPI (phase ultérieure, pipeline agents — pas branché sur le web actuel)
 │   ├── app/routers/             db (documents), moi (identité), assets (/_blob), dossiers (agents)
 │   ├── app/pipeline.py          chaque nouvelle idée → dossier → Zeus
 │   └── tests/
@@ -80,10 +95,11 @@ ideomes/
 │   ├── ideomes_agents/core/         dossier partagé, client Claude, masquage, territoire, score, audit
 │   ├── eval/jeu_annote.jsonl        jeu d'évaluation (fictif, à remplacer)
 │   └── tests/
-├── db/init.sql              PostgreSQL : pgvector et index des plongements
+├── db/init.sql              PostgreSQL local (docker-compose) pour l'ancien flux api/ + agents/
 ├── docs/                    architecture, agents, conformité, décisions (ADR), stratégie PDF
-├── scripts/                 seed, raccourcis Windows / Linux
-└── docker-compose.yml       PostgreSQL 16 + pgvector et l'API
+├── scripts/                 seed (Supabase et ancien flux FastAPI), raccourcis Windows / Linux
+├── render.yaml              hébergement Docker de api/ + agents/ (phase ultérieure, pipeline)
+└── docker-compose.yml       PostgreSQL 16 + pgvector et l'API (ancien flux local)
 ```
 
 Détails : [docs/architecture.md](docs/architecture.md).
@@ -137,11 +153,37 @@ humaine tracée (`POST /api/dossiers/{id}/decision`).
 | Phase 3 | A9, A11, suivi des projets | codés, à brancher sur les projets réels |
 
 Prochaines étapes conseillées : voir la section « À faire avant la mise en ligne » de
-[docs/conformite.md](docs/conformite.md) (vraie authentification, connecteur WhatsApp, hébergement).
+[docs/conformite.md](docs/conformite.md).
 
 ---
 
-## 5. Licence
+## 5. Déploiement : GitHub Pages + Supabase
+
+1. **Créer un projet Supabase** sur [supabase.com](https://supabase.com) (gratuit).
+2. **Récupérer** `Project URL` et `anon public key` (Settings → API).
+3. **Exécuter** [`db/supabase_schema.sql`](db/supabase_schema.sql) dans l'éditeur SQL du projet
+   (Database → SQL Editor). Adapte `insert into public.admins (email) values ('admin@geomessen.bf')`
+   si l'adresse administrateur doit changer ; d'autres admins peuvent être ajoutés plus tard par un
+   simple `insert` supplémentaire.
+4. **Authentication → URL Configuration** : ajouter l'URL de la Pages GitHub
+   (`https://<compte>.github.io/ideomes/`) et une entrée locale (`http://localhost:8000/**`) aux
+   redirections autorisées — sinon le lien de connexion par e-mail est rejeté.
+5. **Secrets GitHub** (Settings → Secrets and variables → Actions, ou `gh secret set`) :
+   `SUPABASE_URL` et `SUPABASE_ANON_KEY` (valeurs de l'étape 2 — l'anon key est publique par
+   conception, ce n'est pas une fuite si elle apparaît dans le HTML généré).
+6. **Activer GitHub Pages** (source = GitHub Actions) :
+   `gh api --method POST repos/<compte>/ideomes/pages -f build_type=workflow`.
+7. **Pousser sur `main`** : le workflow [`.github/workflows/deploy-pages.yml`](.github/workflows/deploy-pages.yml)
+   construit `web/dist` et le publie automatiquement.
+8. **Remplir le contenu de démo** (une fois) :
+   `SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... python scripts/seed_supabase.py`.
+
+Le pipeline des 15 agents IA n'est pas branché à cette étape (voir § 4, Phase 2/3) : les idées
+soumises sont stockées dans Supabase mais pas encore traitées automatiquement.
+
+---
+
+## 6. Licence
 
 Ce projet est distribué sous licence [AGPL-3.0](LICENSE). Toute personne qui héberge une version
 modifiée de ce code (y compris en SaaS) doit republier le code source de sa version.

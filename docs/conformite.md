@@ -25,9 +25,15 @@
 
 ## À faire avant la mise en ligne
 
-1. **Authentification réelle** : l'en-tête `X-Dev-User` est un outil de développement, pas une sécurité.
-   Remplacer par un code à usage unique (WhatsApp Business API ou e-mail) et des sessions signées.
-2. Changer le mot de passe administrateur et `API_JETON_SERVICE`.
+1. ~~**Authentification réelle**~~ : fait pour l'appli web déployée sur GitHub Pages + Supabase —
+   connexion par lien magique e-mail (Supabase Auth), permissions appliquées par Row Level Security
+   (voir `db/supabase_schema.sql`). Reste à faire : l'en-tête `X-Dev-User` de l'ancien backend
+   `api/` (utilisé pour le pipeline agents, § 1.b du README) reste un outil de développement, pas
+   une sécurité, tant que ce backend n'est pas lui aussi reconnecté à une vraie authentification.
+   WhatsApp OTP (alternative à l'e-mail) reporté : nécessite un compte Twilio payant et une
+   validation Meta Business.
+2. Changer le mot de passe administrateur et `API_JETON_SERVICE` **de l'ancien backend `api/`**
+   s'il est un jour redéployé (le nouveau flux Supabase n'utilise plus ces identifiants).
 3. Hébergement avec chiffrement (HTTPS, base chiffrée), sauvegardes, durée de conservation définie.
 4. Déclaration auprès de la CIL ; registre des traitements ; mentions d'information à jour.
 5. Jeu d'évaluation réel (contributions annotées) et calibrage des seuils avant d'activer `LLM_MODE=anthropic`.
