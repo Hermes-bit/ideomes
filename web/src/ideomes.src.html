@@ -12,7 +12,13 @@
   --hero:#0E5C63; --hero-ink:#FFFFFF; --on-orange:#14343C; --shadow:0 10px 30px -12px rgba(14,92,99,.28);
   --display:"Unbounded", "Arial Black", system-ui, sans-serif;
   --body:"Lexend", "Segoe UI", system-ui, sans-serif;
+  -webkit-text-size-adjust:100%; text-size-adjust:100%;
 }
+/* Filet de sécurité si le texte est malgré tout agrandi par l'appareil : le titre
+   passe à la ligne plutôt que de déborder de la boîte .hero (overflow:hidden),
+   ce qui donnait l'impression que le titre avait disparu. */
+.herotitle{flex-wrap:wrap; max-width:100%}
+.herotitle h1{min-width:0}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0B1A1D; --surface:#12262A; --ink:#E4EFEF; --muted:#9BB0B2; --line:#23393D;
   --teal:#45A6AD; --teal-soft:#163136; --sage:#5D8C8D; --orange:#F0944F; --orange-soft:#3A2618;
