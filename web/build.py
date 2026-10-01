@@ -11,6 +11,7 @@ from __future__ import annotations
 import base64
 import os
 import shutil
+from datetime import datetime, timezone
 from pathlib import Path
 
 ICI = Path(__file__).resolve().parent
@@ -35,6 +36,9 @@ def construire() -> Path:
         .replace("__IDEO__", b64("ideomes-logo.png"))
         .replace("__FAV__", b64("ideomes-favicon.png"))
         .replace("__BF__", (ASSETS / "bf-limites.json").read_text(encoding="utf-8").strip())
+        # Horodatage de compilation affiché en pied de page : permet de vérifier
+        # d'un coup d'oeil si le navigateur sert bien la dernière version déployée.
+        .replace("__BUILD__", "1.3 (" + datetime.now(timezone.utc).strftime("%d/%m/%Y %H:%M UTC") + ")")
     )
     shim_src = (
         (SRC / "claude-shim.js")
