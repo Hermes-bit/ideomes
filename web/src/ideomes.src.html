@@ -166,8 +166,9 @@ button.logo:focus-visible{outline:2px solid var(--teal);outline-offset:4px}
 .hero .badges span{font-size:.78rem;padding:5px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22)}
 
 /* ---------- ONGLETS ---------- */
-.tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;margin:0 0 20px;background:var(--surface);padding:5px;border-radius:20px;border:1px solid var(--line);width:100%;box-shadow:var(--shadow)}
+.tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;margin:0 0 20px;background:var(--surface);padding:5px;border-radius:20px;border:1px solid var(--line);width:100%;box-shadow:var(--shadow)}
 .tabs button{display:flex;align-items:center;justify-content:center;gap:9px;min-width:0;border:0;background:none;color:var(--muted);font-weight:500;font-size:.92rem;padding:12px 10px;border-radius:15px;cursor:pointer;transition:background .2s,color .2s}
+.tabs button span{display:none}
 .tabs button span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .tabs button svg{width:19px;height:19px;flex:none}
 .tabs button:hover{color:var(--ink);background:var(--bg)}
@@ -437,6 +438,7 @@ textarea{min-height:120px;resize:vertical}
 .cnx{display:grid;grid-template-columns:32px minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 0;border-top:1px solid var(--line);font-size:.87rem}
 .cnx:first-child{border-top:0}
 .cnx img,.cnx .ph{width:32px;height:32px;border-radius:50%;object-fit:cover;background:var(--teal-soft)}
+.cnx .av{width:32px;height:32px;border-radius:50%;background:var(--teal-soft);color:var(--teal);border:2px solid var(--orange);display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:.78rem}
 .cnx .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500}
 .cnx .sub{color:var(--muted);font-size:.78rem}
 .cnx .tag{font-size:.72rem;padding:3px 8px;border-radius:999px;background:var(--bg);border:1px solid var(--line);color:var(--muted);white-space:nowrap}
@@ -544,7 +546,7 @@ select:disabled{opacity:.55}
 .tour .skip{background:none;border:0;color:var(--muted);font-size:.85rem;cursor:pointer;padding:8px}
 @media (prefers-reduced-motion: reduce){.tour .hole,.tour .tip{transition:none;animation:none}}
 
-.une{margin:0 0 26px}
+.une{margin:28px 0 26px}
 .unehead{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:12px;flex-wrap:wrap}
 .unehead h2{font-size:1.2rem;font-weight:800;display:flex;align-items:center;gap:10px}
 .unehead .dot{width:10px;height:10px;border-radius:50%;background:var(--orange);box-shadow:0 0 0 5px var(--orange-soft);animation:pulse 2s ease-in-out infinite}
@@ -755,10 +757,11 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
   </section>
 
   <nav class="tabs" role="tablist" id="tabs" hidden>
-    <button id="tab-form" role="tab" aria-selected="true" data-view="form"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg><span>Donner une idée</span></button>
-    <button id="tab-ideas" role="tab" aria-selected="false" data-view="ideas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.8 7L4 20l1.1-4.6A8 8 0 1 1 21 12z"/><path d="M8.5 10.5h7M8.5 13.5h4"/></svg><span>Idées reçues</span></button>
-    <button id="tab-dash" role="tab" aria-selected="false" data-view="dash" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span>Tableau de bord</span></button>
-    <button id="tab-notif" role="tab" aria-selected="false" data-view="notif" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span>Notifications</span></button>
+    <button id="tab-form" role="tab" aria-selected="true" data-view="form" title="Donner une idée"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg><span>Donner une idée</span></button>
+    <button id="tab-ideas" role="tab" aria-selected="false" data-view="ideas" title="Idées reçues"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.8 7L4 20l1.1-4.6A8 8 0 1 1 21 12z"/><path d="M8.5 10.5h7M8.5 13.5h4"/></svg><span>Idées reçues</span></button>
+    <button id="tab-dash" role="tab" aria-selected="false" data-view="dash" hidden title="Tableau de bord"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span>Tableau de bord</span></button>
+    <button id="tab-users" role="tab" aria-selected="false" data-view="users" hidden title="Utilisateurs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 20v-1a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v1"/><circle cx="9" cy="7" r="4"/><path d="M23 20v-1a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Utilisateurs</span></button>
+    <button id="tab-notif" role="tab" aria-selected="false" data-view="notif" hidden title="Notifications"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span>Notifications</span></button>
   </nav>
 
   <!-- ASSISTANT -->
@@ -1002,6 +1005,16 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
     </div>
   </section>
 
+  <!-- UTILISATEURS (admin) -->
+  <section id="view-users" hidden>
+    <div class="row"><h2>Utilisateurs</h2></div>
+    <div class="panel">
+      <input type="text" id="userSearch" placeholder="Rechercher par e-mail…" aria-label="Rechercher un utilisateur" style="margin-bottom:14px">
+      <div class="nalist" id="userList"></div>
+      <button class="btn secondary small" type="button" id="userMore" style="margin-top:14px" hidden>Voir plus</button>
+    </div>
+  </section>
+
   <!-- NOTIFICATIONS (admin) -->
   <section id="view-notif" hidden>
     <div class="row"><h2>Notifications</h2></div>
@@ -1029,7 +1042,7 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
 
     <div class="dash-block">
       <h3 class="sec">Historique GitHub</h3>
-      <div class="panel"><div class="nalist" id="ghHistory"><p class="hint" style="margin:0">Chargement…</p></div></div>
+      <div class="panel"><div class="nalist" id="ghHistory"><p class="hint" style="margin:0">Chargement…</p></div><button class="btn secondary small" type="button" id="ghMore" style="margin-top:14px" hidden>Voir plus</button></div>
     </div>
   </section>
 
@@ -1448,7 +1461,7 @@ document.addEventListener("keydown", e=>{ if(e.key==="Escape") $("policy").hidde
 /* ---------- Administrateur : isAdmin suit directement isOwner (table admins Supabase) ---------- */
 function applyAdmin(){
   isAdmin = isOwner;
-  $("tabs").hidden = !isAdmin; $("tab-dash").hidden = !isAdmin; $("tab-notif").hidden = !isAdmin;
+  $("tabs").hidden = !isAdmin; $("tab-dash").hidden = !isAdmin; $("tab-users").hidden = !isAdmin; $("tab-notif").hidden = !isAdmin;
   $("exportBox").hidden = !(isAdmin && downloads);
   $("vidAdmin").hidden = !(isAdmin && assets);
   $("contexte").hidden = isAdmin;
@@ -1926,7 +1939,8 @@ function renderCnx(){
   $("cnx-list").innerHTML = recent.length ? recent.map(c=>{
     const p = people[c.uid];
     const when = c.last ? new Date(c.last).toLocaleString("fr-FR",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}) : "";
-    return `<div class="cnx">${p&&p.avatarUrl?`<img src="${esc(p.avatarUrl)}" alt="">`:`<span class="ph"></span>`}<div style="min-width:0"><div class="nm">${esc(c.valeur || (p&&p.name) || "Sans compte")}</div><div class="sub">${c.count||0} connexion${(c.count||0)>1?"s":""} · ${esc(when)}</div></div><span class="tag">${esc(TYPE_LBL[c.type]||"")}</span></div>`;
+    const initials = esc(((c.valeur || (p&&p.name) || "?")).slice(0,2).toUpperCase());
+    return `<div class="cnx">${p&&p.avatarUrl?`<img src="${esc(p.avatarUrl)}" alt="">`:`<span class="av">${initials}</span>`}<div style="min-width:0"><div class="nm">${esc(c.valeur || (p&&p.name) || "Sans compte")}</div><div class="sub">${c.count||0} connexion${(c.count||0)>1?"s":""} · ${esc(when)}</div></div><span class="tag">${esc(TYPE_LBL[c.type]||"")}</span></div>`;
   }).join("") : `<p class="hint" style="margin:0">Aucune connexion pour l’instant.</p>`;
 }
 
@@ -1949,7 +1963,12 @@ function startTour(){
   TSTEPS = TOUR.filter(st=>{ if(!st.opt) return true; const el = document.querySelector(st.sel); return el && !el.hidden && el.getBoundingClientRect().width > 0; });
   tourI = 0; unePause = Date.now() + 1e9; $("tour").hidden = false; tourStep();
 }
-function endTour(){ $("tour").hidden = true; store.set("ideomes-tour", TOUR_V); unePause = Date.now() + 1500; window.scrollTo({top:0,behavior:"smooth"}); }
+function endTour(){
+  $("tour").hidden = true; store.set("ideomes-tour", TOUR_V); unePause = Date.now() + 1500;
+  // Double rAF : laisse le navigateur appliquer la disparition de l'overlay et tout
+  // réancrage de scroll automatique avant d'imposer le retour en haut de page.
+  requestAnimationFrame(()=>requestAnimationFrame(()=>window.scrollTo({top:0,behavior:"smooth"})));
+}
 function tourTarget(){
   const st = TSTEPS[tourI]; if(!st.sel) return null;
   let el = document.querySelector(st.sel);
@@ -2036,7 +2055,8 @@ function show(view){
   setTimeout(()=>{ if(view==="dash" && isAdmin) renderMap(); }, 30);
   if(view==="notif" && isAdmin) loadGithubHistory();
   document.querySelectorAll(".tabs button").forEach(b=>b.setAttribute("aria-selected", b.dataset.view===view));
-  ["form","ideas","dash","notif"].forEach(v=>$("view-"+v).hidden = v!==view);
+  if(view==="users") renderUsers();
+  ["form","ideas","dash","notif","users"].forEach(v=>$("view-"+v).hidden = v!==view);
 }
 document.querySelectorAll(".tabs button").forEach(b=>b.addEventListener("click",()=>show(b.dataset.view)));
 $("logoHome").addEventListener("click", ()=>{
@@ -2340,6 +2360,24 @@ $("hermesList").addEventListener("click", async e=>{
   }catch(_){ (ok||no).disabled = false; toast("L’opération a échoué. Réessayez."); }
 });
 
+/* ---------- Utilisateurs (admin) : liste dédiée, recherche, pagination ---------- */
+let usersShown = 20;
+function renderUsers(){
+  if(!isAdmin) return;
+  const q = $("userSearch").value.trim().toLowerCase();
+  const all = [...cnx].sort((a,b)=>String(b.last||"").localeCompare(String(a.last||"")))
+    .filter(c=>!q || String(c.valeur||"").toLowerCase().includes(q));
+  const slice = all.slice(0, usersShown);
+  $("userList").innerHTML = slice.length ? slice.map(c=>{
+    const initials = esc(((c.valeur||"?")).slice(0,2).toUpperCase());
+    const when = c.last ? new Date(c.last).toLocaleString("fr-FR",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}) : "";
+    return `<div class="cnx"><span class="av">${initials}</span><div style="min-width:0"><div class="nm">${esc(c.valeur||"Sans compte")}</div><div class="sub">${c.count||0} connexion${(c.count||0)>1?"s":""} · ${esc(when)}</div></div></div>`;
+  }).join("") : `<p class="hint" style="margin:0">${q ? "Aucun utilisateur ne correspond." : "Aucun utilisateur pour l’instant."}</p>`;
+  $("userMore").hidden = all.length <= usersShown;
+}
+$("userSearch").addEventListener("input", ()=>{ usersShown = 20; renderUsers(); });
+$("userMore").addEventListener("click", ()=>{ usersShown += 20; renderUsers(); });
+
 /* ---------- Notifications admin ---------- */
 let maint = [];
 function renderRecentIdeas(){
@@ -2376,21 +2414,37 @@ $("maintList").addEventListener("click", async e=>{
   try{ await db.doc("maintenance/"+rm.dataset.maintRm).delete(); toast("Annonce supprimée."); }catch(_){ toast("La suppression a échoué."); }
 });
 let ghLoaded = false;
+let ghPage = 1, ghCommits = [];
+function renderGhHistory(){
+  $("ghHistory").innerHTML = ghCommits.length ? ghCommits.map(c=>{
+    const msg = ((c.commit && c.commit.message) || "").split("\n")[0];
+    const when = c.commit && c.commit.author && c.commit.author.date ? new Date(c.commit.author.date).toLocaleString("fr-FR",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}) : "";
+    const author = (c.commit && c.commit.author && c.commit.author.name) || "";
+    const sha = (c.sha || "").slice(0, 7);
+    return `<div class="naitem"><div style="min-width:0"><b>${esc(msg)}</b><small>${esc(when)} · ${esc(author)} · ${esc(sha)}</small></div></div>`;
+  }).join("") : `<p class="hint" style="margin:0">Aucun historique disponible.</p>`;
+}
 async function loadGithubHistory(){
   if(ghLoaded) return; ghLoaded = true;
   try{
-    const r = await fetch("https://api.github.com/repos/Hermes-bit/ideomes/commits?per_page=8");
+    const r = await fetch(`https://api.github.com/repos/Hermes-bit/ideomes/commits?per_page=8&page=${ghPage}`);
     if(!r.ok) throw new Error("http " + r.status);
     const commits = await r.json();
-    $("ghHistory").innerHTML = commits.length ? commits.map(c=>{
-      const msg = ((c.commit && c.commit.message) || "").split("\n")[0];
-      const when = c.commit && c.commit.author && c.commit.author.date ? new Date(c.commit.author.date).toLocaleString("fr-FR",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}) : "";
-      const author = (c.commit && c.commit.author && c.commit.author.name) || "";
-      const sha = (c.sha || "").slice(0, 7);
-      return `<div class="naitem"><div style="min-width:0"><b>${esc(msg)}</b><small>${esc(when)} · ${esc(author)} · ${esc(sha)}</small></div></div>`;
-    }).join("") : `<p class="hint" style="margin:0">Aucun historique disponible.</p>`;
+    ghCommits = commits; renderGhHistory();
+    $("ghMore").hidden = commits.length < 8;
   }catch(_){ ghLoaded = false; $("ghHistory").innerHTML = `<p class="hint" style="margin:0">Impossible de charger l’historique GitHub pour le moment.</p>`; }
 }
+$("ghMore").addEventListener("click", async ()=>{
+  $("ghMore").disabled = true;
+  try{
+    const r = await fetch(`https://api.github.com/repos/Hermes-bit/ideomes/commits?per_page=8&page=${ghPage+1}`);
+    if(!r.ok) throw new Error("http " + r.status);
+    const more = await r.json();
+    if(more.length){ ghPage++; ghCommits = ghCommits.concat(more); renderGhHistory(); }
+    $("ghMore").hidden = more.length < 8;
+  }catch(_){}
+  finally{ $("ghMore").disabled = false; }
+});
 
 /* Défilement automatique : toutes les 5 s, en pause au toucher ou au survol */
 let uneT = null, uneIdx = 0, unePause = 0;
@@ -2418,11 +2472,13 @@ function startUne(){
 function naOpen(n){
   naEdit = n ? n.id : null; naImgFile = null; naImgClear = false;
   $("naTitre").value = n?.titre||""; $("naCat").value = n?.categorie||"Numérique"; $("naResume").value = n?.resume||""; $("naTexte").value = n?.texte||"";
-  $("naTexte").scrollTop = 0; $("naResume").scrollTop = 0;
   $("naDate").value = n?.date || dayKey(new Date()); $("naSource").value = n?.source||""; $("naLien").value = n?.lien||""; $("naPin").checked = !!n?.pin;
   $("naImgName").textContent = n?.imageId ? "Image actuelle conservée" : "Aucune image";
   $("naSave").textContent = n ? "Enregistrer" : "Publier"; $("naMsg").hidden = true;
   $("naForm").hidden = false; $("naTitre").focus();
+  // Remis à zéro après l'affichage réel du formulaire : sur certains navigateurs mobiles,
+  // fixer scrollTop pendant que le champ est encore caché (hidden) ne prend pas effet.
+  requestAnimationFrame(()=>{ $("naTexte").scrollTop = 0; $("naResume").scrollTop = 0; });
 }
 $("naNew").addEventListener("click", ()=>naOpen(null));
 $("naCancel").addEventListener("click", ()=>{ $("naForm").hidden = true; });
