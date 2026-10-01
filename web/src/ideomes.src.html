@@ -247,7 +247,7 @@ button.logo:focus-visible{outline:2px solid var(--teal);outline-offset:4px}
 
 /* ---------- ASSISTANT ---------- */
 .wizard{background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:26px 22px;box-shadow:var(--shadow)}
-.stepper{list-style:none;margin:0 0 30px;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+.stepper{list-style:none;margin:0 0 30px;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}
 .stepper li{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;min-width:0}
 .stepper li:not(:last-child)::after{content:"";position:absolute;top:17px;left:calc(50% + 24px);right:calc(-50% + 24px);height:3px;border-radius:2px;background:var(--line);transition:background .4s}
 .stepper li.done::after{background:var(--teal)}
@@ -320,6 +320,13 @@ textarea{min-height:120px;resize:vertical}
 .btn svg{width:18px;height:18px}
 .msg{padding:12px 15px;border-radius:12px;font-size:.92rem;margin-top:16px}
 .msg.err{background:var(--orange-soft);border-left:4px solid var(--orange)}
+/* Récapitulatif : un bloc par étape, relu avant l'envoi. */
+.rgrp{border:1.5px solid var(--line);border-radius:18px;padding:16px 18px;background:var(--surface);margin-bottom:14px}
+.rgrp .rhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.rgrp .rhead h3{margin:0;font-size:1rem;letter-spacing:-.01em}
+.rgrp .vide{margin:0;color:var(--muted);font-size:.88rem}
+.rgrp dd{white-space:pre-wrap}
+@media (max-width:560px){.rgrp{padding:14px;border-radius:16px}}
 .recap{background:var(--teal-soft);border-radius:16px;padding:16px;font-size:.92rem;display:flex;flex-direction:column;gap:4px;margin-bottom:20px}
 .recap b{font-weight:600}
 .recap p{margin:0;overflow-wrap:anywhere}
@@ -867,14 +874,14 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
         <ol class="stepper" id="progress" aria-label="Progression"></ol>
 
         <div class="step" data-step="0">
-          <div class="steplabel">Étape 1 sur 4</div>
+          <div class="steplabel">Étape 1 sur 5</div>
           <h2>Dans quel domaine ?</h2>
           <p class="lead">Choisissez ce qui correspond le mieux à votre besoin.</p>
           <div class="tiles" id="domaines"></div>
         </div>
 
         <div class="step" data-step="1" hidden>
-          <div class="steplabel">Étape 2 sur 4</div>
+          <div class="steplabel">Étape 2 sur 5</div>
           <h2>Racontez-nous votre problème</h2>
           <p class="lead">Avec vos mots. Un exemple concret nous aide beaucoup.</p>
           <div class="fields">
@@ -911,7 +918,7 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
         </div>
 
         <div class="step" data-step="2" hidden>
-          <div class="steplabel">Étape 3 sur 4</div>
+          <div class="steplabel">Étape 3 sur 5</div>
           <h2>Un peu sur vous</h2>
           <p class="lead">Pour concevoir des applications qui marchent sur votre téléphone, dans votre langue. Tout est facultatif.</p>
           <div class="fields">
@@ -944,8 +951,15 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
         </div>
 
         <div class="step" data-step="3" hidden>
-          <div class="steplabel">Étape 4 sur 4</div>
-          <h2>Vérifiez et envoyez</h2>
+          <div class="steplabel">Étape 4 sur 5</div>
+          <h2>Vérifiez vos réponses</h2>
+          <p class="lead">Relisez avant d’envoyer. Vous pouvez revenir corriger n’importe quelle réponse.</p>
+          <div id="review"></div>
+        </div>
+
+        <div class="step" data-step="4" hidden>
+          <div class="steplabel">Étape 5 sur 5</div>
+          <h2>Envoyer votre idée</h2>
           <p class="lead">Laissez un contact seulement si vous voulez tester nos futures applications.</p>
           <div class="recap" id="recap"></div>
           <div class="fields">
@@ -2226,12 +2240,12 @@ $("logoHome").addEventListener("click", ()=>{
 });
 
 /* ---------- Assistant ---------- */
-const STEPS = 4; let step = 0;
+const STEPS = 5; let step = 0;
 const val = n => (document.querySelector(`input[name="${n}"]:checked`)||{}).value || "";
 const checked = n => [...document.querySelectorAll(`input[name="${n}"]:checked`)].map(i=>i.value);
 function formErr(t){ const m=$("formMsg"); m.textContent=t; m.hidden=!t; }
 function drawProgress(){
-  const L = ["Domaine","Problème","Vous","Envoi"];
+  const L = ["Domaine","Problème","Vous","Résumé","Envoi"];
   const CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
   $("progress").innerHTML = L.map((l,i)=>`<li class="${i<step?"done":i===step?"now":""}"${i===step?' aria-current="step"':""}><span class="node">${i<step?CHECK:i+1}</span><span class="lbl">${l}</span></li>`).join("");
 }
@@ -2242,6 +2256,7 @@ function goto(n, noScroll){
   $("next").innerHTML = n===STEPS-1
     ? `Envoyer mon idée<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg>`
     : `Continuer<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>`;
+  if(n===3) drawReview();
   if(n===STEPS-1) drawRecap();
   drawProgress();
   if(!noScroll) document.querySelector(".wizard").scrollIntoView({behavior:"smooth", block:"start"});
@@ -2250,6 +2265,60 @@ function drawRecap(){
   const imp = Number(val("importance"));
   $("recap").innerHTML = `<p><b>${esc(val("domaines"))}</b>${imp?` · ${esc(IMP[imp-1])}`:""}${[$("ville").value.trim(), $("province").value].filter(Boolean).length?` · ${esc([$("ville").value.trim(), $("province").value].filter(Boolean).join(", "))}`:""}</p><p>${esc($("probleme").value.trim())}</p>`;
 }
+/* Récapitulatif de l'étape 4 : ce que l'utilisateur a renseigné aux étapes
+   précédentes. Chaque groupe renvoie vers son étape pour corriger sans
+   reprendre le formulaire depuis le début. Les réponses vides sont omises. */
+const REVUE = [
+  ["Le domaine", 0, [["Domaine", ()=>val("domaines")]]],
+  ["Le problème", 1, [
+    ["Le problème", ()=>$("probleme").value.trim()],
+    ["Comment vous faites aujourd’hui", ()=>$("debrouille").value.trim()],
+    ["Ce que vous perdez", ()=>checked("perte").join(", ")],
+    ["Ce que vous êtes prêt à faire", ()=>checked("effort").join(", ")],
+    ["Quand ça ne marche pas", ()=>val("echec")],
+    ["Fréquence", ()=>val("frequence")],
+    ["Temps que ça prend", ()=>val("tempsPris")],
+    ["Ce que ça coûte", ()=>val("cout")],
+    ["Ce qui vous empêche de le régler", ()=>checked("blocage").join(", ")],
+    ["Distance du service", ()=>val("distance")],
+    ["Depuis combien de temps", ()=>val("duree")],
+    ["Qui d’autre est concerné", ()=>val("ampleur")],
+    ["Tentatives déjà faites", ()=>val("tentative")],
+    ["Importance", ()=>{ const i = Number(val("importance")); return i ? IMP[i-1] : ""; }],
+    ["Votre idée de solution", ()=>$("solution").value.trim()],
+  ]],
+  ["Vous", 2, [
+    ["Région", ()=>$("region").value],
+    ["Province", ()=>$("province").value],
+    ["Commune ou département", ()=>$("ville").value],
+    ["Âge", ()=>$("age").value],
+    ["Activité", ()=>val("activite")],
+    ["Téléphone", ()=>val("telephone")],
+    ["Le téléphone est", ()=>val("telephoneA")],
+    ["Accès à internet", ()=>val("internet")],
+    ["Recharge du téléphone", ()=>val("recharge")],
+    ["Mobile money", ()=>val("mobileMoney")],
+    ["Langue parlée", ()=>val("langueParlee")],
+    ["Langue préférée", ()=>val("langue")],
+    ["Lire et écrire", ()=>val("litEcrit")],
+    ["Qui remplit ce formulaire", ()=>val("remplitPar")],
+  ]],
+];
+function drawReview(){
+  $("review").innerHTML = REVUE.map(([titre, etape, champs])=>{
+    const lignes = champs.map(([l, lire])=>[l, lire()]).filter(([, v])=>v);
+    return `<section class="rgrp">
+      <div class="rhead"><h3>${esc(titre)}</h3><button type="button" class="linkbtn" data-edit="${etape}">Modifier</button></div>
+      ${lignes.length
+        ? `<dl class="dgrid">${lignes.map(([l, v])=>`<dt>${esc(l)}</dt><dd>${esc(v)}</dd>`).join("")}</dl>`
+        : `<p class="vide">Rien de renseigné à cette étape.</p>`}
+    </section>`;
+  }).join("");
+}
+$("review").addEventListener("click", e=>{
+  const b = e.target.closest("[data-edit]");
+  if(b) goto(Number(b.dataset.edit));
+});
 function checkStep(){
   if(step===0 && !val("domaines")) return "Choisissez un domaine pour continuer.";
   if(step===1 && $("probleme").value.trim().length < 10){ $("probleme").focus(); return "Décrivez votre problème en une phrase au moins."; }

@@ -5,10 +5,17 @@ name: Veille Hermès
 # collection « veille ». Rien n'est publié sans l'accord de l'administrateur :
 # les propositions attendent dans le tableau de bord.
 
+# La veille automatique est en sommeil : elle consomme des appels payants
+# (recherche web + modèle), et les secrets ANTHROPIC_API_KEY et
+# SUPABASE_SERVICE_ROLE_KEY ne sont pas posés. Sans eux, une exécution planifiée
+# échouerait chaque matin pour rien.
+#
+# Pour la réveiller : poser les deux secrets, puis décommenter les deux lignes
+# « schedule » ci-dessous. Le déclenchement manuel reste disponible entre-temps
+# (onglet Actions > Veille Hermès > Run workflow).
 on:
-  schedule:
-    # 06:52 UTC, et le Burkina Faso est à UTC+0 : la veille est prête au réveil.
-    - cron: "52 6 * * *"
+  # schedule:
+  #   - cron: "52 6 * * *"   # 06:52 UTC, soit l'heure du Burkina Faso (UTC+0)
   workflow_dispatch:
 
 # Une seule veille à la fois : deux exécutions simultanées se marcheraient dessus.
