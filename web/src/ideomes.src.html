@@ -295,6 +295,11 @@ textarea{min-height:120px;resize:vertical}
 #maintForm .mact{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
 @media (max-width:560px){#maintForm .mact .btn{width:100%}}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
+/* Espace de rédaction libre proposé sous chaque question à options : une liste
+   fermée ne couvre jamais tous les cas. Replié par défaut. */
+.precis{margin-top:8px}
+.precis .linkbtn{font-size:.82rem}
+.precis-txt{margin-top:8px;min-height:72px}
 .chip{position:relative}
 .chip input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer;z-index:1}
 .chip span{display:inline-flex;align-items:center;padding:8px 15px;border:1.5px solid var(--line);border-radius:999px;background:var(--bg);font-size:.92rem;transition:all .2s}
@@ -1926,6 +1931,7 @@ function rowsReponses(){
     "ID réponse": d.id||"", "ID participant": d.uid||"", "Date (heure locale)": fmtDate(d.createdAt), "Horodatage UTC": isoUTC(d.createdAt),
     "Identifiant de connexion": (d.identite&&d.identite.valeur)||"", "Mode de connexion": TYPE_LBL[(d.identite||{}).type]||"",
     "Domaine": d.domaine||"", "Problème": d.probleme||"",
+    ...PRECISABLES.reduce((o,k)=>{ o[(LIBELLES[k]||k) + " (en ses mots)"] = (d.precisions||{})[k] || ""; return o; }, {}),
     "Contournement actuel": d.debrouille||"", "Ce que ça fait perdre": texteLibre(d.perte), "Effort déjà consenti": texteLibre(d.effort),
     "Quand ça ne marche pas": texteLibre(d.echec), "Temps pris à chaque fois": d.tempsPris||"", "Coût à chaque fois": d.cout||"",
     "Ce qui empêche de régler soi-même": texteLibre(d.blocage), "Distance du service": d.distance||"",
@@ -2202,7 +2208,34 @@ Object.entries(OPTS).forEach(([k,list])=>{
 Object.entries(OPTS_MULTI).forEach(([k,list])=>{
   $(k).innerHTML = list.map((v,i)=>`<label class="chip"><input type="checkbox" name="${k}" value="${esc(v)}" id="${k}-${i}"><span>${esc(v)}</span></label>`).join("");
 });
+/* Libellés des questions à options, pour l'espace de rédaction libre, le
+   récapitulatif et les exports. « domaines » en est exclu : l'étape 1 avance
+   automatiquement dès le choix, une zone de texte y serait inutilisable. */
+const LIBELLES = {
+  frequence:"Fréquence", tempsPris:"Temps que ça prend", cout:"Ce que ça coûte",
+  distance:"Distance du service", duree:"Depuis combien de temps",
+  ampleur:"Qui d’autre est concerné", importance:"Importance",
+  activite:"Activité", telephone:"Téléphone", telephoneA:"À qui est le téléphone",
+  internet:"Accès à internet", recharge:"Recharge du téléphone", mobileMoney:"Mobile money",
+  langueParlee:"Langue parlée", langue:"Langue préférée", litEcrit:"Lire et écrire",
+  remplitPar:"Qui remplit le formulaire", rappel:"Être rappelé", participation:"Participation",
+};
+const PRECISABLES = Object.keys(LIBELLES);
+const lirePrecision = k => { const t = $(k + "Libre"); return t ? t.value.trim() : ""; };
 $("importance").innerHTML = IMP.map((t,i)=>`<label class="chip"><input type="radio" name="importance" value="${i+1}" id="importance-${i}"><span><strong>${i+1}</strong>${t}</span></label>`).join("");
+PRECISABLES.forEach(k=>{
+  const box = $(k); if(!box) return;
+  box.insertAdjacentHTML("afterend",
+    `<div class="precis"><button type="button" class="linkbtn" data-precis="${k}">Préciser en vos propres mots</button>`
+    + `<textarea id="${k}Libre" class="precis-txt" maxlength="600" hidden placeholder="Expliquez avec vos mots, si vous le souhaitez."></textarea></div>`);
+});
+document.addEventListener("click", e=>{
+  const b = e.target.closest("[data-precis]"); if(!b) return;
+  const t = $(b.dataset.precis + "Libre");
+  t.hidden = !t.hidden;
+  b.textContent = t.hidden ? "Préciser en vos propres mots" : "Masquer la précision";
+  if(!t.hidden) t.focus();
+});
 $("region").insertAdjacentHTML("beforeend", Object.keys(GEO).map(r=>`<option>${esc(r)}</option>`).join(""));
 $("region").addEventListener("change", ()=>{
   const r = $("region").value, ps = GEO[r] || [];
@@ -2275,15 +2308,15 @@ const REVUE = [
     ["Ce que vous perdez", ()=>$("perte").value.trim()],
     ["Ce que vous êtes prêt à faire", ()=>$("effort").value.trim()],
     ["Quand ça ne marche pas", ()=>$("echec").value.trim()],
-    ["Fréquence", ()=>val("frequence")],
-    ["Temps que ça prend", ()=>val("tempsPris")],
-    ["Ce que ça coûte", ()=>val("cout")],
+    ["Fréquence", ()=>val("frequence"), "frequence"],
+    ["Temps que ça prend", ()=>val("tempsPris"), "tempsPris"],
+    ["Ce que ça coûte", ()=>val("cout"), "cout"],
     ["Ce qui vous empêche de le régler", ()=>$("blocage").value.trim()],
-    ["Distance du service", ()=>val("distance")],
-    ["Depuis combien de temps", ()=>val("duree")],
-    ["Qui d’autre est concerné", ()=>val("ampleur")],
+    ["Distance du service", ()=>val("distance"), "distance"],
+    ["Depuis combien de temps", ()=>val("duree"), "duree"],
+    ["Qui d’autre est concerné", ()=>val("ampleur"), "ampleur"],
     ["Tentatives déjà faites", ()=>$("tentative").value.trim()],
-    ["Importance", ()=>{ const i = Number(val("importance")); return i ? IMP[i-1] : ""; }],
+    ["Importance", ()=>{ const i = Number(val("importance")); return i ? IMP[i-1] : ""; }, "importance"],
     ["Votre idée de solution", ()=>$("solution").value.trim()],
   ]],
   ["Vous", 2, [
@@ -2291,21 +2324,26 @@ const REVUE = [
     ["Province", ()=>$("province").value],
     ["Commune ou département", ()=>$("ville").value],
     ["Âge", ()=>$("age").value],
-    ["Activité", ()=>val("activite")],
-    ["Téléphone", ()=>val("telephone")],
-    ["Le téléphone est", ()=>val("telephoneA")],
-    ["Accès à internet", ()=>val("internet")],
-    ["Recharge du téléphone", ()=>val("recharge")],
-    ["Mobile money", ()=>val("mobileMoney")],
-    ["Langue parlée", ()=>val("langueParlee")],
-    ["Langue préférée", ()=>val("langue")],
-    ["Lire et écrire", ()=>val("litEcrit")],
-    ["Qui remplit ce formulaire", ()=>val("remplitPar")],
+    ["Activité", ()=>val("activite"), "activite"],
+    ["Téléphone", ()=>val("telephone"), "telephone"],
+    ["Le téléphone est", ()=>val("telephoneA"), "telephoneA"],
+    ["Accès à internet", ()=>val("internet"), "internet"],
+    ["Recharge du téléphone", ()=>val("recharge"), "recharge"],
+    ["Mobile money", ()=>val("mobileMoney"), "mobileMoney"],
+    ["Langue parlée", ()=>val("langueParlee"), "langueParlee"],
+    ["Langue préférée", ()=>val("langue"), "langue"],
+    ["Lire et écrire", ()=>val("litEcrit"), "litEcrit"],
+    ["Qui remplit ce formulaire", ()=>val("remplitPar"), "remplitPar"],
   ]],
 ];
 function drawReview(){
   $("review").innerHTML = REVUE.map(([titre, etape, champs])=>{
-    const lignes = champs.map(([l, lire])=>[l, lire()]).filter(([, v])=>v);
+    const lignes = [];
+    champs.forEach(([l, lire, nom])=>{
+      const v = lire(); if(v) lignes.push([l, v]);
+      // La précision rédigée se place juste sous la réponse qu'elle explique.
+      const pr = nom ? lirePrecision(nom) : ""; if(pr) lignes.push([l + ", en vos mots", pr]);
+    });
     return `<section class="rgrp">
       <div class="rhead"><h3>${esc(titre)}</h3><button type="button" class="linkbtn" data-edit="${etape}">Modifier</button></div>
       ${lignes.length
@@ -2365,6 +2403,7 @@ $("f").addEventListener("submit", async e=>{
     internet:val("internet"), recharge:val("recharge"), mobileMoney:val("mobileMoney"),
     langueParlee:val("langueParlee"), langue:val("langue"), litEcrit:val("litEcrit"), remplitPar:val("remplitPar"),
     rappel, participation:checked("participation"),
+    precisions: PRECISABLES.reduce((o,k)=>{ const v = lirePrecision(k); if(v) o[k] = v; return o; }, {}),
     aContact: okContact, consentement:{rgpd:true, version:CONSENT_VERSION, date:now}, createdAt:now,
     trace:{app:APP_VERSION, appareil: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "Mobile" : "Ordinateur", langueNavigateur: navigator.language || "", fuseau: (Intl.DateTimeFormat().resolvedOptions().timeZone)||""}
   };
@@ -2436,6 +2475,9 @@ function openIdea(d){
     <div class="dsec"><h3>Le besoin</h3><p class="dtext">${esc(d.probleme||"")}</p>
       ${d.solution?`<p class="muted" style="margin:10px 0 4px;font-size:.8rem;color:var(--muted)">Solution proposée</p><p class="dtext">${esc(d.solution)}</p>`:""}
       <div style="margin-top:10px">${dl([["Domaine",d.domaine],["Fréquence",d.frequence],["Importance",d.importance?`${d.importance}/5 · ${IMP[d.importance-1]}`:""]])}</div></div>
+    ${(()=>{ const pr = d.precisions || {};
+       const l = Object.keys(pr).filter(k=>pr[k]).map(k=>[(LIBELLES[k]||k), pr[k]]);
+       return l.length ? `<div class="dsec"><h3>Dit avec ses mots</h3>${dl(l)}</div>` : ""; })()}
     <div class="dsec"><h3>Le vécu</h3>${dl([["Comment vous vous en sortez",d.debrouille],["Ce que ça fait perdre",texteLibre(d.perte)],
       ["Effort déjà consenti",texteLibre(d.effort)],["Quand ça ne marche pas",texteLibre(d.echec)],["Temps pris à chaque fois",d.tempsPris],["Coût à chaque fois",d.cout],
       ["Ce qui empêche de régler soi-même",texteLibre(d.blocage)],["Distance du service",d.distance],["Depuis quand",d.duree],
