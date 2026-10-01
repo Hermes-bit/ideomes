@@ -85,6 +85,17 @@ create policy documents_select_own_or_admin
     or (collection in ('reponses', 'connexions') and doc_id = auth.uid()::text)
   );
 
+-- Envoi d'une idée sans compte : INSERT seul, collection « reponses », doc_id
+-- préfixé « anon- ». Pas de SELECT/UPDATE/DELETE, donc un visiteur anonyme ne
+-- peut ni relire ni modifier quoi que ce soit, pas même son propre envoi.
+create policy documents_insert_anon_reponses
+  on public.documents for insert
+  to anon
+  with check (
+    collection = 'reponses'
+    and doc_id like 'anon-%'
+  );
+
 -- Écriture : admin, ou participant sur ses propres documents personnels uniquement.
 create policy documents_insert
   on public.documents for insert

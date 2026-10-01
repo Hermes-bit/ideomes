@@ -893,20 +893,20 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
               <label for="debrouille">Aujourd’hui, comment faites-vous pour vous en sortir ?</label>
               <textarea id="debrouille" maxlength="1500" placeholder="Ex. : Je demande à un voisin qui a une moto de m’y emmener."></textarea>
             </div>
-            <div class="field"><span class="q">Qu’est-ce que vous perdez à cause de ça ?</span><div class="chips" id="perte"></div></div>
-            <div class="field"><span class="q">Qu’êtes-vous déjà prêt à faire pour ça aujourd’hui ?</span><div class="chips" id="effort"></div></div>
-            <div class="field"><span class="q">Que se passe-t-il quand ça ne marche pas ?</span><div class="chips" id="echec"></div></div>
+            <div class="field"><label for="perte">Qu’est-ce que vous perdez à cause de ça ?</label><textarea id="perte" maxlength="800" placeholder="Ex. : Je perds une journée de travail à chaque fois, et parfois l’argent du transport pour rien."></textarea></div>
+            <div class="field"><label for="effort">Qu’êtes-vous déjà prêt à faire pour ça aujourd’hui ?</label><textarea id="effort" maxlength="800" placeholder="Ex. : Je suis prêt à faire la route et à payer un peu, mais pas à y passer plusieurs jours."></textarea></div>
+            <div class="field"><label for="echec">Que se passe-t-il quand ça ne marche pas ?</label><textarea id="echec" maxlength="800" placeholder="Ex. : Je rentre sans le papier, et mon fils ne peut pas s’inscrire à l’école à temps."></textarea></div>
             <div class="field"><span class="q">Ça arrive…</span><div class="chips" id="frequence"></div></div>
 
             <button type="button" class="linkbtn" id="toggleMore">En dire plus</button>
             <div class="field more" id="step1More" hidden>
               <div class="field"><span class="q">Combien de temps ça vous prend, à chaque fois ?</span><div class="chips" id="tempsPris"></div></div>
-              <div class="field" id="fCout" hidden><span class="q">Combien ça vous coûte, à chaque fois ?</span><div class="chips" id="cout"></div></div>
-              <div class="field"><span class="q">Qu’est-ce qui vous empêche de le régler vous-même ?</span><div class="chips" id="blocage"></div></div>
+              <div class="field"><span class="q">Combien ça vous coûte, à chaque fois ?</span><div class="chips" id="cout"></div></div>
+              <div class="field"><label for="blocage">Qu’est-ce qui vous empêche de le régler vous-même ?</label><textarea id="blocage" maxlength="800" placeholder="Ex. : On me demande des papiers que je n’ai pas, et personne ne m’explique où les obtenir."></textarea></div>
               <div class="field"><span class="q">À quelle distance se trouve le service concerné ? <span class="hint">(mairie, CSPS, marché, école, banque…)</span></span><div class="chips" id="distance"></div></div>
               <div class="field"><span class="q">Depuis combien de temps ça dure ?</span><div class="chips" id="duree"></div></div>
               <div class="field"><span class="q">Qui d’autre autour de vous a le même problème ?</span><div class="chips" id="ampleur"></div></div>
-              <div class="field"><span class="q">Quelqu’un a-t-il déjà essayé de régler ça ?</span><div class="chips" id="tentative"></div></div>
+              <div class="field"><label for="tentative">Quelqu’un a-t-il déjà essayé de régler ça ?</label><textarea id="tentative" maxlength="800" placeholder="Ex. : La mairie a annoncé un guichet l’an dernier, mais il n’a jamais ouvert."></textarea></div>
             </div>
 
             <div class="field"><span class="q">C’est important pour vous ?</span><div class="scale chips" id="importance"></div></div>
@@ -960,7 +960,7 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
         <div class="step" data-step="4" hidden>
           <div class="steplabel">Étape 5 sur 5</div>
           <h2>Envoyer votre idée</h2>
-          <p class="lead">Laissez un contact seulement si vous voulez tester nos futures applications.</p>
+          <p class="lead">Pas besoin de compte pour envoyer votre idée. Laissez un contact seulement si vous voulez tester nos futures applications.</p>
           <div class="recap" id="recap"></div>
           <div class="fields">
             <div class="grid2">
@@ -1373,13 +1373,11 @@ const DOMAINES = [
 ];
 const OPTS = {
   frequence:["Tous les jours","Chaque semaine","Chaque mois","Rarement","Seulement à certaines périodes de l’année (semis, récolte, soudure, saison des pluies)"],
-  echec:["J’attends, ça se règle plus tard","Je perds quelque chose définitivement","Quelqu’un est en danger","Je me débrouille autrement"],
   tempsPris:["Moins d’1 h","Une demi-journée","Une journée entière","Plusieurs jours"],
   cout:["Moins de 1 000 F","1 000–5 000 F","5 000–25 000 F","Plus de 25 000 F"],
   distance:["Moins d’1 km","1–5 km","5–15 km","Plus de 15 km"],
   duree:["C’est nouveau","Depuis des mois","Depuis des années","Ça a toujours été comme ça"],
   ampleur:["Moi seul","Ma famille","Mon quartier","Tout le village ou la ville"],
-  tentative:["L’État ou la mairie","Une ONG","Une association du quartier","Personne à ma connaissance"],
   activite:["Agriculteur / éleveur","Commerçant(e)","Élève / étudiant(e)","Artisan","Fonctionnaire","Salarié(e) du privé","Sans emploi","Autre"],
   telephone:["Smartphone","Téléphone simple","Pas de téléphone"],
   telephoneA:["À moi","Partagé dans la famille","Je l’emprunte"],
@@ -1393,11 +1391,12 @@ const OPTS = {
   rappel:["Oui, par appel","Oui, par SMS","Oui, par WhatsApp","Non"]
 };
 const OPTS_MULTI = {
-  perte:["Du temps","De l’argent","Ma santé ou celle de ma famille","Ma sécurité","Une occasion (école, travail, marché, aide)","Rien de tout ça, mais ça me fatigue"],
-  effort:["J’y consacre du temps","Je fais de la route","Je demande un service à quelqu’un","Je paie","Je ne fais rien parce que c’est impossible"],
-  blocage:["Je ne sais pas où aller","C’est trop loin","C’est trop cher","On me demande des papiers que je n’ai pas","Je ne sais pas lire les documents","On ne me répond pas","Autre"],
   participation:["Essayer l’application","En parler autour de moi","Aider à traduire dans ma langue","Non merci"]
 };
+/* Les questions de vécu étaient à choix multiple avant de passer en rédaction
+   libre : les idées déjà reçues contiennent des tableaux, les nouvelles du texte.
+   Ce lecteur accepte les deux, pour que l'historique reste lisible. */
+const texteLibre = v => Array.isArray(v) ? v.join(", ") : (v || "");
 const IMP = ["Pas trop","Un peu","Moyen","Beaucoup","Urgent"];
 const VILLES = ["Ouagadougou","Bobo-Dioulasso","Koudougou","Ouahigouya","Banfora","Kaya","Tenkodogo","Fada N'Gourma","Dédougou","Dori","Gaoua","Ziniaré","Manga","Réo","Kombissiri","Houndé","Pouytenga","Koupéla","Djibo","Nouna","Léo","Yako","Tougan","Diébougou","Orodara","Boromo","Kongoussi","Pô","Sapouy"];
 const GEO = {
@@ -1927,10 +1926,10 @@ function rowsReponses(){
     "ID réponse": d.id||"", "ID participant": d.uid||"", "Date (heure locale)": fmtDate(d.createdAt), "Horodatage UTC": isoUTC(d.createdAt),
     "Identifiant de connexion": (d.identite&&d.identite.valeur)||"", "Mode de connexion": TYPE_LBL[(d.identite||{}).type]||"",
     "Domaine": d.domaine||"", "Problème": d.probleme||"",
-    "Contournement actuel": d.debrouille||"", "Ce que ça fait perdre": (d.perte||[]).join(", "), "Effort déjà consenti": (d.effort||[]).join(", "),
-    "Quand ça ne marche pas": d.echec||"", "Temps pris à chaque fois": d.tempsPris||"", "Coût à chaque fois": d.cout||"",
-    "Ce qui empêche de régler soi-même": (d.blocage||[]).join(", "), "Distance du service": d.distance||"",
-    "Depuis quand ça dure": d.duree||"", "Qui d’autre est concerné": d.ampleur||"", "Déjà tenté par": d.tentative||"",
+    "Contournement actuel": d.debrouille||"", "Ce que ça fait perdre": texteLibre(d.perte), "Effort déjà consenti": texteLibre(d.effort),
+    "Quand ça ne marche pas": texteLibre(d.echec), "Temps pris à chaque fois": d.tempsPris||"", "Coût à chaque fois": d.cout||"",
+    "Ce qui empêche de régler soi-même": texteLibre(d.blocage), "Distance du service": d.distance||"",
+    "Depuis quand ça dure": d.duree||"", "Qui d’autre est concerné": d.ampleur||"", "Déjà tenté par": texteLibre(d.tentative),
     "Solution proposée": d.solution||"", "Fréquence": d.frequence||"", "Importance (1-5)": d.importance||"",
     "Région": d.region||"", "Province": d.province||"", "Commune / département": d.ville||"",
     "Latitude": g.ll[1] ?? "", "Longitude": g.ll[0] ?? "", "WKT": wkt(g.ll), "Précision de la position": g.prec ? "Centre de la " + g.prec : "Non renseignée",
@@ -2273,17 +2272,17 @@ const REVUE = [
   ["Le problème", 1, [
     ["Le problème", ()=>$("probleme").value.trim()],
     ["Comment vous faites aujourd’hui", ()=>$("debrouille").value.trim()],
-    ["Ce que vous perdez", ()=>checked("perte").join(", ")],
-    ["Ce que vous êtes prêt à faire", ()=>checked("effort").join(", ")],
-    ["Quand ça ne marche pas", ()=>val("echec")],
+    ["Ce que vous perdez", ()=>$("perte").value.trim()],
+    ["Ce que vous êtes prêt à faire", ()=>$("effort").value.trim()],
+    ["Quand ça ne marche pas", ()=>$("echec").value.trim()],
     ["Fréquence", ()=>val("frequence")],
     ["Temps que ça prend", ()=>val("tempsPris")],
     ["Ce que ça coûte", ()=>val("cout")],
-    ["Ce qui vous empêche de le régler", ()=>checked("blocage").join(", ")],
+    ["Ce qui vous empêche de le régler", ()=>$("blocage").value.trim()],
     ["Distance du service", ()=>val("distance")],
     ["Depuis combien de temps", ()=>val("duree")],
     ["Qui d’autre est concerné", ()=>val("ampleur")],
-    ["Tentatives déjà faites", ()=>val("tentative")],
+    ["Tentatives déjà faites", ()=>$("tentative").value.trim()],
     ["Importance", ()=>{ const i = Number(val("importance")); return i ? IMP[i-1] : ""; }],
     ["Votre idée de solution", ()=>$("solution").value.trim()],
   ]],
@@ -2334,7 +2333,6 @@ $("toggleMore").addEventListener("click", ()=>{
   $("toggleMore").textContent = hidden ? "Replier" : "En dire plus";
 });
 document.addEventListener("change", e=>{
-  if(e.target.name==="perte") $("fCout").hidden = !checked("perte").includes("De l’argent");
   if(e.target.name==="telephone"){
     const smartphone = val("telephone")==="Smartphone";
     const opt = document.querySelector('#participation input[value="Essayer l’application"]');
@@ -2351,14 +2349,14 @@ $("f").addEventListener("submit", async e=>{
   const contact = $("contact").value.trim(), rappel = val("rappel"), okContact = !!rappel && rappel!=="Non";
   if(!$("consentRgpd").checked){ formErr("Cochez la case sur l’utilisation de vos réponses pour pouvoir envoyer."); return; }
   if(contact && !okContact){ formErr("Choisissez comment Geomessen peut vous rappeler, ou laissez le numéro vide."); return; }
-  if(!db || !myId){ formErr("Connectez-vous par e-mail pour envoyer votre idée."); showLogin(); return; }
+  if(!db){ formErr("L’envoi n’est pas disponible pour le moment. Réessayez dans un instant."); return; }
 
   const now = new Date().toISOString();
   const doc = {
     domaine:val("domaines"), probleme:$("probleme").value.trim(), debrouille:$("debrouille").value.trim(),
-    perte:checked("perte"), effort:checked("effort"), echec:val("echec"),
-    tempsPris:val("tempsPris"), cout:val("cout"), blocage:checked("blocage"), distance:val("distance"),
-    duree:val("duree"), ampleur:val("ampleur"), tentative:val("tentative"),
+    perte:$("perte").value.trim(), effort:$("effort").value.trim(), echec:$("echec").value.trim(),
+    tempsPris:val("tempsPris"), cout:val("cout"), blocage:$("blocage").value.trim(), distance:val("distance"),
+    duree:val("duree"), ampleur:val("ampleur"), tentative:$("tentative").value.trim(),
     solution:$("solution").value.trim(),
     frequence:val("frequence"), importance:Number(val("importance"))||0,
     ville:$("ville").value.trim(), region:$("region").value, province:$("province").value,
@@ -2374,13 +2372,19 @@ $("f").addEventListener("submit", async e=>{
   try{
     if(doc.aContact){ doc.nom = $("nom").value.trim(); doc.contact = contact; }
     { const gq = geoOf(doc); if(gq){ doc.lon = gq.ll[0]; doc.lat = gq.ll[1]; doc.geoPrecision = gq.prec; } }
-    doc.identite = {type:"email", valeur: claudeMe.name || ""};
+    doc.identite = myId ? {type:"email", valeur: (claudeMe && claudeMe.name) || ""} : {type:"anonyme", valeur:""};
     doc.id = Date.now().toString(36) + Math.random().toString(36).slice(2,7);
-    const ref = db.doc("reponses/" + myId);
-    const snap = await ref.get();
-    const items = snap.exists ? [...((snap.data() || {}).items || [])] : [];
-    items.push(doc);
-    await ref.set({ items, updatedAt: now });
+    if(myId){
+      const ref = db.doc("reponses/" + myId);
+      const snap = await ref.get();
+      const items = snap.exists ? [...((snap.data() || {}).items || [])] : [];
+      items.push(doc);
+      await ref.set({ items, updatedAt: now });
+    }else{
+      /* Sans compte, le visiteur n'a pas le droit de relire ses réponses : on ne
+         peut donc pas compléter un document existant. Chaque envoi crée le sien. */
+      await db.doc("reponses/anon-" + crypto.randomUUID()).set({ items:[doc], updatedAt: now, anonyme:true });
+    }
     $("f").reset(); $("f").hidden = true; $("thanks").hidden = false;
     document.querySelector(".wizard").scrollIntoView({behavior:"smooth", block:"start"});
   }catch(err){
@@ -2432,10 +2436,10 @@ function openIdea(d){
     <div class="dsec"><h3>Le besoin</h3><p class="dtext">${esc(d.probleme||"")}</p>
       ${d.solution?`<p class="muted" style="margin:10px 0 4px;font-size:.8rem;color:var(--muted)">Solution proposée</p><p class="dtext">${esc(d.solution)}</p>`:""}
       <div style="margin-top:10px">${dl([["Domaine",d.domaine],["Fréquence",d.frequence],["Importance",d.importance?`${d.importance}/5 · ${IMP[d.importance-1]}`:""]])}</div></div>
-    <div class="dsec"><h3>Le vécu</h3>${dl([["Comment vous vous en sortez",d.debrouille],["Ce que ça fait perdre",(d.perte||[]).join(", ")],
-      ["Effort déjà consenti",(d.effort||[]).join(", ")],["Quand ça ne marche pas",d.echec],["Temps pris à chaque fois",d.tempsPris],["Coût à chaque fois",d.cout],
-      ["Ce qui empêche de régler soi-même",(d.blocage||[]).join(", ")],["Distance du service",d.distance],["Depuis quand",d.duree],
-      ["Qui d’autre est concerné",d.ampleur],["Déjà tenté par",d.tentative]])}</div>
+    <div class="dsec"><h3>Le vécu</h3>${dl([["Comment vous vous en sortez",d.debrouille],["Ce que ça fait perdre",texteLibre(d.perte)],
+      ["Effort déjà consenti",texteLibre(d.effort)],["Quand ça ne marche pas",texteLibre(d.echec)],["Temps pris à chaque fois",d.tempsPris],["Coût à chaque fois",d.cout],
+      ["Ce qui empêche de régler soi-même",texteLibre(d.blocage)],["Distance du service",d.distance],["Depuis quand",d.duree],
+      ["Qui d’autre est concerné",d.ampleur],["Déjà tenté par",texteLibre(d.tentative)]])}</div>
     <div class="dsec"><h3>Localisation</h3>${dl([["Région",d.region],["Province",d.province],["Commune / département",d.ville],
       ["Latitude",g.ll[1]],["Longitude",g.ll[0]],["Précision",g.prec?"Centre de la "+g.prec:"Non renseignée"],
       ["HASC",code(k.hc||k.hp||k.hr),1],["GID (GADM)",code(k.gc||k.gp||k.gr),1],["shapeID geoBoundaries",code(k.sc||k.sp||k.sr),1],["Code ISO région",code(k.iso),1]])}</div>
