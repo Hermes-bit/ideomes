@@ -207,6 +207,7 @@ button.logo:focus-visible{outline:2px solid var(--teal);outline-offset:4px}
 @keyframes boing{0%{transform:scale(.94)}100%{transform:scale(1)}}
 
 .fields{display:flex;flex-direction:column;gap:20px}
+.field.more{display:flex;flex-direction:column;gap:20px;padding:16px;background:var(--bg);border-radius:16px;border:1px solid var(--line)}
 .field{display:flex;flex-direction:column;gap:8px;min-width:0}
 .field > label,.q{font-weight:500}
 .hint{color:var(--muted);font-weight:300;font-size:.88rem}
@@ -783,11 +784,30 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
               <textarea id="probleme" maxlength="1500" placeholder="Ex. : Pour obtenir un extrait d’acte de naissance, je dois aller trois fois à la mairie et perdre mes journées de travail."></textarea>
             </div>
             <div class="field">
+              <label for="debrouille">Aujourd’hui, comment faites-vous pour vous en sortir ?</label>
+              <textarea id="debrouille" maxlength="1500" placeholder="Ex. : Je demande à un voisin qui a une moto de m’y emmener."></textarea>
+            </div>
+            <div class="field"><span class="q">Qu’est-ce que vous perdez à cause de ça ?</span><div class="chips" id="perte"></div></div>
+            <div class="field"><span class="q">Qu’êtes-vous déjà prêt à faire pour ça aujourd’hui ?</span><div class="chips" id="effort"></div></div>
+            <div class="field"><span class="q">Que se passe-t-il quand ça ne marche pas ?</span><div class="chips" id="echec"></div></div>
+            <div class="field"><span class="q">Ça arrive…</span><div class="chips" id="frequence"></div></div>
+
+            <button type="button" class="linkbtn" id="toggleMore">En dire plus</button>
+            <div class="field more" id="step1More" hidden>
+              <div class="field"><span class="q">Combien de temps ça vous prend, à chaque fois ?</span><div class="chips" id="tempsPris"></div></div>
+              <div class="field" id="fCout" hidden><span class="q">Combien ça vous coûte, à chaque fois ?</span><div class="chips" id="cout"></div></div>
+              <div class="field"><span class="q">Qu’est-ce qui vous empêche de le régler vous-même ?</span><div class="chips" id="blocage"></div></div>
+              <div class="field"><span class="q">À quelle distance se trouve le service concerné ? <span class="hint">(mairie, CSPS, marché, école, banque…)</span></span><div class="chips" id="distance"></div></div>
+              <div class="field"><span class="q">Depuis combien de temps ça dure ?</span><div class="chips" id="duree"></div></div>
+              <div class="field"><span class="q">Qui d’autre autour de vous a le même problème ?</span><div class="chips" id="ampleur"></div></div>
+              <div class="field"><span class="q">Quelqu’un a-t-il déjà essayé de régler ça ?</span><div class="chips" id="tentative"></div></div>
+            </div>
+
+            <div class="field"><span class="q">C’est important pour vous ?</span><div class="scale chips" id="importance"></div></div>
+            <div class="field">
               <label for="solution">Votre idée de solution <span class="hint">(facultatif)</span></label>
               <textarea id="solution" maxlength="1500" placeholder="Ex. : Faire la demande par téléphone et recevoir un SMS quand le papier est prêt."></textarea>
             </div>
-            <div class="field"><span class="q">Ça arrive…</span><div class="chips" id="frequence"></div></div>
-            <div class="field"><span class="q">C’est important pour vous ?</span><div class="scale chips" id="importance"></div></div>
           </div>
         </div>
 
@@ -813,8 +833,14 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
             </div>
             <div class="field"><span class="q">Votre activité</span><div class="chips" id="activite"></div></div>
             <div class="field"><span class="q">Votre téléphone</span><div class="chips" id="telephone"></div></div>
+            <div class="field"><span class="q">Le téléphone est-il à vous ?</span><div class="chips" id="telephoneA"></div></div>
             <div class="field"><span class="q">Accès à internet</span><div class="chips" id="internet"></div></div>
+            <div class="field"><span class="q">Où rechargez-vous votre téléphone ?</span><div class="chips" id="recharge"></div></div>
+            <div class="field"><span class="q">Utilisez-vous le mobile money ?</span><div class="chips" id="mobileMoney"></div></div>
+            <div class="field"><span class="q">Quelle langue parlez-vous le plus souvent ?</span><div class="chips" id="langueParlee"></div></div>
             <div class="field"><span class="q">Langue préférée pour une application</span><div class="chips" id="langue"></div></div>
+            <div class="field"><span class="q">Savez-vous lire et écrire ?</span><div class="chips" id="litEcrit"></div></div>
+            <div class="field"><span class="q">Qui remplit ce formulaire ?</span><div class="chips" id="remplitPar"></div></div>
           </div>
         </div>
 
@@ -828,7 +854,8 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
               <div class="field"><label for="nom">Prénom <span class="hint">(facultatif)</span></label><input type="text" id="nom" maxlength="60" autocomplete="given-name"></div>
               <div class="field"><label for="contact">WhatsApp, téléphone ou e-mail <span class="hint">(facultatif)</span></label><input type="text" id="contact" maxlength="80" placeholder="+226 70 12 34 56"></div>
             </div>
-            <label class="consent"><input type="checkbox" id="consentContact"><span>J’accepte que Geomessen me recontacte pour tester une future application.</span></label>
+            <div class="field"><span class="q">Accepteriez-vous qu’on vous rappelle pour tester la solution ?</span><div class="chips" id="rappel"></div></div>
+            <div class="field"><span class="q">Seriez-vous prêt à participer autrement ?</span><div class="chips" id="participation"></div></div>
             <label class="consent required"><input type="checkbox" id="consentRgpd"><span>J’accepte les <button type="button" class="linkbtn" data-page="cgu">conditions d’utilisation</button> et que mes réponses soient utilisées par Geomessen Burkina Faso pour étudier les besoins de la population, comme décrit dans <button type="button" class="linkbtn" data-policy>la notice sur les données personnelles</button>. <strong>Obligatoire</strong></span></label>
           </div>
         </div>
@@ -1209,11 +1236,31 @@ const DOMAINES = [
   ["Logement","loyer, parcelle, construction"],["Culture & loisirs","musique, sport, événements"],["Autre","tout le reste"]
 ];
 const OPTS = {
-  frequence:["Tous les jours","Chaque semaine","Chaque mois","Rarement"],
+  frequence:["Tous les jours","Chaque semaine","Chaque mois","Rarement","Seulement à certaines périodes de l’année (semis, récolte, soudure, saison des pluies)"],
+  echec:["J’attends, ça se règle plus tard","Je perds quelque chose définitivement","Quelqu’un est en danger","Je me débrouille autrement"],
+  tempsPris:["Moins d’1 h","Une demi-journée","Une journée entière","Plusieurs jours"],
+  cout:["Moins de 1 000 F","1 000–5 000 F","5 000–25 000 F","Plus de 25 000 F"],
+  distance:["Moins d’1 km","1–5 km","5–15 km","Plus de 15 km"],
+  duree:["C’est nouveau","Depuis des mois","Depuis des années","Ça a toujours été comme ça"],
+  ampleur:["Moi seul","Ma famille","Mon quartier","Tout le village ou la ville"],
+  tentative:["L’État ou la mairie","Une ONG","Une association du quartier","Personne à ma connaissance"],
   activite:["Agriculteur / éleveur","Commerçant(e)","Élève / étudiant(e)","Artisan","Fonctionnaire","Salarié(e) du privé","Sans emploi","Autre"],
   telephone:["Smartphone","Téléphone simple","Pas de téléphone"],
+  telephoneA:["À moi","Partagé dans la famille","Je l’emprunte"],
   internet:["Oui, souvent","Parfois","Non"],
-  langue:["Français","Mooré","Dioula","Fulfuldé","Gulmancéma","Bissa","Autre"]
+  recharge:["Chez moi","Chez un voisin ou une boutique","C’est difficile"],
+  mobileMoney:["Orange Money","Moov Money","Les deux","Non"],
+  langueParlee:["Mooré","Dioula","Fulfuldé","Français","Autre"],
+  langue:["Français","Mooré","Dioula","Fulfuldé","Gulmancéma","Bissa","Autre"],
+  litEcrit:["Oui, bien","Un peu","Non"],
+  remplitPar:["Moi-même","Quelqu’un remplit pour moi"],
+  rappel:["Oui, par appel","Oui, par SMS","Oui, par WhatsApp","Non"]
+};
+const OPTS_MULTI = {
+  perte:["Du temps","De l’argent","Ma santé ou celle de ma famille","Ma sécurité","Une occasion (école, travail, marché, aide)","Rien de tout ça, mais ça me fatigue"],
+  effort:["J’y consacre du temps","Je fais de la route","Je demande un service à quelqu’un","Je paie","Je ne fais rien parce que c’est impossible"],
+  blocage:["Je ne sais pas où aller","C’est trop loin","C’est trop cher","On me demande des papiers que je n’ai pas","Je ne sais pas lire les documents","On ne me répond pas","Autre"],
+  participation:["Essayer l’application","En parler autour de moi","Aider à traduire dans ma langue","Non merci"]
 };
 const IMP = ["Pas trop","Un peu","Moyen","Beaucoup","Urgent"];
 const VILLES = ["Ouagadougou","Bobo-Dioulasso","Koudougou","Ouahigouya","Banfora","Kaya","Tenkodogo","Fada N'Gourma","Dédougou","Dori","Gaoua","Ziniaré","Manga","Réo","Kombissiri","Houndé","Pouytenga","Koupéla","Djibo","Nouna","Léo","Yako","Tougan","Diébougou","Orodara","Boromo","Kongoussi","Pô","Sapouy"];
@@ -1704,15 +1751,23 @@ function rowsReponses(){
     return {
     "ID réponse": d.id||"", "ID participant": d.uid||"", "Date (heure locale)": fmtDate(d.createdAt), "Horodatage UTC": isoUTC(d.createdAt),
     "Identifiant de connexion": (d.identite&&d.identite.valeur)||"", "Mode de connexion": TYPE_LBL[(d.identite||{}).type]||"",
-    "Domaine": d.domaine||"", "Problème": d.probleme||"", "Solution proposée": d.solution||"", "Fréquence": d.frequence||"", "Importance (1-5)": d.importance||"",
+    "Domaine": d.domaine||"", "Problème": d.probleme||"",
+    "Contournement actuel": d.debrouille||"", "Ce que ça fait perdre": (d.perte||[]).join(", "), "Effort déjà consenti": (d.effort||[]).join(", "),
+    "Quand ça ne marche pas": d.echec||"", "Temps pris à chaque fois": d.tempsPris||"", "Coût à chaque fois": d.cout||"",
+    "Ce qui empêche de régler soi-même": (d.blocage||[]).join(", "), "Distance du service": d.distance||"",
+    "Depuis quand ça dure": d.duree||"", "Qui d’autre est concerné": d.ampleur||"", "Déjà tenté par": d.tentative||"",
+    "Solution proposée": d.solution||"", "Fréquence": d.frequence||"", "Importance (1-5)": d.importance||"",
     "Région": d.region||"", "Province": d.province||"", "Commune / département": d.ville||"",
     "Latitude": g.ll[1] ?? "", "Longitude": g.ll[0] ?? "", "WKT": wkt(g.ll), "Précision de la position": g.prec ? "Centre de la " + g.prec : "Non renseignée",
     "Code ISO région": k.iso, "HASC région": k.hr, "HASC province": k.hp, "HASC commune": k.hc,
     "GID région (GADM)": k.gr, "GID province (GADM)": k.gp, "GID commune (GADM)": k.gc,
     "shapeID ADM1 (geoBoundaries)": k.sr, "shapeID ADM2 (geoBoundaries)": k.sp, "shapeID ADM3 (geoBoundaries)": k.sc,
     "Source des coordonnées": g.prec ? "Point intérieur du polygone administratif (geoBoundaries), WGS 84" : "",
-    "Âge": d.age||"", "Activité": d.activite||"", "Téléphone": d.telephone||"", "Internet": d.internet||"", "Langue": d.langue||"",
-    "Prénom": d.nom||"", "Contact": d.contact||"", "Accord pour être recontacté": d.aContact ? "Oui" : "Non",
+    "Âge": d.age||"", "Activité": d.activite||"",
+    "Téléphone": d.telephone||"", "Téléphone à soi": d.telephoneA||"", "Internet": d.internet||"", "Recharge": d.recharge||"", "Mobile money": d.mobileMoney||"",
+    "Langue parlée": d.langueParlee||"", "Langue préférée (appli)": d.langue||"", "Sait lire et écrire": d.litEcrit||"", "Formulaire rempli par": d.remplitPar||"",
+    "Prénom": d.nom||"", "Contact": d.contact||"", "Souhait de rappel": d.rappel||"", "Accord pour être recontacté": d.aContact ? "Oui" : "Non",
+    "Participation possible": (d.participation||[]).join(", "),
     "Consentement RGPD": c.rgpd ? "Oui" : "", "Version du consentement": c.version||"", "Date du consentement (UTC)": isoUTC(c.date),
     "Appareil": t.appareil||"", "Langue du navigateur": t.langueNavigateur||"", "Fuseau horaire": t.fuseau||"", "Version de l’application": t.app||""
   }; });
@@ -1956,6 +2011,9 @@ $("domaines").innerHTML = DOMAINES.map(([d,ex],i)=>`<label class="tile"><input t
 Object.entries(OPTS).forEach(([k,list])=>{
   $(k).innerHTML = list.map((v,i)=>`<label class="chip"><input type="radio" name="${k}" value="${esc(v)}" id="${k}-${i}"><span>${esc(v)}</span></label>`).join("");
 });
+Object.entries(OPTS_MULTI).forEach(([k,list])=>{
+  $(k).innerHTML = list.map((v,i)=>`<label class="chip"><input type="checkbox" name="${k}" value="${esc(v)}" id="${k}-${i}"><span>${esc(v)}</span></label>`).join("");
+});
 $("importance").innerHTML = IMP.map((t,i)=>`<label class="chip"><input type="radio" name="importance" value="${i+1}" id="importance-${i}"><span><strong>${i+1}</strong>${t}</span></label>`).join("");
 $("region").insertAdjacentHTML("beforeend", Object.keys(GEO).map(r=>`<option>${esc(r)}</option>`).join(""));
 $("region").addEventListener("change", ()=>{
@@ -1991,6 +2049,7 @@ $("logoHome").addEventListener("click", ()=>{
 /* ---------- Assistant ---------- */
 const STEPS = 4; let step = 0;
 const val = n => (document.querySelector(`input[name="${n}"]:checked`)||{}).value || "";
+const checked = n => [...document.querySelectorAll(`input[name="${n}"]:checked`)].map(i=>i.value);
 function formErr(t){ const m=$("formMsg"); m.textContent=t; m.hidden=!t; }
 function drawProgress(){
   const L = ["Domaine","Problème","Vous","Envoi"];
@@ -2021,24 +2080,45 @@ function checkStep(){
 $("domaines").addEventListener("change", ()=>{ setTimeout(()=>{ if(step===0) goto(1); }, 380); });
 $("prev").addEventListener("click", ()=>goto(Math.max(0,step-1)));
 
+$("toggleMore").addEventListener("click", ()=>{
+  const hidden = $("step1More").hidden;
+  $("step1More").hidden = !hidden;
+  $("toggleMore").textContent = hidden ? "Replier" : "En dire plus";
+});
+document.addEventListener("change", e=>{
+  if(e.target.name==="perte") $("fCout").hidden = !checked("perte").includes("De l’argent");
+  if(e.target.name==="telephone"){
+    const smartphone = val("telephone")==="Smartphone";
+    const opt = document.querySelector('#participation input[value="Essayer l’application"]');
+    if(opt){ opt.closest("label").hidden = !smartphone; if(!smartphone) opt.checked = false; }
+  }
+});
+
 $("f").addEventListener("submit", async e=>{
   e.preventDefault();
   const err = checkStep(); if(err){ formErr(err); return; }
   if(step < STEPS-1){ goto(step+1); return; }
 
-  const contact = $("contact").value.trim(), okContact = $("consentContact").checked;
+  const contact = $("contact").value.trim(), rappel = val("rappel"), okContact = !!rappel && rappel!=="Non";
   if(!$("consentRgpd").checked){ formErr("Cochez la case sur l’utilisation de vos réponses pour pouvoir envoyer."); return; }
-  if(contact && !okContact){ formErr("Cochez la case « J’accepte que Geomessen me recontacte », ou laissez le numéro vide."); return; }
+  if(contact && !okContact){ formErr("Choisissez comment Geomessen peut vous rappeler, ou laissez le numéro vide."); return; }
   if(!db || !myId){ formErr("Connectez-vous par e-mail pour envoyer votre idée."); showLogin(); return; }
 
   const now = new Date().toISOString();
   const doc = {
-    domaine:val("domaines"), probleme:$("probleme").value.trim(), solution:$("solution").value.trim(),
+    domaine:val("domaines"), probleme:$("probleme").value.trim(), debrouille:$("debrouille").value.trim(),
+    perte:checked("perte"), effort:checked("effort"), echec:val("echec"),
+    tempsPris:val("tempsPris"), cout:val("cout"), blocage:checked("blocage"), distance:val("distance"),
+    duree:val("duree"), ampleur:val("ampleur"), tentative:val("tentative"),
+    solution:$("solution").value.trim(),
     frequence:val("frequence"), importance:Number(val("importance"))||0,
     ville:$("ville").value.trim(), region:$("region").value, province:$("province").value,
     lat:null, lon:null, geoPrecision:"", age:$("age").value,
-    activite:val("activite"), telephone:val("telephone"), internet:val("internet"), langue:val("langue"),
-    aContact: !!(contact && okContact), consentement:{rgpd:true, version:CONSENT_VERSION, date:now}, createdAt:now,
+    activite:val("activite"), telephone:val("telephone"), telephoneA:val("telephoneA"),
+    internet:val("internet"), recharge:val("recharge"), mobileMoney:val("mobileMoney"),
+    langueParlee:val("langueParlee"), langue:val("langue"), litEcrit:val("litEcrit"), remplitPar:val("remplitPar"),
+    rappel, participation:checked("participation"),
+    aContact: okContact, consentement:{rgpd:true, version:CONSENT_VERSION, date:now}, createdAt:now,
     trace:{app:APP_VERSION, appareil: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "Mobile" : "Ordinateur", langueNavigateur: navigator.language || "", fuseau: (Intl.DateTimeFormat().resolvedOptions().timeZone)||""}
   };
   $("next").disabled = true;
@@ -2103,12 +2183,17 @@ function openIdea(d){
     <div class="dsec"><h3>Le besoin</h3><p class="dtext">${esc(d.probleme||"")}</p>
       ${d.solution?`<p class="muted" style="margin:10px 0 4px;font-size:.8rem;color:var(--muted)">Solution proposée</p><p class="dtext">${esc(d.solution)}</p>`:""}
       <div style="margin-top:10px">${dl([["Domaine",d.domaine],["Fréquence",d.frequence],["Importance",d.importance?`${d.importance}/5 · ${IMP[d.importance-1]}`:""]])}</div></div>
+    <div class="dsec"><h3>Le vécu</h3>${dl([["Comment vous vous en sortez",d.debrouille],["Ce que ça fait perdre",(d.perte||[]).join(", ")],
+      ["Effort déjà consenti",(d.effort||[]).join(", ")],["Quand ça ne marche pas",d.echec],["Temps pris à chaque fois",d.tempsPris],["Coût à chaque fois",d.cout],
+      ["Ce qui empêche de régler soi-même",(d.blocage||[]).join(", ")],["Distance du service",d.distance],["Depuis quand",d.duree],
+      ["Qui d’autre est concerné",d.ampleur],["Déjà tenté par",d.tentative]])}</div>
     <div class="dsec"><h3>Localisation</h3>${dl([["Région",d.region],["Province",d.province],["Commune / département",d.ville],
       ["Latitude",g.ll[1]],["Longitude",g.ll[0]],["Précision",g.prec?"Centre de la "+g.prec:"Non renseignée"],
       ["HASC",code(k.hc||k.hp||k.hr),1],["GID (GADM)",code(k.gc||k.gp||k.gr),1],["shapeID geoBoundaries",code(k.sc||k.sp||k.sr),1],["Code ISO région",code(k.iso),1]])}</div>
     <div class="dsec"><h3>Participant</h3>${dl([["Connexion",(TYPE_LBL[(d.identite||{}).type]||"")+((d.identite&&d.identite.valeur)?" · "+d.identite.valeur:"")],["Nom du compte",p&&p.name],
-      ["Âge",d.age],["Activité",d.activite],["Téléphone",d.telephone],["Internet",d.internet],["Langue préférée",d.langue]])}</div>
-    <div class="dsec"><h3>Contact</h3>${d.contact||d.nom ? dl([["Prénom",d.nom],["Contact",d.contact],["Accepte d’être recontacté",d.aContact?"Oui":"Non"]]) : `<p class="muted" style="margin:0;color:var(--muted)">Aucun contact laissé.</p>`}</div>
+      ["Âge",d.age],["Activité",d.activite],["Téléphone",d.telephone],["Téléphone à soi",d.telephoneA],["Internet",d.internet],["Recharge",d.recharge],["Mobile money",d.mobileMoney],
+      ["Langue parlée",d.langueParlee],["Langue préférée",d.langue],["Sait lire et écrire",d.litEcrit],["Formulaire rempli par",d.remplitPar]])}</div>
+    <div class="dsec"><h3>Contact</h3>${d.contact||d.nom ? dl([["Prénom",d.nom],["Contact",d.contact],["Souhait de rappel",d.rappel],["Accepte d’être recontacté",d.aContact?"Oui":"Non"],["Participation possible",(d.participation||[]).join(", ")]]) : `<p class="muted" style="margin:0;color:var(--muted)">Aucun contact laissé.</p>`}</div>
     <div class="dsec"><h3>Traçabilité</h3>${dl([["ID réponse",code(d.id),1],["ID participant",code(d.uid),1],["Horodatage UTC",isoUTC(d.createdAt)],
       ["Consentement RGPD",c.rgpd?`Oui · version ${c.version||""} · ${isoUTC(c.date)}`:""],["Appareil",t.appareil],["Langue du navigateur",t.langueNavigateur],["Fuseau horaire",t.fuseau],["Version de l’application",t.app]])}</div>`;
   $("ideaModal").hidden = false; $("imClose").focus();
