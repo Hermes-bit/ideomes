@@ -1,0 +1,39 @@
+name: Veille Hermès
+
+# Hermès cherche chaque matin les avancées récentes au Burkina Faso, vérifie
+# chaque chiffre dans l'article d'origine et dépose des propositions dans la
+# collection « veille ». Rien n'est publié sans l'accord de l'administrateur :
+# les propositions attendent dans le tableau de bord.
+
+on:
+  schedule:
+    # 06:52 UTC, et le Burkina Faso est à UTC+0 : la veille est prête au réveil.
+    - cron: "52 6 * * *"
+  workflow_dispatch:
+
+# Une seule veille à la fois : deux exécutions simultanées se marcheraient dessus.
+concurrency:
+  group: veille-hermes
+  cancel-in-progress: false
+
+jobs:
+  veille:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Installer les agents
+        run: pip install ./agents
+
+      - name: Lancer la veille
+        env:
+          LLM_MODE: anthropic
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: ideomes veille

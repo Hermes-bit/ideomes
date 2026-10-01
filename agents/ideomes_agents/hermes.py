@@ -1,21 +1,22 @@
 """Hermès, veille des actualités (hors pipeline des idées).
 
 Chaque matin : recherche web (outil serveur d'Anthropic), propositions vérifiées, envoi à l'API
-dans la collection « veille ». L'administrateur approuve dans le tableau de bord : Hermès ne publie jamais seul.
-Lancement : `ideomes veille` (planifiez-le avec cron / le Planificateur de tâches Windows à 06:52).
+dans la collection « veille » de Supabase. L'administrateur approuve dans le tableau de bord :
+Hermès ne publie jamais seul.
+Lancement : `ideomes veille` (planifié chaque matin par .github/workflows/veille.yml).
 """
 
 from __future__ import annotations
 
+import hashlib
 import json
 import re
-import time
-from datetime import date
+from datetime import date, datetime, timezone
 from typing import Any
 
-import httpx
 import jsonschema
 
+from . import supabase_io
 from .config import reglages
 from .core.audit import journaliser
 from .core.llm import client, modele_pour, prompt_systeme, schema
@@ -72,36 +73,36 @@ def rechercher(deja_vus: list[str]) -> dict:
     raise RuntimeError("Hermès n'a pas rendu de résultat.")
 
 
-def executer(api_url: str | None = None) -> dict:
-    url = (api_url or reglages.api_url).rstrip("/")
-    entetes = {"X-Service-Token": reglages.api_jeton_service}
-    with httpx.Client(base_url=url, headers=entetes, timeout=30) as h:
-        existants = h.get("/api/db/collection/actus").json().get("docs", []) + h.get(
-            "/api/db/collection/veille"
-        ).json().get("docs", [])
-        deja_vus = sorted(
-            {x.get("data", {}).get(k) for x in existants for k in ("lien", "titre") if x.get("data", {}).get(k)}
-        )
-        sortie = _nettoyer(rechercher(deja_vus))
-        maintenant_ms = int(time.time() * 1000)
-        for i, p in enumerate(sortie["propositions"]):
-            doc = {
-                **p,
-                "statut": "en_attente",
-                "propose_le": maintenant_ms,
-                "agent": "Hermès",
-                "image": p["categorie"].lower(),
-            }
-            h.put(f"/api/db/doc/veille/h{maintenant_ms}{i}", json={"data": doc})
-        h.put(
-            "/api/db/doc/config/hermes",
-            json={
-                "data": {
-                    "derniere_execution": maintenant_ms,
-                    "nb_propositions": len(sortie["propositions"]),
-                    "message": sortie["message"],
-                }
-            },
-        )
-    journaliser("veille", "HERMES", "execution", propositions=len(sortie["propositions"]))
+def executer() -> dict:
+    """Lance une veille et dépose les propositions dans Supabase.
+
+    Les noms de champs suivent exactement ce que lit le tableau de bord :
+    statut « proposee » pour qu'une proposition s'affiche, et config/hermes avec
+    `lastRun` / `message` pour la ligne d'état.
+    """
+    existants = supabase_io.lire_collection("actus") + supabase_io.lire_collection("veille")
+    deja_vus = sorted({x[k] for x in existants for k in ("lien", "titre") if x.get(k)})
+
+    sortie = _nettoyer(rechercher(deja_vus))
+    maintenant = datetime.now(timezone.utc).isoformat()
+
+    propositions = {}
+    for p in sortie["propositions"]:
+        # Identifiant stable dérivé du lien : une même actualité reproposée
+        # écrase son entrée au lieu d'en créer une seconde.
+        ident = "h" + hashlib.sha1(p["lien"].encode("utf-8")).hexdigest()[:16]
+        propositions[ident] = {
+            **p,
+            "statut": "proposee",
+            "proposeLe": maintenant,
+            "agent": "Hermès",
+            "image": p["categorie"].lower(),
+        }
+    supabase_io.ecrire_documents("veille", propositions)
+    supabase_io.ecrire_documents(
+        "config",
+        {"hermes": {"lastRun": maintenant, "nbPropositions": len(propositions), "message": sortie["message"]}},
+    )
+
+    journaliser("veille", "HERMES", "execution", propositions=len(propositions))
     return sortie

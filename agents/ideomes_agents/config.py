@@ -14,7 +14,7 @@ class Reglages(BaseSettings):
 
     # Modèles Claude
     anthropic_api_key: str = ""
-    modele_fort: str = "claude-sonnet-5-5"
+    modele_fort: str = "claude-sonnet-5"
     modele_leger: str = "claude-haiku-4-5-20251001"
     # "anthropic" en production, "simule" pour développer et tester sans clé ni coût
     llm_mode: str = "simule"

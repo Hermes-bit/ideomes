@@ -74,10 +74,10 @@ def cmd_run(a):
     _afficher(Zeus(Contexte()).lancer(a.id or uuid.uuid4().hex[:8], contribution))
 
 
-def cmd_veille(a):
+def cmd_veille(_):
     from . import hermes
 
-    _afficher(hermes.executer(a.api))
+    _afficher(hermes.executer())
 
 
 def cmd_eval(a):
@@ -99,8 +99,7 @@ def main(argv=None):
     r.add_argument("fichier", nargs="?")
     r.add_argument("--id")
     r.set_defaults(f=cmd_run)
-    v = s.add_parser("veille", help="Lance Hermès (veille des actualités) et envoie les propositions à l'API")
-    v.add_argument("--api")
+    v = s.add_parser("veille", help="Lance Hermès (veille des actualités) et dépose les propositions dans Supabase")
     v.set_defaults(f=cmd_veille)
     e = s.add_parser("eval", help="Évalue les agents sur le jeu annoté")
     e.add_argument("--jeu")
