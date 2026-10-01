@@ -1471,7 +1471,7 @@ function applyAdmin(){
   renderNews();
   renderRecentIdeas();
   renderMaint();
-  if(!isAdmin) show("form");
+  if(!isAdmin) show("form", true);
   renderAccount(); renderVideo(); renderDash(); renderIdeas();
 }
 
@@ -1959,7 +1959,7 @@ let tourI = 0, TSTEPS = TOUR;
 const TOUR_V = "2";   // nouvelle version du guide : À la une
 function maybeTour(){ if(store.get("ideomes-tour")!==TOUR_V) setTimeout(()=>startTour(), 500); }
 function startTour(){
-  show("form");
+  show("form", true);
   TSTEPS = TOUR.filter(st=>{ if(!st.opt) return true; const el = document.querySelector(st.sel); return el && !el.hidden && el.getBoundingClientRect().width > 0; });
   tourI = 0; unePause = Date.now() + 1e9; $("tour").hidden = false; tourStep();
 }
@@ -2051,18 +2051,21 @@ $("province").addEventListener("change", ()=>{
 ["ideaDom","dashDom","mDom"].forEach(id=>$(id).insertAdjacentHTML("beforeend", DOMAINES.map(([d])=>`<option>${esc(d)}</option>`).join("")));
 
 /* ---------- Onglets ---------- */
-function show(view){
+function show(view, noScroll){
   setTimeout(()=>{ if(view==="dash" && isAdmin) renderMap(); }, 30);
   if(view==="notif" && isAdmin) loadGithubHistory();
   document.querySelectorAll(".tabs button").forEach(b=>b.setAttribute("aria-selected", b.dataset.view===view));
   if(view==="users") renderUsers();
   ["form","ideas","dash","notif","users"].forEach(v=>$("view-"+v).hidden = v!==view);
+  // Sans ça, changer d'onglet garde l'ancienne position de défilement : si le nouvel
+  // onglet est plus court, on atterrit au milieu de son contenu au lieu du début.
+  if(!noScroll) requestAnimationFrame(()=>requestAnimationFrame(()=>document.querySelector(".tabs").scrollIntoView({behavior:"smooth", block:"start"})));
 }
 document.querySelectorAll(".tabs button").forEach(b=>b.addEventListener("click",()=>show(b.dataset.view)));
 $("logoHome").addEventListener("click", ()=>{
   closePage();
   $("acctMenu").hidden = true;
-  show("form");
+  show("form", true);
   window.scrollTo({top:0, behavior:"smooth"});
 });
 
