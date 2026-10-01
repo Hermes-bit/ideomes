@@ -8,3 +8,6 @@ __pycache__/
 data/
 web/dist/
 .DS_Store
+
+# Réglages locaux de l'outil Claude Code (propres au poste)
+.claude/
