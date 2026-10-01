@@ -212,8 +212,11 @@ button.logo:focus-visible{outline:2px solid var(--teal);outline-offset:4px}
 .field{display:flex;flex-direction:column;gap:8px;min-width:0}
 .field > label,.q{font-weight:500}
 .hint{color:var(--muted);font-weight:300;font-size:.88rem}
-input[type=text],input[type=tel],input[type=password],textarea,select{font:inherit;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:14px;padding:13px 15px;width:100%;transition:border-color .2s, background .2s}
-input[type=text]:focus,input[type=tel]:focus,input[type=password]:focus,textarea:focus,select:focus{border-color:var(--teal);background:var(--surface);outline:none;box-shadow:0 0 0 4px var(--teal-soft)}
+input[type=text],input[type=tel],input[type=password],input[type=date],input[type=email],input[type=number],textarea,select{font:inherit;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:14px;padding:13px 15px;width:100%;min-width:0;max-width:100%;transition:border-color .2s, background .2s}
+input[type=text]:focus,input[type=tel]:focus,input[type=password]:focus,input[type=date]:focus,input[type=email]:focus,input[type=number]:focus,textarea:focus,select:focus{border-color:var(--teal);background:var(--surface);outline:none;box-shadow:0 0 0 4px var(--teal-soft)}
+/* Safari iOS impose sa propre largeur et centre le texte des champs date : sans ça, ils
+   débordent de leur cadre sur téléphone et ne ressemblent pas aux autres champs. */
+input[type=date]{-webkit-appearance:none;appearance:none;text-align:left;box-sizing:border-box}
 textarea{min-height:120px;resize:vertical}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 @media (max-width:560px){.grid2{grid-template-columns:1fr}}
