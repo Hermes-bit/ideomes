@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python web/build.py)",
+      "Bash(node --check \"/c/Users/herme/Documents/ideomes/web/src/claude-shim.js\")",
+      "Bash(python3 -c ' *)",
+      "Bash(python -c ' *)",
+      "Bash(node --check 'C:\\\\Users\\\\herme\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-herme-Documents-ideomes\\\\ed74373f-6b3c-48d4-80fe-b55cfc022990\\\\scratchpad/script_1.js')",
+      "Bash(node --check 'C:\\\\Users\\\\herme\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-herme-Documents-ideomes\\\\ed74373f-6b3c-48d4-80fe-b55cfc022990\\\\scratchpad/script_2.js')",
+      "Bash(gh api *)",
+      "Bash(gh run *)",
+      "Bash(gh secret *)"
+    ],
+    "additionalDirectories": [
+      "C:\\temp\\shots"
+    ]
+  }
+}

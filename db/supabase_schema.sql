@@ -63,12 +63,15 @@ create trigger trg_documents_set_meta
   for each row execute function public.documents_set_meta();
 
 -- Lecture publique : actus (tout le flux) + config/video (mirrors PUBLIC_COLLECTIONS /
--- PUBLIC_LECTURE de l'actuel api/app/securite.py).
+-- PUBLIC_LECTURE de l'actuel api/app/securite.py) + maintenance (les annonces
+-- doivent atteindre tous les visiteurs, y compris non connectés). L'écriture des
+-- annonces reste réservée à l'administrateur par les policies ci-dessous.
 create policy documents_select_public
   on public.documents for select
   to anon, authenticated
   using (
     collection = 'actus'
+    or collection = 'maintenance'
     or (collection = 'config' and doc_id = 'video')
   );
 

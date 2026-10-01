@@ -98,12 +98,25 @@
     return cachedAdmin;
   }
 
+  /* Prenom reel de l'utilisateur, uniquement quand le fournisseur nous en donne un
+     (Google renseigne given_name / full_name). Une connexion par lien magique
+     n'apporte qu'une adresse e-mail : on renvoie null plutot que de deviner un
+     prenom a partir de l'adresse, ce qui donnerait des resultats faux. */
+  function prenomDe(u){
+    const m = (u && u.user_metadata) || {};
+    const brut = m.given_name || m.first_name
+      || String(m.full_name || m.name || "").trim().split(/\s+/)[0] || "";
+    const p = brut.trim();
+    if(p.length < 2 || /[0-9@]/.test(p)) return null;
+    return p.charAt(0).toUpperCase() + p.slice(1);
+  }
+
   const user = {
     async me(){
       const { data: { session } } = await sb.auth.getSession();
       if(!session) return { id: null, name: null, avatarUrl: null, isOwner: false };
       const isOwner = await checkAdmin();
-      return { id: session.user.id, name: isOwner ? "Administrateur Geomessen" : session.user.email, avatarUrl: null, isOwner };
+      return { id: session.user.id, name: isOwner ? "Administrateur Geomessen" : session.user.email, avatarUrl: null, isOwner, firstName: prenomDe(session.user) };
     },
     async isOwner(){ return (await this.me()).isOwner; },
     async profiles(ids){

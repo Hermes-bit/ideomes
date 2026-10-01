@@ -10,6 +10,7 @@
   --bg:#F1F6F6; --surface:#FFFFFF; --ink:#14343C; --muted:#5C6D71; --line:#D5E2E2;
   --teal:#0E5C63; --teal-soft:#E0EEEE; --sage:#7FA9A9; --orange:#E8833A; --orange-soft:#FDEBDC;
   --hero:#0E5C63; --hero-ink:#FFFFFF; --on-orange:#14343C; --shadow:0 10px 30px -12px rgba(14,92,99,.28);
+  --maint-bg:#FDEBDC; --maint-line:#F2C39A;
   --display:"Unbounded", "Arial Black", system-ui, sans-serif;
   --body:"Lexend", "Segoe UI", system-ui, sans-serif;
   -webkit-text-size-adjust:100%; text-size-adjust:100%;
@@ -22,11 +23,11 @@
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0B1A1D; --surface:#12262A; --ink:#E4EFEF; --muted:#9BB0B2; --line:#23393D;
   --teal:#45A6AD; --teal-soft:#163136; --sage:#5D8C8D; --orange:#F0944F; --orange-soft:#3A2618;
-  --hero:#0F3E43; --hero-ink:#FFFFFF; --on-orange:#14343C; --shadow:0 10px 30px -12px rgba(0,0,0,.6); color-scheme:dark }}
+  --maint-bg:#3A2618; --maint-line:#6B4526; --hero:#0F3E43; --hero-ink:#FFFFFF; --on-orange:#14343C; --shadow:0 10px 30px -12px rgba(0,0,0,.6); color-scheme:dark }}
 :root[data-theme="dark"]{
   --bg:#0B1A1D; --surface:#12262A; --ink:#E4EFEF; --muted:#9BB0B2; --line:#23393D;
   --teal:#45A6AD; --teal-soft:#163136; --sage:#5D8C8D; --orange:#F0944F; --orange-soft:#3A2618;
-  --hero:#0F3E43; --hero-ink:#FFFFFF; --on-orange:#14343C; --shadow:0 10px 30px -12px rgba(0,0,0,.6); color-scheme:dark }
+  --maint-bg:#3A2618; --maint-line:#6B4526; --hero:#0F3E43; --hero-ink:#FFFFFF; --on-orange:#14343C; --shadow:0 10px 30px -12px rgba(0,0,0,.6); color-scheme:dark }
 
 /* Couleurs des graphiques (validées daltonisme, clair et sombre) */
 :root{--c1:#008C99;--c2:#E07A2E;--c3:#3D86D9;--c4:#B8940A;--c5:#9A4E8C;--c-other:#B3C1C2;--grid:#E4ECEC}
@@ -169,11 +170,70 @@ button.logo:focus-visible{outline:2px solid var(--teal);outline-offset:4px}
    le contenu des onglets sous la ligne de flottaison à chaque changement d'onglet. */
 @media (max-width:720px){
   body.admin .hero{margin:12px 0 16px;padding:18px 18px 16px}
-  body.admin .hero p,body.admin .hero .badges{display:none}
+  body.admin .hero p:not(.hello),body.admin .hero .badges{display:none}
   body.admin .hero h1{font-size:clamp(1.9rem,7.5vw,2.6rem)}
   body.admin .ideotile{width:46px;height:46px;border-radius:14px}
   body.admin .hero .pattern{width:140px;height:148px;right:-30px;top:-24px}
 }
+
+/* Salutation d'accueil, en tête du bandeau : apparaît en fondu après le splash. */
+.hello{margin:0 0 10px;font-size:.95rem;font-weight:500;letter-spacing:.01em;opacity:0;transform:translateY(-6px);transition:opacity .5s ease,transform .5s ease}
+.hello.in{opacity:.92;transform:none}
+.hello .hname{color:var(--orange);font-weight:700}
+@media (prefers-reduced-motion:reduce){.hello{transition:none}}
+@media (max-width:720px){body.admin .hello{margin-bottom:6px;font-size:.88rem}}
+
+/* Bandeau de maintenance destiné aux utilisateurs. Reprend l'orange de la charte
+   pour l'alerte, sans rompre avec les cartes arrondies du reste de l'application. */
+.maintnote{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:start;
+  margin:0 0 22px;padding:16px 18px;border-radius:20px;
+  background:var(--maint-bg);border:1.5px solid var(--maint-line);box-shadow:var(--shadow)}
+.maintnote .mn-ico{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;flex:none;
+  background:rgba(232,131,58,.16);color:var(--orange)}
+.maintnote .mn-ico svg{width:21px;height:21px}
+.maintnote .mn-body{min-width:0}
+.maintnote b{display:block;font-size:1.02rem;letter-spacing:-.01em;margin-bottom:4px}
+.maintnote p{margin:0;font-size:.92rem;line-height:1.5;color:var(--muted)}
+.maintnote .mn-sorry{margin-top:6px;font-style:italic}
+.maintnote .mn-svc{margin-top:8px;display:flex;flex-wrap:wrap;gap:6px}
+.maintnote .mn-svc span{font-size:.76rem;padding:4px 10px;border-radius:999px;
+  background:rgba(232,131,58,.14);border:1px solid rgba(232,131,58,.3);color:var(--orange);font-style:normal}
+.maintnote .mn-close{flex:none;width:32px;height:32px;border-radius:10px;border:0;cursor:pointer;
+  background:transparent;color:var(--muted);font-size:1.4rem;line-height:1;display:grid;place-items:center;
+  transition:background .2s}
+.maintnote .mn-close:hover{background:rgba(0,0,0,.06)}
+@media (max-width:560px){
+  .maintnote{gap:11px;padding:14px;border-radius:17px}
+  .maintnote .mn-ico{width:32px;height:32px;border-radius:10px}
+  .maintnote .mn-ico svg{width:18px;height:18px}
+  .maintnote b{font-size:.96rem}
+  .maintnote p{font-size:.87rem}
+}
+
+/* Service coupé : remplace le contenu indisponible par une explication sobre. */
+.svcdown{display:grid;gap:10px;justify-items:center;text-align:center;padding:38px 22px;
+  border-radius:22px;background:var(--surface);border:1.5px dashed var(--line)}
+.svcdown .sd-ico{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;
+  background:rgba(232,131,58,.14);color:var(--orange)}
+.svcdown .sd-ico svg{width:26px;height:26px}
+.svcdown b{font-size:1.08rem;letter-spacing:-.01em}
+.svcdown p{margin:0;max-width:42ch;font-size:.93rem;line-height:1.55;color:var(--muted)}
+@media (max-width:560px){.svcdown{padding:28px 16px;border-radius:18px}}
+
+/* Formulaire d'annonce : services concernés et interrupteur de coupure. */
+.svcpick{display:flex;flex-wrap:wrap;gap:8px}
+.svcpick label{display:inline-flex;align-items:center;gap:7px;cursor:pointer;
+  font-size:.85rem;padding:7px 12px;border-radius:999px;
+  background:var(--bg);border:1.5px solid var(--line);transition:border-color .2s,background .2s}
+.svcpick label:has(input:checked){border-color:var(--orange);background:rgba(232,131,58,.1);color:var(--orange);font-weight:600}
+.svcpick input{accent-color:var(--orange);width:15px;height:15px;flex:none}
+.cutnow{display:flex;align-items:center;gap:9px;cursor:pointer;margin-top:14px;
+  font-size:.9rem;font-weight:600;padding:11px 14px;border-radius:14px;
+  background:var(--bg);border:1.5px solid var(--line);transition:border-color .2s,background .2s}
+.cutnow:has(input:checked){border-color:var(--orange);background:rgba(232,131,58,.1);color:var(--orange)}
+.cutnow input{accent-color:var(--orange);width:17px;height:17px;flex:none}
+.naitem .live{display:inline-block;font-size:.7rem;font-weight:700;vertical-align:middle;
+  padding:3px 9px;border-radius:999px;background:var(--orange);color:#fff;letter-spacing:.02em}
 
 /* ---------- ONGLETS ---------- */
 .tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;margin:0 0 20px;background:var(--surface);padding:5px;border-radius:20px;border:1px solid var(--line);width:100%;box-shadow:var(--shadow)}
@@ -588,6 +648,13 @@ select:disabled{opacity:.55}
 .nalist{display:flex;flex-direction:column;gap:8px}
 .naitem{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg)}
 .naitem b{display:block;font-size:.9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.na-head{display:flex;align-items:center;gap:8px;min-width:0}
+.na-head b{min-width:0}
+.na-head .live{flex:none}
+/* Deux actions cote a cote etranglaient le texte sur telephone : on empile. */
+@media (max-width:560px){
+  .naitem{grid-template-columns:minmax(0,1fr);gap:9px}
+}
 .naitem small{color:var(--muted);font-size:.76rem}
 .naitem .acts{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
 .naitem .acts button{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;font:500 .76rem var(--body);padding:5px 10px;cursor:pointer}
@@ -767,10 +834,22 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
 
   <section class="hero">
     <div class="hero-deco" aria-hidden="true"><svg class="pattern" viewBox="-200 -200 1000 1060" aria-hidden="true"><g stroke="#fff" stroke-linecap="round" fill="none"><line class="pc" style="--dx:-77px;--dy:-38px;--r:-28deg;--d:0.00s" x1="42" y1="612" x2="300" y2="62" stroke-width="22"/><line class="pc" style="--dx:83px;--dy:-32px;--r:24deg;--d:0.08s" x1="558" y1="612" x2="300" y2="62" stroke-width="22"/><line class="pc" style="--dx:0px;--dy:77px;--r:12deg;--d:0.16s" x1="42" y1="612" x2="558" y2="612" stroke-width="22"/><line class="pc" style="--dx:26px;--dy:-71px;--r:-40deg;--d:0.24s" x1="300" y1="62" x2="300" y2="403" stroke-width="12"/><line class="pc" style="--dx:-96px;--dy:45px;--r:35deg;--d:0.32s" x1="300" y1="403" x2="42" y2="612" stroke-width="12"/><line class="pc" style="--dx:96px;--dy:51px;--r:-30deg;--d:0.40s" x1="300" y1="403" x2="558" y2="612" stroke-width="12"/></g><g fill="#fff"><circle class="pc pn" style="--dx:-122px;--dy:71px;--r:0deg;--d:0.50s" cx="42" cy="612" r="44"/><circle class="pc pn" style="--dx:129px;--dy:77px;--r:0deg;--d:0.58s" cx="558" cy="612" r="44"/><circle class="pc pn" style="--dx:0px;--dy:26px;--r:0deg;--d:0.66s" cx="300" cy="403" r="36"/><circle class="pc pn orange" style="--dx:19px;--dy:-122px;--r:0deg;--d:0.74s" cx="300" cy="62" r="62"/></g></svg></div>
+    <p class="hello" id="hello" hidden></p>
     <div class="herotitle"><span class="ideotile"><img class="" src="data:image/png;base64,__IDEO__" alt="Logo Idéomès"></span><h1>Idéo<span class="accent">mès</span></h1></div>
     <p>Qu’est-ce qui vous complique la vie au quotidien ? Racontez-le en 2 minutes. Vos réponses guident les applications que nous construisons pour les Burkinabè.</p>
     <div class="badges"><span>2 minutes</span><span>Anonyme si vous le souhaitez</span><button type="button" data-policy>Données protégées</button></div>
   </section>
+
+  <div class="maintnote" id="maintNote" hidden role="status" aria-live="polite">
+    <span class="mn-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></span>
+    <div class="mn-body">
+      <b id="maintNoteTitle"></b>
+      <p id="maintNoteMsg"></p>
+      <p class="mn-sorry" id="maintNoteSorry"></p>
+      <p class="mn-svc" id="maintNoteSvc"></p>
+    </div>
+    <button type="button" class="mn-close" id="maintNoteClose" aria-label="Fermer cette annonce">&times;</button>
+  </div>
 
   <nav class="tabs" role="tablist" id="tabs" hidden>
     <button id="tab-form" role="tab" aria-selected="true" data-view="form" title="Donner une idée"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg><span>Donner une idée</span></button>
@@ -896,6 +975,11 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
         <p>Votre idée est bien enregistrée. Merci d’aider à construire des outils utiles pour le Faso.</p>
         <button class="btn primary" id="again" type="button">Proposer une autre idée</button>
       </div>
+    </div>
+    <div class="svcdown" id="svcDownIdee" hidden>
+      <span class="sd-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+      <b>Envoi d’idée momentanément indisponible</b>
+      <p>Nous effectuons une maintenance sur ce service. Vos idées comptent beaucoup pour nous : revenez un peu plus tard, le formulaire sera de nouveau ouvert. Merci de votre patience.</p>
     </div>
   </section>
 
@@ -1043,12 +1127,17 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
     <div class="dash-block">
       <h3 class="sec">Annonces de maintenance</h3>
       <div class="panel">
-        <p class="hint" style="margin:0 0 12px">Visible uniquement par l’administrateur, pour préparer une coupure ou un changement à venir.</p>
+        <p class="hint" style="margin:0 0 12px">Annonce affichée à tous les utilisateurs. Tant que la coupure n’est pas activée, ils voient un simple avertissement et gardent l’accès.</p>
         <form id="maintForm" novalidate>
           <div class="grid2">
             <div class="field"><label for="maintDate">Date</label><input type="date" id="maintDate"></div>
             <div class="field"><label for="maintMsg">Message</label><input type="text" id="maintMsg" maxlength="200" placeholder="Ex. : Maintenance prévue, site indisponible 10 min"></div>
           </div>
+          <div class="field" style="margin-top:14px">
+            <span class="q">Services concernés</span>
+            <div class="svcpick" id="maintSvc"></div>
+          </div>
+          <label class="cutnow"><input type="checkbox" id="maintActive"><span>Couper ces services maintenant</span></label>
           <div id="maintFormMsg" class="msg err" hidden></div>
           <button class="btn primary small" type="submit">Publier l’annonce</button>
         </form>
@@ -1395,10 +1484,41 @@ document.addEventListener("click", async e=>{
 /* ---------- Connexion (Supabase Auth, lien magique par e-mail) ---------- */
 let claudeMe = null, isOwner = false;
 function loggedIn(){ return !!(claudeMe && claudeMe.id); }
-function afterSplash(){ maybeTour(); }
-function showLogin(){ $("login").hidden = false; $("loginMsg").hidden = true; setTimeout(()=>$("loginMail").focus(), 60); }
+function afterSplash(){ renderHello(); maybeTour(); }
+
+/* Salutation d'accueil. Le prénom n'est affiché que si le fournisseur
+   d'identité nous en a réellement donné un (Google) : une connexion par lien
+   magique ne fournit qu'une adresse e-mail, et deviner un prénom à partir de
+   l'adresse donnerait des résultats faux. Sans prénom, on salue sans nommer. */
+function helloTexte(){
+  const h = new Date().getHours();
+  const moment = h < 5 ? "Bonsoir" : h < 18 ? "Bonjour" : "Bonsoir";
+  if(!loggedIn()) return `${moment} et bienvenue sur Idéomès.`;
+  const p = claudeMe && claudeMe.firstName;
+  if(isAdmin) return p ? `${moment} ${nomHtml(p)}, bon retour sur votre espace d’administration.` : `${moment}, bon retour sur votre espace d’administration.`;
+  return p ? `${moment} ${nomHtml(p)}, content de vous revoir.` : `${moment}, content de vous revoir.`;
+}
+const nomHtml = p => `<span class="hname">${esc(p)}</span>`;
+function renderHello(){
+  const el = $("hello"); if(!el) return;
+  el.innerHTML = helloTexte();
+  el.hidden = false;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add("in")));
+}
+function showLogin(){
+  $("login").hidden = false; $("loginMsg").hidden = true;
+  if(svcCoupe("connexion")){
+    const m = $("loginMsg");
+    m.className = "msg err";
+    m.textContent = "La connexion est momentanément suspendue pour maintenance. Merci de réessayer un peu plus tard.";
+    m.hidden = false;
+    return;
+  }
+  setTimeout(()=>$("loginMail").focus(), 60);
+}
 $("googleLogin").addEventListener("click", async ()=>{
   const m = $("loginMsg"); m.className = "msg err"; m.hidden = true;
+  if(svcCoupe("connexion")){ m.textContent = "La connexion est momentanément suspendue pour maintenance."; m.hidden = false; return; }
   try{
     const auth = window.claude && window.claude.auth;
     if(!auth) throw new Error("no-auth");
@@ -1417,6 +1537,7 @@ document.querySelectorAll("#loginModeSeg button").forEach(b=>b.addEventListener(
 $("loginForm").addEventListener("submit", async e=>{
   e.preventDefault();
   const m = $("loginMsg"); m.className = "msg err"; m.hidden = true;
+  if(svcCoupe("connexion")){ m.textContent = "La connexion est momentanément suspendue pour maintenance. Merci de réessayer un peu plus tard."; m.hidden = false; return; }
   const v = $("loginMail").value.trim();
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)){ m.textContent = "Cette adresse e-mail ne semble pas complète. Exemple : nom@gmail.com"; m.hidden = false; return; }
   if(pwMode && !$("loginPw").value){ m.textContent = "Entrez votre mot de passe."; m.hidden = false; return; }
@@ -2144,6 +2265,7 @@ document.addEventListener("change", e=>{
 
 $("f").addEventListener("submit", async e=>{
   e.preventDefault();
+  if(svcCoupe("idee")){ formErr("L’envoi d’idée est momentanément suspendu pour maintenance. Merci de réessayer un peu plus tard."); return; }
   const err = checkStep(); if(err){ formErr(err); return; }
   if(step < STEPS-1){ goto(step+1); return; }
 
@@ -2344,7 +2466,7 @@ const fmtDay = d => d ? new Date(d+"T12:00:00").toLocaleDateString("fr-FR",{day:
 function sortedNews(){ return [...news].sort((a,b)=>(b.pin?1:0)-(a.pin?1:0) || String(b.date||"").localeCompare(String(a.date||"")) || String(b.createdAt||"").localeCompare(String(a.createdAt||""))); }
 function renderNews(){
   const list = sortedNews();
-  $("une").hidden = isAdmin || !list.length;
+  $("une").hidden = isAdmin || !list.length || svcCoupe("une");
   $("uneRail").innerHTML = list.map(n=>`<button type="button" class="news" data-news="${esc(n.id)}">
     <div class="img"${n.imageId?` style="background-image:url('${esc(window.claude.publicUrl(n.imageId))}')"`:""}>${n.imageId?"":catArt(n.categorie)}<span class="cat">${esc(n.categorie||"Actualité")}</span>${n.pin?`<span class="pin">Épinglé</span>`:""}</div>
     <div class="txt"><h3>${esc(n.titre||"")}</h3><p>${esc(n.resume||"")}</p><span class="src">${esc(fmtDay(n.date))}${n.source?` · ${esc(n.source)}`:""}</span></div></button>`).join("");
@@ -2417,11 +2539,83 @@ function renderRecentIdeas(){
     return `<div class="naitem"><div style="min-width:0"><b>${esc(it.domaine||"Sans domaine")}</b><small>${esc(apercu)} · ${esc(when)}</small></div></div>`;
   }).join("") : `<p class="hint" style="margin:0">Aucune idée reçue pour l’instant.</p>`;
 }
+/* Services que l'administrateur peut rendre indisponibles pendant une maintenance.
+   Le code est stocké dans l'annonce ; le libellé sert à l'affichage des deux côtés. */
+const SERVICES = [
+  {code:"idee",      label:"Envoi d’une idée"},
+  {code:"une",       label:"À la une"},
+  {code:"video",     label:"Vidéo de présentation"},
+  {code:"connexion", label:"Connexion au compte"},
+];
+const svcLabel = c => (SERVICES.find(s=>s.code===c)||{}).label || c;
+
+/* L'annonce qui coupe réellement des services, s'il y en a une. L'administrateur
+   n'est jamais bloqué par sa propre coupure : il doit pouvoir la lever. */
+function maintEnCours(){
+  if(isAdmin) return null;
+  return maint.find(m=>m && m.active) || null;
+}
+/* L'annonce à montrer à l'utilisateur : la coupure en cours, sinon la prochaine
+   maintenance annoncée (simple avertissement, sans blocage). */
+function maintAAfficher(){
+  if(isAdmin) return null;
+  const encours = maint.find(m=>m && m.active);
+  if(encours) return encours;
+  const auj = new Date().toISOString().slice(0,10);
+  return [...maint].filter(m=>m && m.date && m.date >= auj)
+    .sort((a,b)=>String(a.date||"").localeCompare(String(b.date||"")))[0] || null;
+}
+function svcCoupe(code){
+  const m = maintEnCours();
+  return !!(m && Array.isArray(m.services) && m.services.includes(code));
+}
+
+/* Bandeau utilisateur + mise hors service effective des fonctions concernées. */
+function renderMaintNote(){
+  const note = $("maintNote"), m = maintAAfficher();
+  const ferme = m && store.get("ideomes-maint-vu") === m.id;
+  note.hidden = !m || ferme;
+  if(m && !ferme){
+    const actif = !!m.active;
+    const svc = (Array.isArray(m.services) ? m.services : []).map(svcLabel);
+    $("maintNoteTitle").textContent = actif ? "Maintenance en cours" : "Maintenance prévue le " + fmtDay(m.date);
+    $("maintNoteMsg").textContent = m.message || "";
+    $("maintNoteSorry").textContent = actif
+      ? "Nous vous prions de bien vouloir nous excuser pour la gêne occasionnée. Tout revient très vite."
+      : "Merci de votre compréhension par avance.";
+    $("maintNoteSvc").innerHTML = svc.length
+      ? `<span>${svc.map(esc).join("</span><span>")}</span>`
+      : "";
+  }
+  appliquerCoupures();
+}
+function appliquerCoupures(){
+  const coupeIdee = svcCoupe("idee");
+  const w = document.querySelector("#view-form .wizard");
+  if(w) w.hidden = coupeIdee;
+  $("svcDownIdee").hidden = !coupeIdee;
+  if($("une") && svcCoupe("une")) $("une").hidden = true;
+  if($("contexte") && !isAdmin) $("contexte").hidden = svcCoupe("video");
+}
+$("maintNoteClose").addEventListener("click", ()=>{
+  const m = maintAAfficher();
+  if(m) store.set("ideomes-maint-vu", m.id);
+  $("maintNote").hidden = true;
+});
+
 function renderMaint(){
+  renderMaintNote();
   if(!isAdmin) return;
+  if(!$("maintSvc").childElementCount){
+    $("maintSvc").innerHTML = SERVICES.map(s=>
+      `<label><input type="checkbox" name="maintsvc" value="${esc(s.code)}">${esc(s.label)}</label>`).join("");
+  }
   const sorted = [...maint].sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));
-  $("maintList").innerHTML = sorted.length ? sorted.map(m=>`<div class="naitem"><div style="min-width:0"><b>${esc(fmtDay(m.date))}</b><small>${esc(m.message||"")}</small></div>
-    <div class="acts"><button type="button" class="rm" data-maint-rm="${esc(m.id)}">Supprimer</button></div></div>`).join("") : `<p class="hint" style="margin:0">Aucune annonce publiée.</p>`;
+  $("maintList").innerHTML = sorted.length ? sorted.map(m=>{
+    const svc = (Array.isArray(m.services) ? m.services : []).map(svcLabel).join(", ");
+    return `<div class="naitem"><div style="min-width:0"><div class="na-head"><b>${esc(fmtDay(m.date))}</b>${m.active?`<span class="live">Coupure active</span>`:""}</div><small>${esc(m.message||"")}${svc?` · ${esc(svc)}`:""}</small></div>
+    <div class="acts"><button type="button" class="btn secondary small" data-maint-toggle="${esc(m.id)}">${m.active?"Rétablir":"Couper"}</button><button type="button" class="rm" data-maint-rm="${esc(m.id)}">Supprimer</button></div></div>`;
+  }).join("") : `<p class="hint" style="margin:0">Aucune annonce publiée.</p>`;
 }
 $("maintForm").addEventListener("submit", async e=>{
   e.preventDefault();
@@ -2429,14 +2623,27 @@ $("maintForm").addEventListener("submit", async e=>{
   const date = $("maintDate").value, msg = $("maintMsg").value.trim();
   if(!date){ m.textContent = "Choisissez une date."; m.hidden = false; return; }
   if(msg.length < 5){ m.textContent = "Décrivez brièvement la maintenance."; m.hidden = false; return; }
+  if($("maintActive").checked && !document.querySelector('input[name="maintsvc"]:checked')){
+    m.textContent = "Cochez au moins un service à couper, sinon la coupure n’aurait aucun effet."; m.hidden = false; return;
+  }
   if(!db){ m.textContent = "Non disponible pour le moment."; m.hidden = false; return; }
   try{
-    await db.collection("maintenance").add({date, message:msg, createdAt:new Date().toISOString()});
+    const services = [...document.querySelectorAll('input[name="maintsvc"]:checked')].map(i=>i.value);
+    const active = $("maintActive").checked && services.length > 0;
+    await db.collection("maintenance").add({date, message:msg, services, active, createdAt:new Date().toISOString()});
     $("maintForm").reset();
-    toast("Annonce publiée.");
+    toast(active ? "Annonce publiée, services coupés." : "Annonce publiée.");
   }catch(_){ m.textContent = "La publication a échoué. Réessayez."; m.hidden = false; }
 });
 $("maintList").addEventListener("click", async e=>{
+  const tg = e.target.closest("[data-maint-toggle]");
+  if(tg){
+    const m = maint.find(x=>x.id === tg.dataset.maintToggle); if(!m) return;
+    if(!m.active && !(Array.isArray(m.services) && m.services.length)){ toast("Cette annonce ne vise aucun service."); return; }
+    try{ await db.doc("maintenance/"+m.id).update({active: !m.active}); toast(m.active ? "Services rétablis." : "Services coupés."); }
+    catch(_){ toast("La modification a échoué."); }
+    return;
+  }
   const rm = e.target.closest("[data-maint-rm]"); if(!rm) return;
   if(!rm.classList.contains("sure")){ rm.classList.add("sure"); rm.textContent = "Confirmer ?"; setTimeout(()=>{ if(rm.isConnected){ rm.classList.remove("sure"); rm.textContent = "Supprimer"; } }, 4000); return; }
   try{ await db.doc("maintenance/"+rm.dataset.maintRm).delete(); toast("Annonce supprimée."); }catch(_){ toast("La suppression a échoué."); }
@@ -2603,13 +2810,13 @@ async function refreshIdentity(){
   myId = claudeMe && claudeMe.id;
   isOwner = !!(claudeMe && claudeMe.isOwner);
   applyAdmin();
+  if(!$("hello").hidden) renderHello();
   if(myId) logConnexion();
 
   if(isOwner && db && !subscribedOwner){
     subscribedOwner = true;
     db.collection("veille").onSnapshot(sn=>{ veille = sn.docs.map(d=>({id:d.id, ...(d.data()||{})})); renderHermes(); }, ()=>{});
     db.doc("config/hermes").onSnapshot(sn=>{ hermesMeta = sn.exists ? (sn.data()||{}) : {}; renderHermes(); }, ()=>{});
-    db.collection("maintenance").onSnapshot(sn=>{ maint = sn.docs.map(d=>({id:d.id, ...(d.data()||{})})); renderMaint(); }, ()=>{});
     db.collection("connexions").onSnapshot(async s=>{
       cnx = s.docs.map(d=>({uid:d.id, ...(d.data()||{})}));
       await refreshPeople(); renderDash();
@@ -2643,6 +2850,9 @@ async function refreshIdentity(){
   await refreshIdentity();
   if(!db) return;
   db.collection("actus").onSnapshot(sn=>{ news = sn.docs.map(d=>({id:d.id, ...(d.data()||{})})); renderNews(); }, ()=>{});
+  /* Les annonces de maintenance s'adressent a tout le monde : l'abonnement vaut
+     pour les visiteurs anonymes comme pour l'administrateur. */
+  db.collection("maintenance").onSnapshot(sn=>{ maint = sn.docs.map(d=>({id:d.id, ...(d.data()||{})})); renderMaint(); }, ()=>{});
   db.doc("config/video").onSnapshot(sn=>{ video = sn.exists ? (sn.data()||{}) : {}; renderVideo(); }, ()=>{});
   renderIdeas(); renderDash();
 })();
