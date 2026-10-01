@@ -83,6 +83,15 @@
         if(error) throw Object.assign(new Error("db"), {code: errCode(error)});
         return docRef(col + "/" + id);
       },
+      /* Création à identifiant imposé, par une insertion simple. À ne pas
+         confondre avec doc(id).set(), qui passe par un upsert : sous RLS,
+         PostgreSQL exige alors une policy UPDATE en plus de l'INSERT, ce qu'un
+         visiteur anonyme n'a pas. */
+      async create(id, data){
+        const { error } = await sb.from("documents").insert({ collection: col, doc_id: id, data });
+        if(error) throw Object.assign(new Error("db"), {code: errCode(error)});
+        return docRef(col + "/" + id);
+      },
       async get(){ return colSnap(await fetchRows()); },
       onSnapshot(cb, err){ return poll(fetchRows, d => cb(colSnap(d)), err); },
     };

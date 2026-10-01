@@ -2421,8 +2421,10 @@ $("f").addEventListener("submit", async e=>{
       await ref.set({ items, updatedAt: now });
     }else{
       /* Sans compte, le visiteur n'a pas le droit de relire ses réponses : on ne
-         peut donc pas compléter un document existant. Chaque envoi crée le sien. */
-      await db.doc("reponses/anon-" + crypto.randomUUID()).set({ items:[doc], updatedAt: now, anonyme:true });
+         peut donc pas compléter un document existant. Chaque envoi crée le sien.
+         create() fait une insertion simple : un upsert serait refusé, car sous RLS
+         il réclame une policy UPDATE que le visiteur anonyme n'a pas. */
+      await db.collection("reponses").create("anon-" + crypto.randomUUID(), { items:[doc], updatedAt: now, anonyme:true });
     }
     $("f").reset(); $("f").hidden = true; $("thanks").hidden = false;
     document.querySelector(".wizard").scrollIntoView({behavior:"smooth", block:"start"});
