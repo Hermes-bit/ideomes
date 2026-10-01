@@ -1997,7 +1997,15 @@ function tourStep(){
   $("tourNext").textContent = tourI===TSTEPS.length-1 ? "Commencer" : "Suivant";
   $("tourSkip").hidden = tourI===TSTEPS.length-1;
   const el = tourTarget();
-  if(el && getComputedStyle(el).position!=="fixed" && !el.closest(".account")) el.scrollIntoView({block:"center"});
+  if(el && getComputedStyle(el).position!=="fixed" && !el.closest(".account")){
+    // Centrer un petit élément situé dans une grande boîte (ex. la pastille « Données
+    // protégées » dans le bandeau d'accueil) poussait le haut de cette boîte hors de l'écran :
+    // on ne voyait plus que la moitié du texte. On cadre donc la section entière dès qu'elle
+    // tient à l'écran (son scroll-margin-top compense déjà l'en-tête fixe).
+    const sec = el.closest("section");
+    if(sec && sec.getBoundingClientRect().height <= innerHeight * 0.7) sec.scrollIntoView({block:"start"});
+    else el.scrollIntoView({block:"center"});
+  }
   requestAnimationFrame(()=>requestAnimationFrame(tourPlace));
 }
 $("tourNext").addEventListener("click", ()=>{ if(tourI < TSTEPS.length-1){ tourI++; tourStep(); } else endTour(); });
