@@ -292,7 +292,8 @@ textarea{min-height:120px;resize:vertical}
 @media (max-width:560px){.grid2{grid-template-columns:1fr}}
 /* Le bouton suit directement la grille des champs : il lui faut sa propre
    respiration, sans quoi il se colle au dernier champ une fois en colonne unique. */
-#maintForm button[type=submit]{margin-top:16px}
+#maintForm .mact{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+@media (max-width:560px){#maintForm .mact .btn{width:100%}}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .chip{position:relative}
 .chip input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer;z-index:1}
@@ -1139,7 +1140,10 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
           </div>
           <label class="cutnow"><input type="checkbox" id="maintActive"><span>Couper ces services maintenant</span></label>
           <div id="maintFormMsg" class="msg err" hidden></div>
-          <button class="btn primary small" type="submit">Publier l’annonce</button>
+          <div class="mact">
+            <button class="btn primary small" type="submit">Publier l’annonce</button>
+            <button class="btn secondary small" type="button" id="maintPreview">Voir ce que voient les utilisateurs</button>
+          </div>
         </form>
         <div class="nalist" id="maintList" style="margin-top:14px"></div>
       </div>
@@ -1522,7 +1526,13 @@ $("googleLogin").addEventListener("click", async ()=>{
   try{
     const auth = window.claude && window.claude.auth;
     if(!auth) throw new Error("no-auth");
-    const { error } = await auth.signInWithOAuth({ provider: "google", options: { redirectTo: location.origin + location.pathname } });
+    /* prompt=select_account : Google propose systématiquement le choix du compte
+       au lieu de reconnecter en silence le dernier utilisé, indispensable quand
+       on possède plusieurs adresses Gmail. */
+    const { error } = await auth.signInWithOAuth({ provider: "google", options: {
+      redirectTo: location.origin + location.pathname,
+      queryParams: { prompt: "select_account" },
+    } });
     if(error) throw error;
   }catch(_){ m.textContent = "La connexion avec Google a échoué. Réessayez."; m.hidden = false; }
 });
@@ -2557,7 +2567,14 @@ function maintEnCours(){
 }
 /* L'annonce à montrer à l'utilisateur : la coupure en cours, sinon la prochaine
    maintenance annoncée (simple avertissement, sans blocage). */
+let apercuMaint = false;
 function maintAAfficher(){
+  if(apercuMaint){
+    /* En aperçu, on montre l'annonce la plus pertinente quoi qu'il arrive :
+       la coupure en cours, sinon la plus récente. */
+    return maint.find(m=>m && m.active)
+      || [...maint].sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")))[0] || null;
+  }
   if(isAdmin) return null;
   const encours = maint.find(m=>m && m.active);
   if(encours) return encours;
@@ -2598,9 +2615,17 @@ function appliquerCoupures(){
   if($("contexte") && !isAdmin) $("contexte").hidden = svcCoupe("video");
 }
 $("maintNoteClose").addEventListener("click", ()=>{
+  if(apercuMaint){ apercuMaint = false; $("maintNote").hidden = true; return; }
   const m = maintAAfficher();
   if(m) store.set("ideomes-maint-vu", m.id);
   $("maintNote").hidden = true;
+});
+$("maintPreview").addEventListener("click", ()=>{
+  if(!maint.length){ toast("Publiez d’abord une annonce."); return; }
+  apercuMaint = true;
+  renderMaintNote();
+  $("maintNote").scrollIntoView({block:"center", behavior:"smooth"});
+  toast("Aperçu : voici ce que voient les utilisateurs.");
 });
 
 function renderMaint(){
