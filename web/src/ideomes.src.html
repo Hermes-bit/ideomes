@@ -2418,6 +2418,7 @@ function startUne(){
 function naOpen(n){
   naEdit = n ? n.id : null; naImgFile = null; naImgClear = false;
   $("naTitre").value = n?.titre||""; $("naCat").value = n?.categorie||"Numérique"; $("naResume").value = n?.resume||""; $("naTexte").value = n?.texte||"";
+  $("naTexte").scrollTop = 0; $("naResume").scrollTop = 0;
   $("naDate").value = n?.date || dayKey(new Date()); $("naSource").value = n?.source||""; $("naLien").value = n?.lien||""; $("naPin").checked = !!n?.pin;
   $("naImgName").textContent = n?.imageId ? "Image actuelle conservée" : "Aucune image";
   $("naSave").textContent = n ? "Enregistrer" : "Publier"; $("naMsg").hidden = true;
