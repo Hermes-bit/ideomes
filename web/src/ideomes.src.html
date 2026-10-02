@@ -2259,6 +2259,19 @@ function reponseAvecAutre(k){
    déséquilibraient les cases. Les deux extrémités sont légendées sous l'échelle,
    comme dans le document. Le libellé reste accessible aux lecteurs d'écran. */
 $("importance").innerHTML = IMP.map((t,i)=>`<label class="chip"><input type="radio" name="importance" value="${i+1}" id="importance-${i}" aria-label="${i+1} sur 5, ${esc(t)}"><span>${i+1}</span></label>`).join("");
+PRECISABLES.forEach(k=>{
+  const box = $(k); if(!box) return;
+  box.insertAdjacentHTML("afterend",
+    `<div class="precis"><button type="button" class="linkbtn" data-precis="${k}">Préciser en vos propres mots</button>`
+    + `<textarea id="${k}Libre" class="precis-txt" maxlength="600" hidden placeholder="Expliquez avec vos mots, si vous le souhaitez."></textarea></div>`);
+});
+document.addEventListener("click", e=>{
+  const b = e.target.closest("[data-precis]"); if(!b) return;
+  const t = $(b.dataset.precis + "Libre");
+  t.hidden = !t.hidden;
+  b.textContent = t.hidden ? "Préciser en vos propres mots" : "Masquer la précision";
+  if(!t.hidden) t.focus();
+});
 /* Ligne « Autre : » du document : un champ texte qui n'apparaît qu'une fois la
    case « Autre » cochée. La réponse reste « Autre » dans les statistiques, et le
    texte saisi est conservé à part. */
@@ -2273,19 +2286,6 @@ document.addEventListener("change", e=>{
   const coche = checked(e.target.name).includes("Autre");
   champ.hidden = !coche;
   if(!coche) champ.value = "";
-});
-PRECISABLES.forEach(k=>{
-  const box = $(k); if(!box) return;
-  box.insertAdjacentHTML("afterend",
-    `<div class="precis"><button type="button" class="linkbtn" data-precis="${k}">Préciser en vos propres mots</button>`
-    + `<textarea id="${k}Libre" class="precis-txt" maxlength="600" hidden placeholder="Expliquez avec vos mots, si vous le souhaitez."></textarea></div>`);
-});
-document.addEventListener("click", e=>{
-  const b = e.target.closest("[data-precis]"); if(!b) return;
-  const t = $(b.dataset.precis + "Libre");
-  t.hidden = !t.hidden;
-  b.textContent = t.hidden ? "Préciser en vos propres mots" : "Masquer la précision";
-  if(!t.hidden) t.focus();
 });
 $("region").insertAdjacentHTML("beforeend", Object.keys(GEO).map(r=>`<option>${esc(r)}</option>`).join(""));
 $("region").addEventListener("change", ()=>{
