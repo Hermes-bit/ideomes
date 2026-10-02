@@ -309,6 +309,7 @@ textarea{min-height:120px;resize:vertical}
 .precis{margin-top:8px}
 .precis .linkbtn{font-size:.82rem}
 .precis-txt{margin-top:8px;min-height:72px}
+.autre-txt{margin-top:8px}
 .chip{position:relative}
 .chip input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer;z-index:1}
 .chip span{display:inline-flex;align-items:center;padding:8px 15px;border:1.5px solid var(--line);border-radius:999px;background:var(--bg);font-size:.92rem;transition:all .2s}
@@ -900,7 +901,7 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
           <p class="lead">Pour adapter l’outil à la façon dont vous l’utiliserez. Tout est facultatif.</p>
           <div class="fields">
             <div class="field"><span class="q">Quelle est votre tranche d’âge ?</span><div class="chips" id="age"></div></div>
-            <div class="field"><span class="q">Quel outil utilisez-vous le plus pour naviguer sur internet ?</span><div class="chips" id="outil"></div></div>
+            <div class="field"><span class="q">Par quel moyen préférez-vous être informé ou aidé ?</span><span class="hint">Plusieurs réponses possibles.</span><div class="chips" id="moyen"></div></div>
             <div class="field">
               <span class="q">Où habitez-vous ?</span>
               <div class="geo3">
@@ -938,25 +939,25 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
           <div class="fields">
             <div class="field">
               <label for="debrouille">Comment faites-vous aujourd’hui pour essayer de résoudre ce problème ?</label>
-              <span class="hint">Par exemple : j’appelle un proche, je cherche sur internet, je me déplace sur place.</span>
+              <span class="hint">Par exemple : j’appelle un proche, je cherche sur internet, je me déplace sur place…</span>
               <textarea id="debrouille" maxlength="1500" placeholder="Ex. : Je demande à un voisin qui a une moto de m’y emmener."></textarea>
             </div>
-            <div class="field"><span class="q">Qu’est-ce qui vous déplaît ou vous manque le plus dans votre méthode actuelle ?</span><div class="chips" id="manque"></div></div>
+            <div class="field"><span class="q">Qu’est-ce qui vous déplaît ou vous manque le plus dans votre méthode actuelle ?</span><span class="hint">Plusieurs réponses possibles.</span><div class="chips" id="manque"></div></div>
           </div>
         </div>
 
         <div class="step" data-step="4" hidden>
           <div class="steplabel">Étape 5 sur 7</div>
-          <h2>En route vers l’outil</h2>
-          <p class="lead">Pour choisir le format et les fonctions de la première version.</p>
+          <h2>Vers une solution</h2>
+          <p class="lead">Pour imaginer ensemble l’aide la plus utile, quelle que soit sa forme.</p>
           <div class="fields">
             <div class="field">
-              <label for="solution">Si une solution numérique existait, quelle action devrait-elle vous permettre de faire en un seul clic pour vous sauver la mise ?</label>
-              <span class="hint">Par exemple : réserver tout de suite, comparer les prix, trouver quelqu’un à proximité.</span>
-              <textarea id="solution" maxlength="1500" placeholder="Ex. : Faire la demande depuis mon téléphone et recevoir un SMS quand le papier est prêt."></textarea>
+              <label for="solution">Si vous aviez une baguette magique, qu’est-ce qui changerait concrètement pour que ce problème disparaisse ?</label>
+              <span class="hint">Décrivez la situation idéale, sans vous soucier de la façon d’y arriver.</span>
+              <textarea id="solution" maxlength="1500" placeholder="Ex. : J’obtiendrais mon acte de naissance en une seule fois, sans me déplacer trois jours."></textarea>
             </div>
-            <div class="field"><span class="q">Pour ce type de problème, quel format préférez-vous utiliser ?</span><div class="chips" id="format"></div></div>
-            <div class="field"><span class="q">Quel serait votre plus grand frein à utiliser un nouvel outil en ligne ?</span><div class="chips" id="frein"></div></div>
+            <div class="field"><span class="q">Quelle forme d’aide vous serait la plus utile ?</span><span class="hint">Plusieurs réponses possibles.</span><div class="chips" id="aide"></div></div>
+            <div class="field"><span class="q">Qu’est-ce qui pourrait vous empêcher d’utiliser une nouvelle solution ?</span><span class="hint">Plusieurs réponses possibles.</span><div class="chips" id="frein"></div></div>
           </div>
         </div>
 
@@ -969,11 +970,11 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
 
         <div class="step" data-step="6" hidden>
           <div class="steplabel">Étape 7 sur 7</div>
-          <h2>Rejoignez nos testeurs</h2>
-          <p class="lead">Pas besoin de compte pour envoyer votre réponse. Laissez un contact seulement si vous voulez tester la première version.</p>
+          <h2>Rejoignez notre groupe de testeurs</h2>
+          <p class="lead">Votre avis compte : aidez-nous à tester une première solution. Pas besoin de compte pour envoyer votre réponse.</p>
           <div class="recap" id="recap"></div>
           <div class="fields">
-            <div class="field"><span class="q">Nous développons la première version de cet outil. Seriez-vous d’accord pour y jeter un œil et nous donner votre avis ?</span><div class="chips" id="testeur"></div></div>
+            <div class="field"><span class="q">Nous préparons une première solution pour répondre à ce problème. Accepteriez-vous de la tester et de nous donner votre avis ?</span><span class="hint">Durée : environ 5 minutes.</span><div class="chips" id="testeur"></div></div>
             <div class="grid2">
               <div class="field"><label for="nom">Prénom <span class="hint">(facultatif)</span></label><input type="text" id="nom" maxlength="60" autocomplete="given-name"></div>
               <div class="field"><label for="contact">WhatsApp, téléphone ou e-mail <span class="hint">(facultatif)</span></label><input type="text" id="contact" maxlength="80" placeholder="+226 70 12 34 56"></div>
@@ -1076,9 +1077,9 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
     </div>
     <div class="two four">
       <div class="panel"><h3>Tranche d’âge</h3><div class="bars" id="b-age"></div></div>
-      <div class="panel"><h3>Outil de navigation</h3><div class="bars" id="b-tel"></div></div>
-      <div class="panel"><h3>Format préféré</h3><div class="bars" id="b-langue"></div></div>
-      <div class="panel"><h3>Principal frein</h3><div class="bars" id="b-act"></div></div>
+      <div class="panel"><h3>Moyen préféré pour être informé</h3><div class="bars" id="b-tel"></div></div>
+      <div class="panel"><h3>Forme d’aide la plus utile</h3><div class="bars" id="b-langue"></div></div>
+      <div class="panel"><h3>Ce qui empêcherait d’utiliser une solution</h3><div class="bars" id="b-act"></div></div>
     </div>
     <div class="row" style="margin-top:22px"><h2>Toutes les réponses</h2></div>
     <div class="filters">
@@ -1381,15 +1382,19 @@ const DOMAINES = [
   ["Logement","loyer, parcelle, construction"],["Culture & loisirs","musique, sport, événements"],["Autre","tout le reste"]
 ];
 const OPTS = {
-  age:["Moins de 25 ans","26 à 45 ans","46 à 60 ans","Plus de 60 ans"],
-  outil:["Mon smartphone","Mon ordinateur (bureau ou portable)","La tablette tactile"],
-  frequence:["Tous les jours ou presque","Quelques fois par mois","Très rarement"],
-  manque:["C’est beaucoup trop long (perte de temps)","C’est trop cher ou pas rentable","Les informations trouvées ne sont jamais fiables ou à jour","C’est trop compliqué administrativement ou techniquement"],
-  format:["Une application mobile (à télécharger, toujours dans la poche)","Un site internet (depuis un navigateur)","Le format m’importe peu, je veux juste que le problème soit résolu"],
-  frein:["Devoir créer un énième compte avec un mot de passe","Avoir peur pour la sécurité et la revente de mes données","Devoir payer pour accéder aux fonctions importantes","Une interface surchargée et difficile à comprendre"],
+  age:["25 ans et moins","26 à 45 ans","46 à 60 ans","Plus de 60 ans"],
+  frequence:["Tous les jours ou presque","Quelques fois par mois","Très rarement","Jamais, je ne suis pas concerné(e)"],
   testeur:["Oui, avec plaisir","Non, merci"],
 };
-const OPTS_MULTI = {};
+/* Questions marquées « Plusieurs réponses possibles » dans le document. */
+const OPTS_MULTI = {
+  moyen:["En face à face","Par téléphone","Par e-mail ou SMS","Sur internet ou via une application","Par un proche ou une association"],
+  manque:["C’est beaucoup trop long (perte de temps)","C’est trop cher ou pas rentable","Les informations trouvées ne sont pas fiables ou pas à jour","C’est trop compliqué administrativement ou techniquement","Autre"],
+  aide:["Un accompagnement par une personne (conseiller, bénévole…)","Un atelier ou une réunion d’information","Un service sur place ou un point de contact près de chez moi","Un guide pratique ou une fiche (papier ou PDF)","Une application mobile ou un site internet","Peu importe, tant que le problème est résolu","Autre"],
+  frein:["Le coût","Le manque de temps","Devoir me déplacer","Le manque de confiance (sérieux de l’organisme, protection de mes données)","Des démarches trop compliquées (inscription, création de compte…)","Autre"],
+};
+/* Questions dont le document prévoit une ligne « Autre : » à compléter. */
+const AVEC_AUTRE = ["manque","aide","frein"];
 /* Les questions de vécu étaient à choix multiple avant de passer en rédaction
    libre : les idées déjà reçues contiennent des tableaux, les nouvelles du texte.
    Ce lecteur accepte les deux, pour que l'historique reste lisible. */
@@ -1397,6 +1402,9 @@ const texteLibre = v => Array.isArray(v) ? v.join(", ") : (v || "");
 /* Champs de l'ancien questionnaire, remplacé le 2 octobre 2026. Ils ne sont plus
    demandés, mais les réponses déjà reçues les contiennent : on continue de les
    afficher et de les exporter pour ne rien perdre. */
+/* Réponses cochées d'une idée enregistrée, « Autre » remplacé par le texte saisi. */
+const avecAutre = (d, k) => (Array.isArray(d[k]) ? d[k] : (d[k] ? [d[k]] : []))
+  .map(v => v === "Autre" && (d.autres||{})[k] ? `Autre : ${(d.autres||{})[k]}` : v).join(", ");
 const ANCIENS = [
   ["Ce que ça fait perdre","perte"],["Effort déjà consenti","effort"],["Quand ça ne marche pas","echec"],
   ["Temps pris à chaque fois","tempsPris"],["Coût à chaque fois","cout"],
@@ -1937,9 +1945,10 @@ function rowsReponses(){
     "Identifiant de connexion": (d.identite&&d.identite.valeur)||"", "Mode de connexion": TYPE_LBL[(d.identite||{}).type]||"",
     "Domaine": d.domaine||"", "Problème": d.probleme||"",
     ...PRECISABLES.reduce((o,k)=>{ o[(LIBELLES[k]||k) + " (en ses mots)"] = (d.precisions||{})[k] || ""; return o; }, {}),
-    "Méthode actuelle": d.debrouille||"", "Ce qui déplaît dans la méthode": d.manque||"",
-    "Action en un seul clic": d.solution||"", "Fréquence": d.frequence||"", "Gravité (1-5)": d.importance||"",
-    "Format préféré": d.format||"", "Principal frein": d.frein||"", "Outil de navigation": d.outil||"",
+    "Méthode actuelle": d.debrouille||"", "Ce qui déplaît dans la méthode": avecAutre(d,"manque"),
+    "Baguette magique": d.solution||"", "Fréquence": d.frequence||"", "Gravité (1-5)": d.importance||"",
+    "Forme d’aide la plus utile": avecAutre(d,"aide"), "Ce qui pourrait empêcher": avecAutre(d,"frein"),
+    "Moyen préféré pour être informé": texteLibre(d.moyen),
     "Région": d.region||"", "Province": d.province||"", "Commune / département": d.ville||"",
     "Latitude": g.ll[1] ?? "", "Longitude": g.ll[0] ?? "", "WKT": wkt(g.ll), "Précision de la position": g.prec ? "Centre de la " + g.prec : "Non renseignée",
     "Code ISO région": k.iso, "HASC région": k.hr, "HASC province": k.hp, "HASC commune": k.hc,
@@ -2215,13 +2224,34 @@ Object.entries(OPTS_MULTI).forEach(([k,list])=>{
    récapitulatif et les exports. « domaines » en est exclu : l'étape 1 avance
    automatiquement dès le choix, une zone de texte y serait inutilisable. */
 const LIBELLES = {
-  age:"Tranche d’âge", outil:"Outil de navigation", frequence:"Fréquence",
+  age:"Tranche d’âge", moyen:"Moyen préféré pour être informé", frequence:"Fréquence",
   importance:"Gravité", manque:"Ce qui déplaît dans la méthode actuelle",
-  format:"Format préféré", frein:"Principal frein", testeur:"Testeur",
+  aide:"Forme d’aide la plus utile", frein:"Ce qui pourrait empêcher d’utiliser une solution",
+  testeur:"Accepte de tester",
 };
 const PRECISABLES = Object.keys(LIBELLES);
 const lirePrecision = k => { const t = $(k + "Libre"); return t ? t.value.trim() : ""; };
+/* Pour le récapitulatif : les réponses cochées, « Autre » étant remplacé par le texte saisi. */
+function reponseAvecAutre(k){
+  const champ = $(k + "Autre"), txt = champ ? champ.value.trim() : "";
+  return checked(k).map(v => v === "Autre" && txt ? `Autre : ${txt}` : v).join(", ");
+}
 $("importance").innerHTML = IMP.map((t,i)=>`<label class="chip"><input type="radio" name="importance" value="${i+1}" id="importance-${i}"><span><strong>${i+1}</strong>${t}</span></label>`).join("");
+/* Ligne « Autre : » du document : un champ texte qui n'apparaît qu'une fois la
+   case « Autre » cochée. La réponse reste « Autre » dans les statistiques, et le
+   texte saisi est conservé à part. */
+AVEC_AUTRE.forEach(k=>{
+  const box = $(k); if(!box) return;
+  box.insertAdjacentHTML("afterend",
+    `<input type="text" id="${k}Autre" class="autre-txt" maxlength="200" hidden placeholder="Autre : précisez">`);
+});
+document.addEventListener("change", e=>{
+  if(!AVEC_AUTRE.includes(e.target.name)) return;
+  const champ = $(e.target.name + "Autre"); if(!champ) return;
+  const coche = checked(e.target.name).includes("Autre");
+  champ.hidden = !coche;
+  if(!coche) champ.value = "";
+});
 PRECISABLES.forEach(k=>{
   const box = $(k); if(!box) return;
   box.insertAdjacentHTML("afterend",
@@ -2303,7 +2333,7 @@ const REVUE = [
   ["Le domaine", 0, [["Domaine", ()=>val("domaines")]]],
   ["Votre profil", 1, [
     ["Tranche d’âge", ()=>val("age"), "age"],
-    ["Outil de navigation", ()=>val("outil"), "outil"],
+    ["Moyen préféré pour être informé", ()=>checked("moyen").join(", "), "moyen"],
     ["Région", ()=>$("region").value],
     ["Province", ()=>$("province").value],
     ["Commune ou département", ()=>$("ville").value],
@@ -2315,12 +2345,12 @@ const REVUE = [
   ]],
   ["Vos habitudes actuelles", 3, [
     ["Comment vous faites aujourd’hui", ()=>$("debrouille").value.trim()],
-    ["Ce qui déplaît le plus", ()=>val("manque"), "manque"],
+    ["Ce qui déplaît le plus", ()=>reponseAvecAutre("manque"), "manque"],
   ]],
   ["En route vers l’outil", 4, [
-    ["L’action en un seul clic", ()=>$("solution").value.trim()],
-    ["Format préféré", ()=>val("format"), "format"],
-    ["Principal frein", ()=>val("frein"), "frein"],
+    ["Si vous aviez une baguette magique", ()=>$("solution").value.trim()],
+    ["Forme d’aide la plus utile", ()=>reponseAvecAutre("aide"), "aide"],
+    ["Ce qui pourrait vous empêcher", ()=>reponseAvecAutre("frein"), "frein"],
   ]],
 ];
 function drawReview(){
@@ -2369,7 +2399,8 @@ $("f").addEventListener("submit", async e=>{
     domaine:val("domaines"), probleme:$("probleme").value.trim(), debrouille:$("debrouille").value.trim(),
     solution:$("solution").value.trim(),
     frequence:val("frequence"), importance:Number(val("importance"))||0,
-    age:val("age"), outil:val("outil"), manque:val("manque"), format:val("format"), frein:val("frein"),
+    age:val("age"), moyen:checked("moyen"), manque:checked("manque"), aide:checked("aide"), frein:checked("frein"),
+    autres: AVEC_AUTRE.reduce((o,k)=>{ const c = $(k+"Autre"); const v = c ? c.value.trim() : ""; if(v) o[k] = v; return o; }, {}),
     testeur:val("testeur"),
     ville:$("ville").value.trim(), region:$("region").value, province:$("province").value,
     lat:null, lon:null, geoPrecision:"",
@@ -2452,12 +2483,13 @@ function openIdea(d){
        const l = Object.keys(pr).filter(k=>pr[k]).map(k=>[(LIBELLES[k]||k), pr[k]]);
        return l.length ? `<div class="dsec"><h3>Dit avec ses mots</h3>${dl(l)}</div>` : ""; })()}
     <div class="dsec"><h3>Vos habitudes actuelles</h3>${dl([["Comment la personne fait aujourd’hui",d.debrouille],
-      ["Ce qui déplaît dans la méthode actuelle",d.manque],["L’action en un seul clic",d.solution]])}</div>
+      ["Ce qui déplaît dans la méthode actuelle",avecAutre(d,"manque")],["Si la personne avait une baguette magique",d.solution],
+      ["Forme d’aide la plus utile",avecAutre(d,"aide")],["Ce qui pourrait l’empêcher d’utiliser une solution",avecAutre(d,"frein")]])}</div>
     <div class="dsec"><h3>Localisation</h3>${dl([["Région",d.region],["Province",d.province],["Commune / département",d.ville],
       ["Latitude",g.ll[1]],["Longitude",g.ll[0]],["Précision",g.prec?"Centre de la "+g.prec:"Non renseignée"],
       ["HASC",code(k.hc||k.hp||k.hr),1],["GID (GADM)",code(k.gc||k.gp||k.gr),1],["shapeID geoBoundaries",code(k.sc||k.sp||k.sr),1],["Code ISO région",code(k.iso),1]])}</div>
     <div class="dsec"><h3>Participant</h3>${dl([["Connexion",(TYPE_LBL[(d.identite||{}).type]||"")+((d.identite&&d.identite.valeur)?" · "+d.identite.valeur:"")],["Nom du compte",p&&p.name],
-      ["Âge",d.age],["Outil de navigation",d.outil],["Format préféré",d.format],["Principal frein",d.frein]])}</div>
+      ["Âge",d.age],["Moyen préféré pour être informé",texteLibre(d.moyen)]])}</div>
     ${(()=>{ const l = ANCIENS.map(([lbl,cle])=>[lbl, texteLibre(d[cle])]).filter(([,v])=>v);
        return l.length ? `<div class="dsec"><h3>Réponses à l’ancien questionnaire</h3>${dl(l)}</div>` : ""; })()}
     <div class="dsec"><h3>Contact</h3>${d.contact||d.nom ? dl([["Prénom",d.nom],["Contact",d.contact],["Accepte de tester",d.testeur],["Accepte d’être recontacté",d.aContact?"Oui":"Non"]]) : `<p class="muted" style="margin:0;color:var(--muted)">Aucun contact laissé.</p>`}</div>
@@ -2512,7 +2544,15 @@ function renderIdeas(){
   $("ideaList").innerHTML = list.length ? list.map(d=>card(d,true)).join("")
     : emptyBox("Aucune idée pour l’instant", "Les besoins envoyés par les participants apparaîtront ici, avec leur nom et leur photo.");
 }
-function count(f){ const m={}; ideas.forEach(d=>{ const k=(d[f]||"").trim(); if(k) m[k]=(m[k]||0)+1; }); return Object.entries(m).sort((a,b)=>b[1]-a[1]); }
+/* Une question à choix multiple stocke un tableau : chaque réponse cochée compte. */
+function count(f){
+  const m = {};
+  ideas.forEach(d=>{
+    const v = d[f];
+    (Array.isArray(v) ? v : [v]).forEach(x=>{ const k = String(x==null?"":x).trim(); if(k) m[k]=(m[k]||0)+1; });
+  });
+  return Object.entries(m).sort((a,b)=>b[1]-a[1]);
+}
 function bars(id, e, max=8){
   const top=e.slice(0,max), hi=Math.max(1,...top.map(x=>x[1]));
   $(id).innerHTML = top.length ? top.map(([k,v])=>`<div class="bar"><span class="t" title="${esc(k)}">${esc(k)}</span><span class="track"><span class="fill" style="width:${(v/hi*100).toFixed(1)}%"></span></span><span class="v">${v}</span></div>`).join("") : `<p class="hint" style="margin:0">Pas encore de données.</p>`;
@@ -2527,7 +2567,7 @@ function renderDash(){
   const t = ideas.filter(d=>d.telephone), s = t.filter(d=>d.telephone!=="Smartphone").length;
   $("k-simple").textContent = t.length ? Math.round(s/t.length*100)+" %" : "n.d.";
   donut($("ch-dom"), count("domaine"), "réponse"); renderCnx();
-  bars("b-dom",count("domaine"),12); bars("b-tel",count("outil")); bars("b-langue",count("format")); bars("b-act",count("frein"));
+  bars("b-dom",count("domaine"),12); bars("b-tel",count("moyen")); bars("b-langue",count("aide")); bars("b-act",count("frein"));
   const q=$("q").value.trim().toLowerCase(), dom=$("dashDom").value;
   let list = ideas.filter(d=>matchZone(d, listZone)&&(!dom||d.domaine===dom)&&(!q||[d.probleme,d.solution,d.ville,d.domaine].join(" ").toLowerCase().includes(q)));
   if($("sort").value==="imp") list=[...list].sort((a,b)=>(b.importance||0)-(a.importance||0));
