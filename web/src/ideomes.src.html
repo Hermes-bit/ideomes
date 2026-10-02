@@ -315,10 +315,18 @@ textarea{min-height:120px;resize:vertical}
 .chip span{display:inline-flex;align-items:center;padding:8px 15px;border:1.5px solid var(--line);border-radius:999px;background:var(--bg);font-size:.92rem;transition:all .2s}
 .chip input:checked + span{border-color:var(--teal);background:var(--teal);color:#fff}
 .chip input:focus-visible + span{outline:3px solid var(--orange);outline-offset:2px}
-.scale{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
-.scale .chip span{width:100%;flex-direction:column;border-radius:14px;padding:8px 2px;font-size:.74rem;text-align:center;line-height:1.2}
-.scale .chip span strong{font-family:var(--display);font-size:1.15rem;line-height:1.3}
-.scale .chip input:checked + span{background:var(--orange);border-color:var(--orange);color:var(--on-orange)}
+.scale{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.scale .chip span{width:100%;aspect-ratio:1;max-height:62px;display:grid;place-items:center;padding:0;border-radius:50%;
+  font-family:var(--display);font-weight:700;font-size:1.3rem;line-height:1}
+.scale .chip input:checked + span{background:var(--orange);border-color:var(--orange);color:var(--on-orange);
+  box-shadow:0 0 0 5px var(--orange-soft)}
+.scale-ends{display:flex;justify-content:space-between;gap:14px;margin-top:10px;font-size:.78rem;color:var(--muted);line-height:1.3}
+.scale-ends span:last-child{text-align:right}
+@media (max-width:420px){
+  .scale{gap:7px}
+  .scale .chip span{font-size:1.1rem}
+  .scale-ends{font-size:.73rem}
+}
 
 .consent{display:flex;gap:12px;align-items:flex-start;font-size:.93rem;background:var(--bg);border:1.5px solid var(--line);border-radius:14px;padding:14px}
 .consent input{width:22px;height:22px;flex:none;margin-top:2px;accent-color:var(--teal)}
@@ -925,9 +933,10 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
             </div>
             <div class="field"><span class="q">À quelle fréquence ce problème se produit-il dans votre vie ?</span><div class="chips" id="frequence"></div></div>
             <div class="field">
-              <span class="q">Quelle note donneriez-vous à la gravité de ce problème ?</span>
-              <span class="hint">De 1, simple détail agaçant, à 5, bloquant et insupportable.</span>
+              <span class="q">Si vous deviez noter la gravité ou le niveau de frustration de ce problème, quelle note mettriez-vous ?</span>
+              <span class="hint">Choisissez une note de 1 à 5.</span>
               <div class="scale chips" id="importance"></div>
+              <div class="scale-ends"><span>Simple détail agaçant</span><span>Bloquant et insupportable</span></div>
             </div>
           </div>
         </div>
@@ -2225,7 +2234,7 @@ Object.entries(OPTS_MULTI).forEach(([k,list])=>{
    automatiquement dès le choix, une zone de texte y serait inutilisable. */
 const LIBELLES = {
   age:"Tranche d’âge", moyen:"Moyen préféré pour être informé", frequence:"Fréquence",
-  importance:"Gravité", manque:"Ce qui déplaît dans la méthode actuelle",
+  manque:"Ce qui déplaît dans la méthode actuelle",
   aide:"Forme d’aide la plus utile", frein:"Ce qui pourrait empêcher d’utiliser une solution",
   testeur:"Accepte de tester",
 };
@@ -2236,7 +2245,10 @@ function reponseAvecAutre(k){
   const champ = $(k + "Autre"), txt = champ ? champ.value.trim() : "";
   return checked(k).map(v => v === "Autre" && txt ? `Autre : ${txt}` : v).join(", ");
 }
-$("importance").innerHTML = IMP.map((t,i)=>`<label class="chip"><input type="radio" name="importance" value="${i+1}" id="importance-${i}"><span><strong>${i+1}</strong>${t}</span></label>`).join("");
+/* Seul le chiffre est affiché : les mots sous chaque note passaient à la ligne et
+   déséquilibraient les cases. Les deux extrémités sont légendées sous l'échelle,
+   comme dans le document. Le libellé reste accessible aux lecteurs d'écran. */
+$("importance").innerHTML = IMP.map((t,i)=>`<label class="chip"><input type="radio" name="importance" value="${i+1}" id="importance-${i}" aria-label="${i+1} sur 5, ${esc(t)}"><span>${i+1}</span></label>`).join("");
 /* Ligne « Autre : » du document : un champ texte qui n'apparaît qu'une fois la
    case « Autre » cochée. La réponse reste « Autre » dans les statistiques, et le
    texte saisi est conservé à part. */
@@ -2341,7 +2353,7 @@ const REVUE = [
   ["Le problème", 2, [
     ["Ce qui s’est passé", ()=>$("probleme").value.trim()],
     ["Fréquence", ()=>val("frequence"), "frequence"],
-    ["Gravité", ()=>{ const i = Number(val("importance")); return i ? `${i}/5 · ${IMP[i-1]}` : ""; }, "importance"],
+    ["Gravité", ()=>{ const i = Number(val("importance")); return i ? `${i}/5 · ${IMP[i-1]}` : ""; }],
   ]],
   ["Vos habitudes actuelles", 3, [
     ["Comment vous faites aujourd’hui", ()=>$("debrouille").value.trim()],
