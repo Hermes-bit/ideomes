@@ -316,7 +316,11 @@ textarea{min-height:120px;resize:vertical}
 .chip input:checked + span{border-color:var(--teal);background:var(--teal);color:#fff}
 .chip input:focus-visible + span{outline:3px solid var(--orange);outline-offset:2px}
 .scale{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
-.scale .chip span{width:100%;aspect-ratio:1;max-height:62px;display:grid;place-items:center;padding:0;border-radius:50%;
+.scale .chip{display:flex;justify-content:center}
+/* Seule la hauteur était plafonnée : sur un écran large la colonne s'élargit, le
+   rapport 1:1 pousse la hauteur, le plafond la retient, et le cercle s'aplatit en
+   ellipse. On borne la largeur et on centre la pastille dans sa colonne. */
+.scale .chip span{width:min(100%,62px);aspect-ratio:1;display:grid;place-items:center;padding:0;border-radius:50%;
   font-family:var(--display);font-weight:700;font-size:1.3rem;line-height:1}
 .scale .chip input:checked + span{background:var(--orange);border-color:var(--orange);color:var(--on-orange);
   box-shadow:0 0 0 5px var(--orange-soft)}
@@ -1365,18 +1369,19 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
     <p>Pour comprendre les besoins du quotidien des Burkinabè et concevoir des applications adaptées. Si vous le demandez, pour vous recontacter afin de tester une future application.</p>
     <h3>Quelles données ?</h3>
     <ul>
-      <li>Votre besoin, votre idée, le domaine, la fréquence et l’importance.</li>
-      <li>Des informations générales : région, province et commune (placées sur la carte au centre de la commune choisie, jamais à votre position exacte), tranche d’âge, activité, type de téléphone, accès à internet, langue.</li>
+      <li>Votre récit du problème, le domaine concerné, la fréquence et la note de gravité.</li>
+      <li>Ce que vous faites aujourd’hui face à ce problème, la forme d’aide qui vous serait utile et ce qui pourrait vous empêcher de l’utiliser.</li>
+      <li>Des informations générales : région, province et commune (placées sur la carte au centre de la commune choisie, jamais à votre position exacte), tranche d’âge, moyen par lequel vous préférez être informé.</li>
       <li>Seulement si vous le choisissez : votre prénom et votre numéro.</li>
-      <li>Si vous vous connectez : votre numéro WhatsApp ou votre adresse e-mail.</li>
+      <li>Si vous vous connectez : votre adresse e-mail, par lien de connexion, mot de passe ou compte Google. La connexion n’est pas nécessaire pour répondre.</li>
       <li>L’identifiant de votre compte de connexion, pour relier vos réponses à vous. Votre nom et votre photo de profil ne sont pas copiés : ils s’affichent seulement pour vous et pour l’administrateur.</li>
     </ul>
     <h3>Sur quelle base ?</h3>
     <p>Votre consentement, que vous donnez en cochant la case avant l’envoi. Vous pouvez le retirer à tout moment.</p>
     <h3>Qui voit vos réponses ?</h3>
-    <p>Seul l’administrateur de Geomessen voit les réponses. Les autres participants ne voient ni vos idées ni vos coordonnées. Aucune donnée n’est vendue ni cédée. Les réponses sont hébergées sur la plateforme Claude d’Anthropic, qui peut se trouver hors du Burkina Faso.</p>
+    <p>Seul l’administrateur de Geomessen voit les réponses. Les autres participants ne voient ni vos idées ni vos coordonnées. Aucune donnée n’est vendue ni cédée. Vos réponses sont enregistrées chez Supabase (base de données) et la page de l’application est diffusée par GitHub Pages ; si vous choisissez de vous connecter avec Google, Google traite votre identification. Ces prestataires hébergent vos données hors du Burkina Faso.</p>
     <h3>Combien de temps ?</h3>
-    <p>24 mois au maximum après votre réponse. Les numéros de téléphone sont supprimés dès la fin de la phase de test.</p>
+    <p>36 mois au maximum après votre réponse. Vos coordonnées (prénom, téléphone, e-mail) sont supprimées dès la fin de la phase de test.</p>
     <h3>Vos droits</h3>
     <p>Vous pouvez demander l’accès à vos données, les corriger, les faire supprimer ou vous opposer à leur utilisation, en écrivant à Geomessen (contact@geomessen.com, BP : S/C 09 BP 1654 Ouaga 09, Ouagadougou). Vous pouvez aussi saisir la Commission de l’Informatique et des Libertés (CIL) du Burkina Faso.</p>
     <p class="hint" style="margin-top:10px">Si vous avez moins de 18 ans, demandez l’accord d’un parent avant de répondre.</p>
@@ -1397,7 +1402,7 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
 const DOMAINES = [
   ["Santé","hôpital, pharmacie, rendez-vous"],["Éducation","école, cours, bourses"],["Agriculture & élevage","semences, météo, prix du marché"],
   ["Commerce & argent","mobile money, crédit, clients"],["Transport","taxis, cars, état des routes"],["Papiers & administration","état civil, CNIB, mairie"],
-  ["Eau & électricité","coupures, forages, factures"],["Emploi & formation","offres, stages, métiers"],["Sécurité","alertes, entraide, urgences"],
+  ["Eau & électricité","coupures, forages, factures"],["Emploi & formation","offres, stages, métiers"],["Sécurité du quotidien","éclairage public, passages dangereux, secours"],
   ["Logement","loyer, parcelle, construction"],["Culture & loisirs","musique, sport, événements"],["Autre","tout le reste"]
 ];
 const OPTS = {
