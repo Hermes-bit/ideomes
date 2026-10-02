@@ -750,6 +750,14 @@ input[type=date]{font:inherit;color:var(--ink);background:var(--bg);border:1.5px
 .fnav button:hover{color:var(--teal);text-decoration-color:var(--teal)}
 body.on-page .hero, body.on-page #une, body.on-page #tabs, body.on-page #view-form, body.on-page #view-ideas, body.on-page #view-dash, body.on-page #contexte{display:none !important}
 footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);color:var(--muted);font-size:.86rem;display:flex;flex-direction:column;gap:22px}
+/* Fiche d'un partenaire, sur la page Partenaires. */
+.partner{border:1.5px solid var(--line);border-radius:20px;padding:20px 22px;background:var(--surface);margin:6px 0 10px}
+.partner .phead{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:6px}
+.partner .phead h2{margin:0}
+.partner .ptag{font-size:.72rem;font-weight:700;letter-spacing:.02em;padding:4px 10px;border-radius:999px;background:var(--teal-soft);color:var(--teal)}
+.partner .pbaseline{font-style:italic;color:var(--teal);font-weight:500;margin:0 0 12px}
+.partner .btn svg{width:15px;height:15px}
+@media (max-width:560px){.partner{padding:16px;border-radius:17px}}
 .fgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:28px}
 @media (max-width:640px){.fgrid{grid-template-columns:1fr}}
 .fgrid h3{font-family:var(--display);font-size:.9rem;color:var(--ink);margin:0 0 10px}
@@ -1288,11 +1296,64 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
     <button class="back" type="button" data-back><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>Retour à l’application</button>
     <div class="prose" id="donneesBody"></div>
   </section>
+  <section class="page" id="page-aide" hidden>
+    <button class="back" type="button" data-back><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>Retour à l’application</button>
+    <div class="pagehead"><span class="steplabel">Besoin d’un coup de main ?</span><h1>Aide</h1><p class="lead">Les réponses aux questions que l’on nous pose le plus souvent.</p></div>
+    <div class="prose">
+      <h2>Comment répondre ?</h2>
+      <p>Le questionnaire compte sept étapes et demande environ cinq minutes. Vous choisissez d’abord un domaine, puis vous racontez une difficulté que vous avez vécue, avec vos mots. Avant l’envoi, une étape de résumé vous laisse tout relire et corriger ce que vous voulez.</p>
+      <p>Aucune question n’est obligatoire, sauf le récit du problème et la case d’accord à la fin. Si une réponse ne vous concerne pas, passez-la.</p>
+
+      <h2>Faut-il créer un compte ?</h2>
+      <p>Non. Vous pouvez envoyer votre réponse sans vous connecter. La connexion sert seulement à retrouver vos envois précédents : elle reste facultative.</p>
+
+      <h2>Puis-je rester anonyme ?</h2>
+      <p>Oui. Le prénom et le contact ne sont demandés qu’à la fin, et seulement si vous acceptez d’être recontacté pour tester une solution. Laissez-les vides et votre réponse part sans aucun moyen de vous identifier.</p>
+
+      <h2>Et si aucune réponse proposée ne me convient ?</h2>
+      <p>Plusieurs questions proposent une case <b>Autre</b> : cochez-la et un espace s’ouvre pour écrire. Sous la plupart des questions, le lien <b>Préciser en vos propres mots</b> ouvre également une zone libre, pour expliquer votre réponse à votre façon.</p>
+
+      <h2>Je n’arrive pas à me connecter</h2>
+      <p>Trois moyens existent : un lien envoyé par e-mail, un mot de passe si vous en avez défini un, ou votre compte Google. Si le lien n’arrive pas, regardez dans les courriers indésirables, puis réessayez quelques minutes plus tard. Vous pouvez aussi répondre sans compte.</p>
+
+      <h2>Puis-je modifier ou supprimer ma réponse ?</h2>
+      <p>Oui. Écrivez à <a href="mailto:contact@geomessen.com">contact@geomessen.com</a> en indiquant la date de votre envoi, et vos réponses seront corrigées ou effacées. Vos droits sont détaillés dans la page <button class="linkbtn" type="button" data-page="donnees">Protection des données</button>.</p>
+
+      <h2>Qui lit mes réponses ?</h2>
+      <p>Seul l’administrateur de Geomessen. Les autres participants ne voient ni vos idées ni vos coordonnées. Le détail de ce qui est collecté, de la durée de conservation et de l’hébergement figure dans la page <button class="linkbtn" type="button" data-page="donnees">Protection des données</button>.</p>
+
+      <h2>L’application est lente ou s’affiche mal</h2>
+      <p>Elle fonctionne depuis un navigateur, sur téléphone comme sur ordinateur, et consomme peu de données. Si l’affichage semble figé sur une ancienne version, videz le cache de votre navigateur : la date de mise à jour est indiquée tout en bas de la page.</p>
+
+      <h2>Une autre question ?</h2>
+      <p>Écrivez-nous : <button class="linkbtn" type="button" data-page="contact">page Contact</button>.</p>
+    </div>
+  </section>
+
+  <section class="page" id="page-partenaires" hidden>
+    <button class="back" type="button" data-back><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>Retour à l’application</button>
+    <div class="pagehead"><span class="steplabel">Ils construisent Idéomès avec nous</span><h1>Partenaires</h1><p class="lead">Les structures qui accompagnent Geomessen dans cette démarche.</p></div>
+    <div class="prose">
+      <div class="partner">
+        <div class="phead"><h2>KendaLab</h2><span class="ptag">Partenaire technique</span></div>
+        <p class="pbaseline">« Vos idées. Notre technologie. »</p>
+        <p>KendaLab est une agence technologique installée à Ouagadougou, qui conçoit et développe des solutions numériques au Burkina Faso. Son objectif déclaré est de construire l’avenir numérique de l’Afrique avec des solutions innovantes et utiles.</p>
+        <p>Ses domaines d’intervention : développement web, applications mobiles, solutions SaaS, cloud et DevOps, conception d’interfaces, référencement et marketing digital, analyse de données, sécurité et conformité, maintenance et conseil technique.</p>
+        <p>Une démarche qui rejoint celle d’Idéomès : recueillir les idées des habitants, puis les transformer en outils qui leur servent vraiment.</p>
+        <a class="btn secondary small" href="https://kendalab.com/services" target="_blank" rel="noopener">Découvrir KendaLab<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg></a>
+      </div>
+      <h2>Devenir partenaire</h2>
+      <p>Votre structure souhaite soutenir la démarche ou exploiter les besoins recueillis dans sa commune ? <button class="linkbtn" type="button" data-page="contact">Écrivez à Geomessen</button>.</p>
+    </div>
+  </section>
+
   <footer class="site">
     <div class="fcompact">
       <div class="fbrand"><svg viewBox="0 0 600 660" aria-hidden="true"><g stroke-linecap="round"><line x1="300" y1="80" x2="300" y2="400" stroke="#7FA9A9" stroke-width="16"/><line x1="300" y1="403" x2="46" y2="608" stroke="#7FA9A9" stroke-width="16"/><line x1="300" y1="403" x2="554" y2="608" stroke="#7FA9A9" stroke-width="16"/><g stroke="var(--teal)" stroke-width="26"><line x1="42" y1="612" x2="300" y2="62"/><line x1="558" y1="612" x2="300" y2="62"/><line x1="42" y1="612" x2="558" y2="612"/></g></g><g fill="var(--teal)"><circle cx="42" cy="612" r="46"/><circle cx="558" cy="612" r="46"/><circle cx="300" cy="403" r="38"/></g><circle cx="300" cy="62" r="62" fill="#E8833A"/></svg><div><strong>Geomessen</strong><span>Burkina Faso</span></div></div>
       <nav class="fnav" aria-label="Informations">
         <button type="button" data-page="apropos">À propos de Geomessen</button>
+        <button type="button" data-page="aide">Aide</button>
+        <button type="button" data-page="partenaires">Partenaires</button>
         <button type="button" data-page="contact">Contact</button>
         <button type="button" data-page="cgu">Conditions d’utilisation</button>
         <button type="button" data-page="donnees">Protection des données</button>
@@ -1529,7 +1590,7 @@ document.addEventListener("click", e=>{
 let pageFromLogin = false;
 document.addEventListener("click", e=>{ if(e.target.closest("[data-back]") && pageFromLogin && !loggedIn()){ pageFromLogin = false; $("login").hidden = false; } });
 document.querySelectorAll(".toc a").forEach(a=>a.addEventListener("click", e=>{ e.preventDefault(); const t = document.querySelector(a.getAttribute("href")); if(t) t.scrollIntoView({behavior:"smooth", block:"start"}); }));
-{ const h = (location.hash||"").slice(1); const map = {apropos:"apropos", contact:"contact", cgu:"cgu", conditions:"cgu", donnees:"donnees"}; if(map[h]) setTimeout(()=>openPage(map[h]), 0); }
+{ const h = (location.hash||"").slice(1); const map = {apropos:"apropos", aide:"aide", partenaires:"partenaires", contact:"contact", cgu:"cgu", conditions:"cgu", donnees:"donnees"}; if(map[h]) setTimeout(()=>openPage(map[h]), 0); }
 
 /* ---------- Copier un contact ---------- */
 document.addEventListener("click", async e=>{
