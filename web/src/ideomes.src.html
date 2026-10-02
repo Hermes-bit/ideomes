@@ -334,6 +334,16 @@ textarea{min-height:120px;resize:vertical}
 .linkbtn{background:none;border:0;padding:0;color:var(--teal);text-decoration:underline;cursor:pointer;font:inherit}
 
 .nav{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:26px;flex-wrap:wrap}
+/* Sur téléphone, les deux boutons ne tiennent pas côte à côte avec leurs libellés
+   complets et passaient à la ligne. « Retour » se réduit à sa flèche, et le bouton
+   principal occupe la largeur restante. */
+@media (max-width:560px){
+  .nav{flex-wrap:nowrap;gap:10px}
+  .nav > span{display:none}
+  .nav #prev{flex:none;padding:13px 15px}
+  .nav #prev .lbl-prev{display:none}
+  .nav #next{flex:1 1 auto;min-width:0;justify-content:center;white-space:nowrap}
+}
 .btn{font-weight:600;font-size:1rem;border:0;border-radius:999px;padding:14px 26px;cursor:pointer;display:inline-flex;align-items:center;gap:10px;transition:transform .15s, box-shadow .2s}
 .btn:active{transform:scale(.97)}
 .btn.primary{background:var(--orange);color:var(--on-orange);box-shadow:0 8px 18px -8px var(--orange)}
@@ -867,8 +877,8 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
     <div class="hero-deco" aria-hidden="true"><svg class="pattern" viewBox="-200 -200 1000 1060" aria-hidden="true"><g stroke="#fff" stroke-linecap="round" fill="none"><line class="pc" style="--dx:-77px;--dy:-38px;--r:-28deg;--d:0.00s" x1="42" y1="612" x2="300" y2="62" stroke-width="22"/><line class="pc" style="--dx:83px;--dy:-32px;--r:24deg;--d:0.08s" x1="558" y1="612" x2="300" y2="62" stroke-width="22"/><line class="pc" style="--dx:0px;--dy:77px;--r:12deg;--d:0.16s" x1="42" y1="612" x2="558" y2="612" stroke-width="22"/><line class="pc" style="--dx:26px;--dy:-71px;--r:-40deg;--d:0.24s" x1="300" y1="62" x2="300" y2="403" stroke-width="12"/><line class="pc" style="--dx:-96px;--dy:45px;--r:35deg;--d:0.32s" x1="300" y1="403" x2="42" y2="612" stroke-width="12"/><line class="pc" style="--dx:96px;--dy:51px;--r:-30deg;--d:0.40s" x1="300" y1="403" x2="558" y2="612" stroke-width="12"/></g><g fill="#fff"><circle class="pc pn" style="--dx:-122px;--dy:71px;--r:0deg;--d:0.50s" cx="42" cy="612" r="44"/><circle class="pc pn" style="--dx:129px;--dy:77px;--r:0deg;--d:0.58s" cx="558" cy="612" r="44"/><circle class="pc pn" style="--dx:0px;--dy:26px;--r:0deg;--d:0.66s" cx="300" cy="403" r="36"/><circle class="pc pn orange" style="--dx:19px;--dy:-122px;--r:0deg;--d:0.74s" cx="300" cy="62" r="62"/></g></svg></div>
     <p class="hello" id="hello" hidden></p>
     <div class="herotitle"><span class="ideotile"><img class="" src="data:image/png;base64,__IDEO__" alt="Logo Idéomès"></span><h1>Idéo<span class="accent">mès</span></h1></div>
-    <p>Qu’est-ce qui vous complique la vie au quotidien ? Racontez-le en 2 minutes. Vos réponses guident les applications que nous construisons pour les Burkinabè.</p>
-    <div class="badges"><span>2 minutes</span><span>Anonyme si vous le souhaitez</span><button type="button" data-policy>Données protégées</button></div>
+    <p>Qu’est-ce qui vous complique la vie au quotidien ? Racontez-le en environ 5 minutes. Vos réponses guident les applications que nous construisons pour les Burkinabè.</p>
+    <div class="badges"><span>Environ 5 minutes</span><span>Anonyme si vous le souhaitez</span><button type="button" data-policy>Données protégées</button></div>
   </section>
 
   <div class="maintnote" id="maintNote" hidden role="status" aria-live="polite">
@@ -994,7 +1004,7 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
 
         <div id="formMsg" class="msg err" hidden></div>
         <div class="nav">
-          <button type="button" class="btn secondary" id="prev" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>Retour</button>
+          <button type="button" class="btn secondary" id="prev" aria-label="Revenir à l’étape précédente" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg><span class="lbl-prev">Retour</span></button>
           <span></span>
           <button type="submit" class="btn primary" id="next">Continuer<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button>
         </div>
@@ -2138,7 +2148,7 @@ const TOUR = [
   {sel:"#acctBtn", k:"Votre compte", t:"Votre compte, en haut à droite", p:"Retrouvez ici votre connexion, le nombre d’idées envoyées, et ce guide si vous voulez le revoir."},
   {sel:"#une", opt:true, k:"À la une", t:"Les avancées au Burkina Faso", p:"Ici défilent les dernières actualités sur les progrès du pays : énergie, agriculture, santé, numérique… Touchez une carte pour lire l’article et sa source. Glissez pour voir les suivantes."},
   {sel:"#domaines", alt:".wizard", k:"Étape 1", t:"Choisissez un domaine", p:"Touchez le domaine qui correspond à votre besoin : santé, papiers, transport, argent…"},
-  {sel:"#progress", k:"4 étapes", t:"Suivez votre avancement", p:"Domaine, problème, vous, envoi : 2 minutes suffisent. Vous pouvez revenir en arrière à tout moment."},
+  {sel:"#progress", k:"7 étapes", t:"Suivez votre avancement", p:"Domaine, profil, problème, habitudes, solution, résumé, envoi : environ 5 minutes. Vous pouvez revenir en arrière à tout moment."},
   {sel:".hero .badges button", k:"Vos données", t:"Vos données sont protégées", p:"Touchez « Données protégées » pour lire comment Geomessen utilise vos réponses. Rien n’est vendu."},
   {sel:"#contexte .ctx-card", k:"Vidéo", t:"Le contexte en vidéo", p:"Une courte vidéo explique le projet Idéomès."},
   {k:"C’est parti", t:"À vous de jouer !", p:"Choisissez un domaine pour commencer. Barka !"}
