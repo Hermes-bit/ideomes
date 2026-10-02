@@ -35,6 +35,7 @@ def construire() -> Path:
         html.replace("__WORD__", b64("geomessen-wordmark.png"))
         .replace("__IDEO__", b64("ideomes-logo.png"))
         .replace("__FAV__", b64("ideomes-favicon.png"))
+        .replace("__KENDA__", b64("kendalab-logo.png"))
         .replace("__BF__", (ASSETS / "bf-limites.json").read_text(encoding="utf-8").strip())
         # Horodatage de compilation affiché en pied de page : permet de vérifier
         # d'un coup d'oeil si le navigateur sert bien la dernière version déployée.

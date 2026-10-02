@@ -752,8 +752,13 @@ body.on-page .hero, body.on-page #une, body.on-page #tabs, body.on-page #view-fo
 footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);color:var(--muted);font-size:.86rem;display:flex;flex-direction:column;gap:22px}
 /* Fiche d'un partenaire, sur la page Partenaires. */
 .partner{border:1.5px solid var(--line);border-radius:20px;padding:20px 22px;background:var(--surface);margin:6px 0 10px}
-.partner .phead{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:6px}
-.partner .phead h2{margin:0}
+.partner .phead{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:10px}
+/* Le logo est bleu marine sur fond transparent : illisible sur le thème sombre.
+   On le pose sur une pastille claire, identique dans les deux thèmes. */
+.partner .plogo{height:38px;width:auto;max-width:100%;display:block;
+  background:#FFFFFF;border-radius:10px;padding:7px 12px;box-sizing:content-box}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+@media (max-width:420px){.partner .plogo{height:30px;padding:6px 10px}}
 .partner .ptag{font-size:.72rem;font-weight:700;letter-spacing:.02em;padding:4px 10px;border-radius:999px;background:var(--teal-soft);color:var(--teal)}
 .partner .pbaseline{font-style:italic;color:var(--teal);font-weight:500;margin:0 0 12px}
 .partner .btn svg{width:15px;height:15px}
@@ -1335,7 +1340,11 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
     <div class="pagehead"><span class="steplabel">Ils construisent Idéomès avec nous</span><h1>Partenaires</h1><p class="lead">Les structures qui accompagnent Geomessen dans cette démarche.</p></div>
     <div class="prose">
       <div class="partner">
-        <div class="phead"><h2>KendaLab</h2><span class="ptag">Partenaire technique</span></div>
+        <h2 class="sr-only">KendaLab</h2>
+        <div class="phead">
+          <img class="plogo" src="data:image/png;base64,__KENDA__" alt="KendaLab" width="780" height="203">
+          <span class="ptag">Partenaire technique</span>
+        </div>
         <p class="pbaseline">« Vos idées. Notre technologie. »</p>
         <p>KendaLab est une agence technologique installée à Ouagadougou, qui conçoit et développe des solutions numériques au Burkina Faso. Son objectif déclaré est de construire l’avenir numérique de l’Afrique avec des solutions innovantes et utiles.</p>
         <p>Ses domaines d’intervention : développement web, applications mobiles, solutions SaaS, cloud et DevOps, conception d’interfaces, référencement et marketing digital, analyse de données, sécurité et conformité, maintenance et conseil technique.</p>
