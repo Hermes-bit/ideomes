@@ -247,7 +247,16 @@ button.logo:focus-visible{outline:2px solid var(--teal);outline-offset:4px}
 
 /* ---------- ASSISTANT ---------- */
 .wizard{background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:26px 22px;box-shadow:var(--shadow)}
-.stepper{list-style:none;margin:0 0 30px;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}
+.stepper{list-style:none;margin:0 0 30px;padding:0;display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}
+/* À sept étapes, les libellés ne tiennent plus côte à côte sur téléphone :
+   seul celui de l'étape en cours reste affiché, les autres se réduisent au numéro. */
+@media (max-width:560px){
+  .stepper li:not(.now) .lbl{display:none}
+  .stepper li.now .lbl{position:absolute;top:44px;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:.72rem;max-width:none;overflow:visible;text-overflow:clip}
+  .stepper{margin-bottom:46px}
+  .stepper .node{width:30px;height:30px;font-size:.78rem}
+  .stepper li:not(:last-child)::after{top:14px;left:calc(50% + 19px);right:calc(-50% + 19px)}
+}
 .stepper li{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;min-width:0}
 .stepper li:not(:last-child)::after{content:"";position:absolute;top:17px;left:calc(50% + 24px);right:calc(-50% + 24px);height:3px;border-radius:2px;background:var(--line);transition:background .4s}
 .stepper li.done::after{background:var(--teal)}
@@ -886,47 +895,12 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
         </div>
 
         <div class="step" data-step="1" hidden>
-          <div class="steplabel">Étape 2 sur 5</div>
-          <h2>Racontez-nous votre problème</h2>
-          <p class="lead">Avec vos mots. Un exemple concret nous aide beaucoup.</p>
+          <div class="steplabel">Étape 2 sur 7</div>
+          <h2>Votre profil en bref</h2>
+          <p class="lead">Pour adapter l’outil à la façon dont vous l’utiliserez. Tout est facultatif.</p>
           <div class="fields">
-            <div class="field">
-              <label for="probleme">Le problème</label>
-              <textarea id="probleme" maxlength="1500" placeholder="Ex. : Pour obtenir un extrait d’acte de naissance, je dois aller trois fois à la mairie et perdre mes journées de travail."></textarea>
-            </div>
-            <div class="field">
-              <label for="debrouille">Aujourd’hui, comment faites-vous pour vous en sortir ?</label>
-              <textarea id="debrouille" maxlength="1500" placeholder="Ex. : Je demande à un voisin qui a une moto de m’y emmener."></textarea>
-            </div>
-            <div class="field"><label for="perte">Qu’est-ce que vous perdez à cause de ça ?</label><textarea id="perte" maxlength="800" placeholder="Ex. : Je perds une journée de travail à chaque fois, et parfois l’argent du transport pour rien."></textarea></div>
-            <div class="field"><label for="effort">Qu’êtes-vous déjà prêt à faire pour ça aujourd’hui ?</label><textarea id="effort" maxlength="800" placeholder="Ex. : Je suis prêt à faire la route et à payer un peu, mais pas à y passer plusieurs jours."></textarea></div>
-            <div class="field"><label for="echec">Que se passe-t-il quand ça ne marche pas ?</label><textarea id="echec" maxlength="800" placeholder="Ex. : Je rentre sans le papier, et mon fils ne peut pas s’inscrire à l’école à temps."></textarea></div>
-            <div class="field"><span class="q">Ça arrive…</span><div class="chips" id="frequence"></div></div>
-
-            <button type="button" class="linkbtn" id="toggleMore">En dire plus</button>
-            <div class="field more" id="step1More" hidden>
-              <div class="field"><span class="q">Combien de temps ça vous prend, à chaque fois ?</span><div class="chips" id="tempsPris"></div></div>
-              <div class="field"><span class="q">Combien ça vous coûte, à chaque fois ?</span><div class="chips" id="cout"></div></div>
-              <div class="field"><label for="blocage">Qu’est-ce qui vous empêche de le régler vous-même ?</label><textarea id="blocage" maxlength="800" placeholder="Ex. : On me demande des papiers que je n’ai pas, et personne ne m’explique où les obtenir."></textarea></div>
-              <div class="field"><span class="q">À quelle distance se trouve le service concerné ? <span class="hint">(mairie, CSPS, marché, école, banque…)</span></span><div class="chips" id="distance"></div></div>
-              <div class="field"><span class="q">Depuis combien de temps ça dure ?</span><div class="chips" id="duree"></div></div>
-              <div class="field"><span class="q">Qui d’autre autour de vous a le même problème ?</span><div class="chips" id="ampleur"></div></div>
-              <div class="field"><label for="tentative">Quelqu’un a-t-il déjà essayé de régler ça ?</label><textarea id="tentative" maxlength="800" placeholder="Ex. : La mairie a annoncé un guichet l’an dernier, mais il n’a jamais ouvert."></textarea></div>
-            </div>
-
-            <div class="field"><span class="q">C’est important pour vous ?</span><div class="scale chips" id="importance"></div></div>
-            <div class="field">
-              <label for="solution">Votre idée de solution <span class="hint">(facultatif)</span></label>
-              <textarea id="solution" maxlength="1500" placeholder="Ex. : Faire la demande par téléphone et recevoir un SMS quand le papier est prêt."></textarea>
-            </div>
-          </div>
-        </div>
-
-        <div class="step" data-step="2" hidden>
-          <div class="steplabel">Étape 3 sur 5</div>
-          <h2>Un peu sur vous</h2>
-          <p class="lead">Pour concevoir des applications qui marchent sur votre téléphone, dans votre langue. Tout est facultatif.</p>
-          <div class="fields">
+            <div class="field"><span class="q">Quelle est votre tranche d’âge ?</span><div class="chips" id="age"></div></div>
+            <div class="field"><span class="q">Quel outil utilisez-vous le plus pour naviguer sur internet ?</span><div class="chips" id="outil"></div></div>
             <div class="field">
               <span class="q">Où habitez-vous ?</span>
               <div class="geo3">
@@ -935,45 +909,75 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
                 <div class="field"><label for="ville" class="hint">Commune ou département</label><select id="ville" disabled><option value="">Choisir la province d’abord</option></select></div>
               </div>
             </div>
-            <div class="grid2">
-              <div class="field">
-                <label for="age">Âge</label>
-                <select id="age"><option value="">Choisir</option><option>Moins de 18 ans</option><option>18 à 25 ans</option><option>26 à 35 ans</option><option>36 à 50 ans</option><option>Plus de 50 ans</option></select>
-              </div>
-              <div></div>
+          </div>
+        </div>
+
+        <div class="step" data-step="2" hidden>
+          <div class="steplabel">Étape 3 sur 7</div>
+          <h2>Le problème</h2>
+          <p class="lead">La partie la plus importante : comprendre la difficulté réelle que vous rencontrez.</p>
+          <div class="fields">
+            <div class="field">
+              <label for="probleme">Racontez-nous la dernière fois, ou la pire fois, où vous avez rencontré une difficulté dans ce domaine. Que s’est-il passé ?</label>
+              <span class="hint">Exprimez-vous librement, avec vos propres mots.</span>
+              <textarea id="probleme" maxlength="1500" placeholder="Ex. : Pour obtenir un extrait d’acte de naissance, je suis allé trois fois à la mairie et j’ai perdu mes journées de travail."></textarea>
             </div>
-            <div class="field"><span class="q">Votre activité</span><div class="chips" id="activite"></div></div>
-            <div class="field"><span class="q">Votre téléphone</span><div class="chips" id="telephone"></div></div>
-            <div class="field"><span class="q">Le téléphone est-il à vous ?</span><div class="chips" id="telephoneA"></div></div>
-            <div class="field"><span class="q">Accès à internet</span><div class="chips" id="internet"></div></div>
-            <div class="field"><span class="q">Où rechargez-vous votre téléphone ?</span><div class="chips" id="recharge"></div></div>
-            <div class="field"><span class="q">Utilisez-vous le mobile money ?</span><div class="chips" id="mobileMoney"></div></div>
-            <div class="field"><span class="q">Quelle langue parlez-vous le plus souvent ?</span><div class="chips" id="langueParlee"></div></div>
-            <div class="field"><span class="q">Langue préférée pour une application</span><div class="chips" id="langue"></div></div>
-            <div class="field"><span class="q">Savez-vous lire et écrire ?</span><div class="chips" id="litEcrit"></div></div>
-            <div class="field"><span class="q">Qui remplit ce formulaire ?</span><div class="chips" id="remplitPar"></div></div>
+            <div class="field"><span class="q">À quelle fréquence ce problème se produit-il dans votre vie ?</span><div class="chips" id="frequence"></div></div>
+            <div class="field">
+              <span class="q">Quelle note donneriez-vous à la gravité de ce problème ?</span>
+              <span class="hint">De 1, simple détail agaçant, à 5, bloquant et insupportable.</span>
+              <div class="scale chips" id="importance"></div>
+            </div>
           </div>
         </div>
 
         <div class="step" data-step="3" hidden>
-          <div class="steplabel">Étape 4 sur 5</div>
+          <div class="steplabel">Étape 4 sur 7</div>
+          <h2>Vos habitudes actuelles</h2>
+          <p class="lead">Comment vous vous débrouillez aujourd’hui face à ce problème.</p>
+          <div class="fields">
+            <div class="field">
+              <label for="debrouille">Comment faites-vous aujourd’hui pour essayer de résoudre ce problème ?</label>
+              <span class="hint">Par exemple : j’appelle un proche, je cherche sur internet, je me déplace sur place.</span>
+              <textarea id="debrouille" maxlength="1500" placeholder="Ex. : Je demande à un voisin qui a une moto de m’y emmener."></textarea>
+            </div>
+            <div class="field"><span class="q">Qu’est-ce qui vous déplaît ou vous manque le plus dans votre méthode actuelle ?</span><div class="chips" id="manque"></div></div>
+          </div>
+        </div>
+
+        <div class="step" data-step="4" hidden>
+          <div class="steplabel">Étape 5 sur 7</div>
+          <h2>En route vers l’outil</h2>
+          <p class="lead">Pour choisir le format et les fonctions de la première version.</p>
+          <div class="fields">
+            <div class="field">
+              <label for="solution">Si une solution numérique existait, quelle action devrait-elle vous permettre de faire en un seul clic pour vous sauver la mise ?</label>
+              <span class="hint">Par exemple : réserver tout de suite, comparer les prix, trouver quelqu’un à proximité.</span>
+              <textarea id="solution" maxlength="1500" placeholder="Ex. : Faire la demande depuis mon téléphone et recevoir un SMS quand le papier est prêt."></textarea>
+            </div>
+            <div class="field"><span class="q">Pour ce type de problème, quel format préférez-vous utiliser ?</span><div class="chips" id="format"></div></div>
+            <div class="field"><span class="q">Quel serait votre plus grand frein à utiliser un nouvel outil en ligne ?</span><div class="chips" id="frein"></div></div>
+          </div>
+        </div>
+
+        <div class="step" data-step="5" hidden>
+          <div class="steplabel">Étape 6 sur 7</div>
           <h2>Vérifiez vos réponses</h2>
           <p class="lead">Relisez avant d’envoyer. Vous pouvez revenir corriger n’importe quelle réponse.</p>
           <div id="review"></div>
         </div>
 
-        <div class="step" data-step="4" hidden>
-          <div class="steplabel">Étape 5 sur 5</div>
-          <h2>Envoyer votre idée</h2>
-          <p class="lead">Pas besoin de compte pour envoyer votre idée. Laissez un contact seulement si vous voulez tester nos futures applications.</p>
+        <div class="step" data-step="6" hidden>
+          <div class="steplabel">Étape 7 sur 7</div>
+          <h2>Rejoignez nos testeurs</h2>
+          <p class="lead">Pas besoin de compte pour envoyer votre réponse. Laissez un contact seulement si vous voulez tester la première version.</p>
           <div class="recap" id="recap"></div>
           <div class="fields">
+            <div class="field"><span class="q">Nous développons la première version de cet outil. Seriez-vous d’accord pour y jeter un œil et nous donner votre avis ?</span><div class="chips" id="testeur"></div></div>
             <div class="grid2">
               <div class="field"><label for="nom">Prénom <span class="hint">(facultatif)</span></label><input type="text" id="nom" maxlength="60" autocomplete="given-name"></div>
               <div class="field"><label for="contact">WhatsApp, téléphone ou e-mail <span class="hint">(facultatif)</span></label><input type="text" id="contact" maxlength="80" placeholder="+226 70 12 34 56"></div>
             </div>
-            <div class="field"><span class="q">Accepteriez-vous qu’on vous rappelle pour tester la solution ?</span><div class="chips" id="rappel"></div></div>
-            <div class="field"><span class="q">Seriez-vous prêt à participer autrement ?</span><div class="chips" id="participation"></div></div>
             <label class="consent required"><input type="checkbox" id="consentRgpd"><span>J’accepte les <button type="button" class="linkbtn" data-page="cgu">conditions d’utilisation</button> et que mes réponses soient utilisées par Geomessen Burkina Faso pour étudier les besoins de la population, comme décrit dans <button type="button" class="linkbtn" data-policy>la notice sur les données personnelles</button>. <strong>Obligatoire</strong></span></label>
           </div>
         </div>
@@ -1072,9 +1076,9 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
     </div>
     <div class="two four">
       <div class="panel"><h3>Tranche d’âge</h3><div class="bars" id="b-age"></div></div>
-      <div class="panel"><h3>Téléphone utilisé</h3><div class="bars" id="b-tel"></div></div>
-      <div class="panel"><h3>Langue préférée</h3><div class="bars" id="b-langue"></div></div>
-      <div class="panel"><h3>Activité</h3><div class="bars" id="b-act"></div></div>
+      <div class="panel"><h3>Outil de navigation</h3><div class="bars" id="b-tel"></div></div>
+      <div class="panel"><h3>Format préféré</h3><div class="bars" id="b-langue"></div></div>
+      <div class="panel"><h3>Principal frein</h3><div class="bars" id="b-act"></div></div>
     </div>
     <div class="row" style="margin-top:22px"><h2>Toutes les réponses</h2></div>
     <div class="filters">
@@ -1377,32 +1381,33 @@ const DOMAINES = [
   ["Logement","loyer, parcelle, construction"],["Culture & loisirs","musique, sport, événements"],["Autre","tout le reste"]
 ];
 const OPTS = {
-  frequence:["Tous les jours","Chaque semaine","Chaque mois","Rarement","Seulement à certaines périodes de l’année (semis, récolte, soudure, saison des pluies)"],
-  tempsPris:["Moins d’1 h","Une demi-journée","Une journée entière","Plusieurs jours"],
-  cout:["Moins de 1 000 F","1 000–5 000 F","5 000–25 000 F","Plus de 25 000 F"],
-  distance:["Moins d’1 km","1–5 km","5–15 km","Plus de 15 km"],
-  duree:["C’est nouveau","Depuis des mois","Depuis des années","Ça a toujours été comme ça"],
-  ampleur:["Moi seul","Ma famille","Mon quartier","Tout le village ou la ville"],
-  activite:["Agriculteur / éleveur","Commerçant(e)","Élève / étudiant(e)","Artisan","Fonctionnaire","Salarié(e) du privé","Sans emploi","Autre"],
-  telephone:["Smartphone","Téléphone simple","Pas de téléphone"],
-  telephoneA:["À moi","Partagé dans la famille","Je l’emprunte"],
-  internet:["Oui, souvent","Parfois","Non"],
-  recharge:["Chez moi","Chez un voisin ou une boutique","C’est difficile"],
-  mobileMoney:["Orange Money","Moov Money","Les deux","Non"],
-  langueParlee:["Mooré","Dioula","Fulfuldé","Français","Autre"],
-  langue:["Français","Mooré","Dioula","Fulfuldé","Gulmancéma","Bissa","Autre"],
-  litEcrit:["Oui, bien","Un peu","Non"],
-  remplitPar:["Moi-même","Quelqu’un remplit pour moi"],
-  rappel:["Oui, par appel","Oui, par SMS","Oui, par WhatsApp","Non"]
+  age:["Moins de 25 ans","26 à 45 ans","46 à 60 ans","Plus de 60 ans"],
+  outil:["Mon smartphone","Mon ordinateur (bureau ou portable)","La tablette tactile"],
+  frequence:["Tous les jours ou presque","Quelques fois par mois","Très rarement"],
+  manque:["C’est beaucoup trop long (perte de temps)","C’est trop cher ou pas rentable","Les informations trouvées ne sont jamais fiables ou à jour","C’est trop compliqué administrativement ou techniquement"],
+  format:["Une application mobile (à télécharger, toujours dans la poche)","Un site internet (depuis un navigateur)","Le format m’importe peu, je veux juste que le problème soit résolu"],
+  frein:["Devoir créer un énième compte avec un mot de passe","Avoir peur pour la sécurité et la revente de mes données","Devoir payer pour accéder aux fonctions importantes","Une interface surchargée et difficile à comprendre"],
+  testeur:["Oui, avec plaisir","Non, merci"],
 };
-const OPTS_MULTI = {
-  participation:["Essayer l’application","En parler autour de moi","Aider à traduire dans ma langue","Non merci"]
-};
+const OPTS_MULTI = {};
 /* Les questions de vécu étaient à choix multiple avant de passer en rédaction
    libre : les idées déjà reçues contiennent des tableaux, les nouvelles du texte.
    Ce lecteur accepte les deux, pour que l'historique reste lisible. */
 const texteLibre = v => Array.isArray(v) ? v.join(", ") : (v || "");
-const IMP = ["Pas trop","Un peu","Moyen","Beaucoup","Urgent"];
+/* Champs de l'ancien questionnaire, remplacé le 2 octobre 2026. Ils ne sont plus
+   demandés, mais les réponses déjà reçues les contiennent : on continue de les
+   afficher et de les exporter pour ne rien perdre. */
+const ANCIENS = [
+  ["Ce que ça fait perdre","perte"],["Effort déjà consenti","effort"],["Quand ça ne marche pas","echec"],
+  ["Temps pris à chaque fois","tempsPris"],["Coût à chaque fois","cout"],
+  ["Ce qui empêche de régler soi-même","blocage"],["Distance du service","distance"],
+  ["Depuis quand ça dure","duree"],["Qui d’autre est concerné","ampleur"],["Déjà tenté par","tentative"],
+  ["Activité","activite"],["Téléphone","telephone"],["Téléphone à soi","telephoneA"],["Internet","internet"],
+  ["Recharge","recharge"],["Mobile money","mobileMoney"],["Langue parlée","langueParlee"],
+  ["Langue préférée","langue"],["Sait lire et écrire","litEcrit"],["Formulaire rempli par","remplitPar"],
+  ["Souhait de rappel","rappel"],["Participation possible","participation"],
+];
+const IMP = ["Simple détail","Peu gênant","Moyen","Très gênant","Bloquant"];
 const VILLES = ["Ouagadougou","Bobo-Dioulasso","Koudougou","Ouahigouya","Banfora","Kaya","Tenkodogo","Fada N'Gourma","Dédougou","Dori","Gaoua","Ziniaré","Manga","Réo","Kombissiri","Houndé","Pouytenga","Koupéla","Djibo","Nouna","Léo","Yako","Tougan","Diébougou","Orodara","Boromo","Kongoussi","Pô","Sapouy"];
 const GEO = {
   "Boucle du Mouhoun":[["Balé","Boromo",11.75,-2.93],["Banwa","Solenzo",12.18,-4.08],["Kossi","Nouna",12.73,-3.86],["Mouhoun","Dédougou",12.46,-3.46],["Nayala","Toma",12.77,-2.89],["Sourou","Tougan",13.07,-3.07]],
@@ -1932,22 +1937,20 @@ function rowsReponses(){
     "Identifiant de connexion": (d.identite&&d.identite.valeur)||"", "Mode de connexion": TYPE_LBL[(d.identite||{}).type]||"",
     "Domaine": d.domaine||"", "Problème": d.probleme||"",
     ...PRECISABLES.reduce((o,k)=>{ o[(LIBELLES[k]||k) + " (en ses mots)"] = (d.precisions||{})[k] || ""; return o; }, {}),
-    "Contournement actuel": d.debrouille||"", "Ce que ça fait perdre": texteLibre(d.perte), "Effort déjà consenti": texteLibre(d.effort),
-    "Quand ça ne marche pas": texteLibre(d.echec), "Temps pris à chaque fois": d.tempsPris||"", "Coût à chaque fois": d.cout||"",
-    "Ce qui empêche de régler soi-même": texteLibre(d.blocage), "Distance du service": d.distance||"",
-    "Depuis quand ça dure": d.duree||"", "Qui d’autre est concerné": d.ampleur||"", "Déjà tenté par": texteLibre(d.tentative),
-    "Solution proposée": d.solution||"", "Fréquence": d.frequence||"", "Importance (1-5)": d.importance||"",
+    "Méthode actuelle": d.debrouille||"", "Ce qui déplaît dans la méthode": d.manque||"",
+    "Action en un seul clic": d.solution||"", "Fréquence": d.frequence||"", "Gravité (1-5)": d.importance||"",
+    "Format préféré": d.format||"", "Principal frein": d.frein||"", "Outil de navigation": d.outil||"",
     "Région": d.region||"", "Province": d.province||"", "Commune / département": d.ville||"",
     "Latitude": g.ll[1] ?? "", "Longitude": g.ll[0] ?? "", "WKT": wkt(g.ll), "Précision de la position": g.prec ? "Centre de la " + g.prec : "Non renseignée",
     "Code ISO région": k.iso, "HASC région": k.hr, "HASC province": k.hp, "HASC commune": k.hc,
     "GID région (GADM)": k.gr, "GID province (GADM)": k.gp, "GID commune (GADM)": k.gc,
     "shapeID ADM1 (geoBoundaries)": k.sr, "shapeID ADM2 (geoBoundaries)": k.sp, "shapeID ADM3 (geoBoundaries)": k.sc,
     "Source des coordonnées": g.prec ? "Point intérieur du polygone administratif (geoBoundaries), WGS 84" : "",
-    "Âge": d.age||"", "Activité": d.activite||"",
-    "Téléphone": d.telephone||"", "Téléphone à soi": d.telephoneA||"", "Internet": d.internet||"", "Recharge": d.recharge||"", "Mobile money": d.mobileMoney||"",
-    "Langue parlée": d.langueParlee||"", "Langue préférée (appli)": d.langue||"", "Sait lire et écrire": d.litEcrit||"", "Formulaire rempli par": d.remplitPar||"",
-    "Prénom": d.nom||"", "Contact": d.contact||"", "Souhait de rappel": d.rappel||"", "Accord pour être recontacté": d.aContact ? "Oui" : "Non",
-    "Participation possible": (d.participation||[]).join(", "),
+    "Âge": d.age||"", "Accepte de tester": d.testeur||"",
+    "Prénom": d.nom||"", "Contact": d.contact||"", "Accord pour être recontacté": d.aContact ? "Oui" : "Non",
+    // Colonnes de l'ancien questionnaire : vides pour les nouvelles réponses, mais
+    // conservées pour ne pas perdre les réponses déjà collectées.
+    ...ANCIENS.reduce((o,[lbl,cle])=>{ o["[ancien] " + lbl] = texteLibre(d[cle]); return o; }, {}),
     "Consentement RGPD": c.rgpd ? "Oui" : "", "Version du consentement": c.version||"", "Date du consentement (UTC)": isoUTC(c.date),
     "Appareil": t.appareil||"", "Langue du navigateur": t.langueNavigateur||"", "Fuseau horaire": t.fuseau||"", "Version de l’application": t.app||""
   }; });
@@ -2212,13 +2215,9 @@ Object.entries(OPTS_MULTI).forEach(([k,list])=>{
    récapitulatif et les exports. « domaines » en est exclu : l'étape 1 avance
    automatiquement dès le choix, une zone de texte y serait inutilisable. */
 const LIBELLES = {
-  frequence:"Fréquence", tempsPris:"Temps que ça prend", cout:"Ce que ça coûte",
-  distance:"Distance du service", duree:"Depuis combien de temps",
-  ampleur:"Qui d’autre est concerné", importance:"Importance",
-  activite:"Activité", telephone:"Téléphone", telephoneA:"À qui est le téléphone",
-  internet:"Accès à internet", recharge:"Recharge du téléphone", mobileMoney:"Mobile money",
-  langueParlee:"Langue parlée", langue:"Langue préférée", litEcrit:"Lire et écrire",
-  remplitPar:"Qui remplit le formulaire", rappel:"Être rappelé", participation:"Participation",
+  age:"Tranche d’âge", outil:"Outil de navigation", frequence:"Fréquence",
+  importance:"Gravité", manque:"Ce qui déplaît dans la méthode actuelle",
+  format:"Format préféré", frein:"Principal frein", testeur:"Testeur",
 };
 const PRECISABLES = Object.keys(LIBELLES);
 const lirePrecision = k => { const t = $(k + "Libre"); return t ? t.value.trim() : ""; };
@@ -2272,12 +2271,12 @@ $("logoHome").addEventListener("click", ()=>{
 });
 
 /* ---------- Assistant ---------- */
-const STEPS = 5; let step = 0;
+const STEPS = 7; let step = 0;
 const val = n => (document.querySelector(`input[name="${n}"]:checked`)||{}).value || "";
 const checked = n => [...document.querySelectorAll(`input[name="${n}"]:checked`)].map(i=>i.value);
 function formErr(t){ const m=$("formMsg"); m.textContent=t; m.hidden=!t; }
 function drawProgress(){
-  const L = ["Domaine","Problème","Vous","Résumé","Envoi"];
+  const L = ["Domaine","Profil","Problème","Habitudes","Outil","Résumé","Envoi"];
   const CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
   $("progress").innerHTML = L.map((l,i)=>`<li class="${i<step?"done":i===step?"now":""}"${i===step?' aria-current="step"':""}><span class="node">${i<step?CHECK:i+1}</span><span class="lbl">${l}</span></li>`).join("");
 }
@@ -2288,7 +2287,7 @@ function goto(n, noScroll){
   $("next").innerHTML = n===STEPS-1
     ? `Envoyer mon idée<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg>`
     : `Continuer<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>`;
-  if(n===3) drawReview();
+  if(n===5) drawReview();
   if(n===STEPS-1) drawRecap();
   drawProgress();
   if(!noScroll) document.querySelector(".wizard").scrollIntoView({behavior:"smooth", block:"start"});
@@ -2302,38 +2301,26 @@ function drawRecap(){
    reprendre le formulaire depuis le début. Les réponses vides sont omises. */
 const REVUE = [
   ["Le domaine", 0, [["Domaine", ()=>val("domaines")]]],
-  ["Le problème", 1, [
-    ["Le problème", ()=>$("probleme").value.trim()],
-    ["Comment vous faites aujourd’hui", ()=>$("debrouille").value.trim()],
-    ["Ce que vous perdez", ()=>$("perte").value.trim()],
-    ["Ce que vous êtes prêt à faire", ()=>$("effort").value.trim()],
-    ["Quand ça ne marche pas", ()=>$("echec").value.trim()],
-    ["Fréquence", ()=>val("frequence"), "frequence"],
-    ["Temps que ça prend", ()=>val("tempsPris"), "tempsPris"],
-    ["Ce que ça coûte", ()=>val("cout"), "cout"],
-    ["Ce qui vous empêche de le régler", ()=>$("blocage").value.trim()],
-    ["Distance du service", ()=>val("distance"), "distance"],
-    ["Depuis combien de temps", ()=>val("duree"), "duree"],
-    ["Qui d’autre est concerné", ()=>val("ampleur"), "ampleur"],
-    ["Tentatives déjà faites", ()=>$("tentative").value.trim()],
-    ["Importance", ()=>{ const i = Number(val("importance")); return i ? IMP[i-1] : ""; }, "importance"],
-    ["Votre idée de solution", ()=>$("solution").value.trim()],
-  ]],
-  ["Vous", 2, [
+  ["Votre profil", 1, [
+    ["Tranche d’âge", ()=>val("age"), "age"],
+    ["Outil de navigation", ()=>val("outil"), "outil"],
     ["Région", ()=>$("region").value],
     ["Province", ()=>$("province").value],
     ["Commune ou département", ()=>$("ville").value],
-    ["Âge", ()=>$("age").value],
-    ["Activité", ()=>val("activite"), "activite"],
-    ["Téléphone", ()=>val("telephone"), "telephone"],
-    ["Le téléphone est", ()=>val("telephoneA"), "telephoneA"],
-    ["Accès à internet", ()=>val("internet"), "internet"],
-    ["Recharge du téléphone", ()=>val("recharge"), "recharge"],
-    ["Mobile money", ()=>val("mobileMoney"), "mobileMoney"],
-    ["Langue parlée", ()=>val("langueParlee"), "langueParlee"],
-    ["Langue préférée", ()=>val("langue"), "langue"],
-    ["Lire et écrire", ()=>val("litEcrit"), "litEcrit"],
-    ["Qui remplit ce formulaire", ()=>val("remplitPar"), "remplitPar"],
+  ]],
+  ["Le problème", 2, [
+    ["Ce qui s’est passé", ()=>$("probleme").value.trim()],
+    ["Fréquence", ()=>val("frequence"), "frequence"],
+    ["Gravité", ()=>{ const i = Number(val("importance")); return i ? `${i}/5 · ${IMP[i-1]}` : ""; }, "importance"],
+  ]],
+  ["Vos habitudes actuelles", 3, [
+    ["Comment vous faites aujourd’hui", ()=>$("debrouille").value.trim()],
+    ["Ce qui déplaît le plus", ()=>val("manque"), "manque"],
+  ]],
+  ["En route vers l’outil", 4, [
+    ["L’action en un seul clic", ()=>$("solution").value.trim()],
+    ["Format préféré", ()=>val("format"), "format"],
+    ["Principal frein", ()=>val("frein"), "frein"],
   ]],
 ];
 function drawReview(){
@@ -2358,25 +2345,13 @@ $("review").addEventListener("click", e=>{
 });
 function checkStep(){
   if(step===0 && !val("domaines")) return "Choisissez un domaine pour continuer.";
-  if(step===1 && $("probleme").value.trim().length < 10){ $("probleme").focus(); return "Décrivez votre problème en une phrase au moins."; }
+  if(step===2 && $("probleme").value.trim().length < 10){ $("probleme").focus(); return "Racontez ce qui s’est passé, en une phrase au moins."; }
   return "";
 }
 // auto-avance après le choix du domaine
 $("domaines").addEventListener("change", ()=>{ setTimeout(()=>{ if(step===0) goto(1); }, 380); });
 $("prev").addEventListener("click", ()=>goto(Math.max(0,step-1)));
 
-$("toggleMore").addEventListener("click", ()=>{
-  const hidden = $("step1More").hidden;
-  $("step1More").hidden = !hidden;
-  $("toggleMore").textContent = hidden ? "Replier" : "En dire plus";
-});
-document.addEventListener("change", e=>{
-  if(e.target.name==="telephone"){
-    const smartphone = val("telephone")==="Smartphone";
-    const opt = document.querySelector('#participation input[value="Essayer l’application"]');
-    if(opt){ opt.closest("label").hidden = !smartphone; if(!smartphone) opt.checked = false; }
-  }
-});
 
 $("f").addEventListener("submit", async e=>{
   e.preventDefault();
@@ -2384,29 +2359,25 @@ $("f").addEventListener("submit", async e=>{
   const err = checkStep(); if(err){ formErr(err); return; }
   if(step < STEPS-1){ goto(step+1); return; }
 
-  const contact = $("contact").value.trim(), rappel = val("rappel"), okContact = !!rappel && rappel!=="Non";
+  const contact = $("contact").value.trim(), okContact = val("testeur")==="Oui, avec plaisir";
   if(!$("consentRgpd").checked){ formErr("Cochez la case sur l’utilisation de vos réponses pour pouvoir envoyer."); return; }
-  if(contact && !okContact){ formErr("Choisissez comment Geomessen peut vous rappeler, ou laissez le numéro vide."); return; }
+  if(contact && !okContact){ formErr("Répondez « Oui, avec plaisir » pour être recontacté, ou laissez le contact vide."); return; }
   if(!db){ formErr("L’envoi n’est pas disponible pour le moment. Réessayez dans un instant."); return; }
 
   const now = new Date().toISOString();
   const doc = {
     domaine:val("domaines"), probleme:$("probleme").value.trim(), debrouille:$("debrouille").value.trim(),
-    perte:$("perte").value.trim(), effort:$("effort").value.trim(), echec:$("echec").value.trim(),
-    tempsPris:val("tempsPris"), cout:val("cout"), blocage:$("blocage").value.trim(), distance:val("distance"),
-    duree:val("duree"), ampleur:val("ampleur"), tentative:$("tentative").value.trim(),
     solution:$("solution").value.trim(),
     frequence:val("frequence"), importance:Number(val("importance"))||0,
+    age:val("age"), outil:val("outil"), manque:val("manque"), format:val("format"), frein:val("frein"),
+    testeur:val("testeur"),
     ville:$("ville").value.trim(), region:$("region").value, province:$("province").value,
-    lat:null, lon:null, geoPrecision:"", age:$("age").value,
-    activite:val("activite"), telephone:val("telephone"), telephoneA:val("telephoneA"),
-    internet:val("internet"), recharge:val("recharge"), mobileMoney:val("mobileMoney"),
-    langueParlee:val("langueParlee"), langue:val("langue"), litEcrit:val("litEcrit"), remplitPar:val("remplitPar"),
-    rappel, participation:checked("participation"),
+    lat:null, lon:null, geoPrecision:"",
     precisions: PRECISABLES.reduce((o,k)=>{ const v = lirePrecision(k); if(v) o[k] = v; return o; }, {}),
     aContact: okContact, consentement:{rgpd:true, version:CONSENT_VERSION, date:now}, createdAt:now,
     trace:{app:APP_VERSION, appareil: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "Mobile" : "Ordinateur", langueNavigateur: navigator.language || "", fuseau: (Intl.DateTimeFormat().resolvedOptions().timeZone)||""}
   };
+
   $("next").disabled = true;
   try{
     if(doc.aContact){ doc.nom = $("nom").value.trim(); doc.contact = contact; }
@@ -2480,17 +2451,16 @@ function openIdea(d){
     ${(()=>{ const pr = d.precisions || {};
        const l = Object.keys(pr).filter(k=>pr[k]).map(k=>[(LIBELLES[k]||k), pr[k]]);
        return l.length ? `<div class="dsec"><h3>Dit avec ses mots</h3>${dl(l)}</div>` : ""; })()}
-    <div class="dsec"><h3>Le vécu</h3>${dl([["Comment vous vous en sortez",d.debrouille],["Ce que ça fait perdre",texteLibre(d.perte)],
-      ["Effort déjà consenti",texteLibre(d.effort)],["Quand ça ne marche pas",texteLibre(d.echec)],["Temps pris à chaque fois",d.tempsPris],["Coût à chaque fois",d.cout],
-      ["Ce qui empêche de régler soi-même",texteLibre(d.blocage)],["Distance du service",d.distance],["Depuis quand",d.duree],
-      ["Qui d’autre est concerné",d.ampleur],["Déjà tenté par",texteLibre(d.tentative)]])}</div>
+    <div class="dsec"><h3>Vos habitudes actuelles</h3>${dl([["Comment la personne fait aujourd’hui",d.debrouille],
+      ["Ce qui déplaît dans la méthode actuelle",d.manque],["L’action en un seul clic",d.solution]])}</div>
     <div class="dsec"><h3>Localisation</h3>${dl([["Région",d.region],["Province",d.province],["Commune / département",d.ville],
       ["Latitude",g.ll[1]],["Longitude",g.ll[0]],["Précision",g.prec?"Centre de la "+g.prec:"Non renseignée"],
       ["HASC",code(k.hc||k.hp||k.hr),1],["GID (GADM)",code(k.gc||k.gp||k.gr),1],["shapeID geoBoundaries",code(k.sc||k.sp||k.sr),1],["Code ISO région",code(k.iso),1]])}</div>
     <div class="dsec"><h3>Participant</h3>${dl([["Connexion",(TYPE_LBL[(d.identite||{}).type]||"")+((d.identite&&d.identite.valeur)?" · "+d.identite.valeur:"")],["Nom du compte",p&&p.name],
-      ["Âge",d.age],["Activité",d.activite],["Téléphone",d.telephone],["Téléphone à soi",d.telephoneA],["Internet",d.internet],["Recharge",d.recharge],["Mobile money",d.mobileMoney],
-      ["Langue parlée",d.langueParlee],["Langue préférée",d.langue],["Sait lire et écrire",d.litEcrit],["Formulaire rempli par",d.remplitPar]])}</div>
-    <div class="dsec"><h3>Contact</h3>${d.contact||d.nom ? dl([["Prénom",d.nom],["Contact",d.contact],["Souhait de rappel",d.rappel],["Accepte d’être recontacté",d.aContact?"Oui":"Non"],["Participation possible",(d.participation||[]).join(", ")]]) : `<p class="muted" style="margin:0;color:var(--muted)">Aucun contact laissé.</p>`}</div>
+      ["Âge",d.age],["Outil de navigation",d.outil],["Format préféré",d.format],["Principal frein",d.frein]])}</div>
+    ${(()=>{ const l = ANCIENS.map(([lbl,cle])=>[lbl, texteLibre(d[cle])]).filter(([,v])=>v);
+       return l.length ? `<div class="dsec"><h3>Réponses à l’ancien questionnaire</h3>${dl(l)}</div>` : ""; })()}
+    <div class="dsec"><h3>Contact</h3>${d.contact||d.nom ? dl([["Prénom",d.nom],["Contact",d.contact],["Accepte de tester",d.testeur],["Accepte d’être recontacté",d.aContact?"Oui":"Non"]]) : `<p class="muted" style="margin:0;color:var(--muted)">Aucun contact laissé.</p>`}</div>
     <div class="dsec"><h3>Traçabilité</h3>${dl([["ID réponse",code(d.id),1],["ID participant",code(d.uid),1],["Horodatage UTC",isoUTC(d.createdAt)],
       ["Consentement RGPD",c.rgpd?`Oui · version ${c.version||""} · ${isoUTC(c.date)}`:""],["Appareil",t.appareil],["Langue du navigateur",t.langueNavigateur],["Fuseau horaire",t.fuseau],["Version de l’application",t.app]])}</div>`;
   $("ideaModal").hidden = false; $("imClose").focus();
@@ -2557,7 +2527,7 @@ function renderDash(){
   const t = ideas.filter(d=>d.telephone), s = t.filter(d=>d.telephone!=="Smartphone").length;
   $("k-simple").textContent = t.length ? Math.round(s/t.length*100)+" %" : "n.d.";
   donut($("ch-dom"), count("domaine"), "réponse"); renderCnx();
-  bars("b-dom",count("domaine"),12); bars("b-tel",count("telephone")); bars("b-langue",count("langue")); bars("b-act",count("activite"));
+  bars("b-dom",count("domaine"),12); bars("b-tel",count("outil")); bars("b-langue",count("format")); bars("b-act",count("frein"));
   const q=$("q").value.trim().toLowerCase(), dom=$("dashDom").value;
   let list = ideas.filter(d=>matchZone(d, listZone)&&(!dom||d.domaine===dom)&&(!q||[d.probleme,d.solution,d.ville,d.domaine].join(" ").toLowerCase().includes(q)));
   if($("sort").value==="imp") list=[...list].sort((a,b)=>(b.importance||0)-(a.importance||0));
