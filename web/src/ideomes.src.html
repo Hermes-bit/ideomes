@@ -574,14 +574,20 @@ select:disabled{opacity:.55}
 .expwrap .chev{transition:transform .2s}
 .expwrap .btn[aria-expanded="true"] .chev{transform:rotate(180deg)}
 .expmenu{max-height:70vh;overflow-y:auto;position:absolute;right:0;top:calc(100% + 8px);z-index:20;width:min(340px,calc(100vw - 36px));background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:6px;box-shadow:0 20px 50px -15px rgba(0,0,0,.35);display:flex;flex-direction:column;animation:menuIn .18s ease}
-.expmenu button{display:flex;gap:12px;align-items:flex-start;text-align:left;border:0;background:none;padding:10px;border-radius:12px;cursor:pointer;color:var(--ink);font:inherit}
+.expmenu button{display:flex;gap:11px;align-items:flex-start;text-align:left;border:0;background:none;padding:9px 10px;border-radius:12px;cursor:pointer;color:var(--ink);font:inherit;width:100%}
 .expmenu button:hover,.expmenu button:focus-visible{background:var(--bg)}
 .expmenu button:disabled{opacity:.5;cursor:wait}
 .expmenu b{display:block;font-weight:600;font-size:.9rem}
 .expmenu small{display:block;color:var(--muted);font-size:.76rem;line-height:1.35}
-.expmenu .ext{flex:none;font:700 .66rem var(--body);letter-spacing:.04em;padding:5px 6px;border-radius:6px;margin-top:2px;min-width:38px;text-align:center}
+/* Largeur fixe : sans elle, la pastille GeoJSON, plus large, decalait le titre
+   des lignes cartographiques par rapport aux autres. */
+.expmenu .ext{flex:none;width:58px;font:700 .66rem var(--body);letter-spacing:.04em;padding:5px 4px;border-radius:7px;margin-top:2px;text-align:center}
+/* Groupes : une respiration et un filet, plutot qu'une liste de sept entrees. */
+.expgrp{display:flex;flex-direction:column}
+.expgrp + .expgrp{margin-top:6px;padding-top:7px;border-top:1px solid var(--line)}
+.exphead{font-size:.66rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:5px 10px 5px;user-select:none}
 .expmenu .ext.xlsx{background:var(--teal-soft);color:var(--teal)}
-.expmenu .ext.json{background:var(--bg);color:var(--c3);border:1px solid var(--line);font-size:.58rem}
+.expmenu .ext.json{background:var(--bg);color:var(--c3);border:1px solid var(--line);font-size:.55rem;letter-spacing:.02em}
 .expmenu .ext.csv{background:var(--orange-soft);color:var(--ink)}
 .exp .btn svg{width:16px;height:16px}
 .geo-cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
@@ -1056,13 +1062,22 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
       <div class="expwrap" id="exportBox" hidden>
         <button class="btn primary small" id="expBtn" type="button" aria-haspopup="true" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>Exporter<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
         <div class="expmenu" id="expMenu" role="menu" hidden>
-          <button type="button" role="menuitem" id="expXlsx"><span class="ext xlsx">XLSX</span><span><b>Classeur Excel complet</b><small>Indicateurs, localités, réponses, connexions et traçabilité</small></span></button>
-          <button type="button" role="menuitem" id="expCsv"><span class="ext csv">CSV</span><span><b>Réponses</b><small>Une ligne par réponse, avec latitude, longitude et traçabilité</small></span></button>
-          <button type="button" role="menuitem" id="expCsvLoc"><span class="ext csv">CSV</span><span><b>Localités</b><small>Régions, provinces et communes avec coordonnées et effectifs</small></span></button>
-          <button type="button" role="menuitem" id="expGeoPts"><span class="ext json">GeoJSON</span><span><b>Points des réponses</b><small>Pour QGIS : un point par réponse, tous les attributs et codes de jointure</small></span></button>
-          <button type="button" role="menuitem" id="expGeoLim"><span class="ext json">GeoJSON</span><span><b>Limites administratives</b><small>Régions, provinces, communes avec codes et nombre de réponses</small></span></button>
-          <button type="button" role="menuitem" id="expCsvRef"><span class="ext csv">CSV</span><span><b>Référentiel des codes</b><small>Les 409 unités administratives et leurs codes de jointure</small></span></button>
-          <button type="button" role="menuitem" id="expCsvCnx"><span class="ext csv">CSV</span><span><b>Connexions</b><small>Participants, mode de connexion, dates</small></span></button>
+          <div class="expgrp">
+            <span class="exphead">Tout en un</span>
+            <button type="button" role="menuitem" id="expXlsx"><span class="ext xlsx">XLSX</span><span><b>Classeur Excel complet</b><small>Indicateurs, localités, réponses, connexions et traçabilité</small></span></button>
+          </div>
+          <div class="expgrp">
+            <span class="exphead">Données à analyser</span>
+            <button type="button" role="menuitem" id="expCsv"><span class="ext csv">CSV</span><span><b>Réponses</b><small>Une ligne par réponse, avec latitude, longitude et traçabilité</small></span></button>
+            <button type="button" role="menuitem" id="expCsvLoc"><span class="ext csv">CSV</span><span><b>Localités</b><small>Régions, provinces et communes avec coordonnées et effectifs</small></span></button>
+            <button type="button" role="menuitem" id="expCsvCnx"><span class="ext csv">CSV</span><span><b>Connexions</b><small>Participants, mode de connexion, dates</small></span></button>
+          </div>
+          <div class="expgrp">
+            <span class="exphead">Cartographie</span>
+            <button type="button" role="menuitem" id="expGeoPts"><span class="ext json">GeoJSON</span><span><b>Points des réponses</b><small>Un point par réponse, tous les attributs et codes de jointure</small></span></button>
+            <button type="button" role="menuitem" id="expGeoLim"><span class="ext json">GeoJSON</span><span><b>Limites administratives</b><small>Régions, provinces, communes avec codes et nombre de réponses</small></span></button>
+            <button type="button" role="menuitem" id="expCsvRef"><span class="ext csv">CSV</span><span><b>Référentiel des codes</b><small>Les 409 unités administratives et leurs codes de jointure</small></span></button>
+          </div>
         </div>
       </div>
     </div>
