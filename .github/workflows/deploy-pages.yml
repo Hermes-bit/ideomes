@@ -25,17 +25,31 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      - name: Construire web/dist
-        env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-        run: python web/build.py
+
+      # APPLI EN PAUSE : tant que l'INSD et la CIL n'ont pas donné leur autorisation,
+      # on publie seulement la page d'attente (web/attente), aussi servie comme page 404
+      # pour que les anciens liens y mènent. L'appli elle-même n'est pas publiée.
+      - name: Assembler la page d'attente
+        run: |
+          mkdir -p _site
+          cp web/attente/index.html _site/index.html
+          cp web/attente/index.html _site/404.html
+          cp web/assets/ideomes-logo.png web/assets/ideomes-favicon.png web/assets/geomessen-wordmark.png _site/
+
+      # Pour remettre l'appli en ligne : supprimer l'étape ci-dessus, décommenter les deux
+      # étapes ci-dessous et remettre « path: web/dist » dans l'envoi de l'artefact.
+      # - uses: actions/setup-python@v5
+      #   with:
+      #     python-version: "3.12"
+      # - name: Construire web/dist
+      #   env:
+      #     SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      #     SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+      #   run: python web/build.py
+
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: web/dist
+          path: _site
       - id: deployment
         uses: actions/deploy-pages@v4

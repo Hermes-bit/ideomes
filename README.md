@@ -2,6 +2,13 @@
 
 **Geomessen Burkina Faso** · version 0.1.0 (30 septembre 2026)
 
+> **Statut : en pause.** Le projet attend deux autorisations, celle de l'Institut national de la
+> statistique et de la démographie (INSD) et celle de la Commission de l'informatique et des libertés
+> (CIL). En attendant, https://hermes-bit.github.io/ideomes/ affiche une page d'attente
+> ([`web/attente/index.html`](web/attente/index.html)) et aucune donnée n'est collectée.
+> Pour remettre l'appli en ligne, suivre la note du workflow
+> [`.github/workflows/deploy-pages.yml`](.github/workflows/deploy-pages.yml).
+
 Idéomès recueille les besoins et les idées des Burkinabè (appli mobile web), puis une équipe de
 15 agents IA, supervisée par des humains, les analyse, les priorise et suit leur réalisation.
 

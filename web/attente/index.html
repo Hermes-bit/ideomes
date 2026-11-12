@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Page d'attente publiée à la place de l'appli tant que l'INSD et la CIL n'ont pas donné leur
+     autorisation (voir .github/workflows/deploy-pages.yml). Elle sert aussi de page 404 :
+     les chemins des images sont donc absolus (/ideomes/…). Aucune ressource extérieure. -->
+<title>Idéomès | En attente d'autorisation</title>
+<meta name="description" content="Idéomès est en pause : le questionnaire rouvrira quand l'INSD et la CIL auront donné leur autorisation.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Idéomès">
+<meta property="og:title" content="Idéomès | En attente d'autorisation">
+<meta property="og:description" content="Le questionnaire rouvrira quand l'INSD et la CIL auront donné leur autorisation. Aucune donnée n'est collectée en attendant.">
+<meta property="og:image" content="https://hermes-bit.github.io/ideomes/ideomes-logo.png">
+<meta property="og:url" content="https://hermes-bit.github.io/ideomes/">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" sizes="128x128" href="/ideomes/ideomes-favicon.png">
+<link rel="apple-touch-icon" href="/ideomes/ideomes-favicon.png">
+<style>
+:root {
+  --bg: #F1F6F6; --surface: #FFFFFF; --ink: #14343C; --muted: #5C6D71; --line: #D5E2E2;
+  --teal: #0E5C63; --teal-soft: #E0EEEE; --orange: #E8833A; --orange-soft: #FDEBDC; --orange-line: #F2C39A;
+  --on-teal: #FFFFFF;
+  --shadow: 0 10px 30px -12px rgba(14, 92, 99, .28);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0B1A1D; --surface: #12262A; --ink: #E4EFEF; --muted: #9BB0B2; --line: #23393D;
+    --teal: #45A6AD; --teal-soft: #163136; --orange: #F0944F; --orange-soft: #3A2618; --orange-line: #6B4526;
+    --on-teal: #0B1A1D;
+    --shadow: 0 10px 30px -12px rgba(0, 0, 0, .6);
+    color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 17px;
+  line-height: 1.6;
+}
+main {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  padding: 40px 16px;
+}
+.carte {
+  width: 100%;
+  max-width: 640px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  padding: clamp(28px, 6vw, 48px);
+}
+.tete { display: flex; align-items: center; gap: 16px; margin-bottom: 28px; }
+.tete img { width: 64px; height: 64px; flex: none; }
+.tete b { display: block; font-size: 1.5rem; line-height: 1.2; letter-spacing: -.01em; }
+.tete span { color: var(--muted); font-size: .95rem; }
+.etat {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 14px 4px 10px;
+  border-radius: 999px;
+  background: var(--orange-soft);
+  border: 1.5px solid var(--orange-line);
+  font-weight: 600;
+  font-size: .9rem;
+}
+.etat::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--orange); }
+h1 { margin: 16px 0 16px; font-size: clamp(1.6rem, 5vw, 2.1rem); line-height: 1.2; text-wrap: balance; }
+p { margin: 0 0 14px; }
+.discret { color: var(--muted); }
+.boutons { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.boutons a {
+  display: inline-block;
+  padding: 11px 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1.5px solid var(--teal);
+}
+.boutons .principal { background: var(--teal); color: var(--on-teal); }
+.boutons .secondaire { color: var(--teal); }
+.boutons a:hover { filter: brightness(1.08); text-decoration: underline; }
+a:focus-visible { outline: 2px solid var(--teal); outline-offset: 3px; }
+footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px 14px;
+  padding: 20px 16px max(20px, env(safe-area-inset-bottom, 0px));
+  color: var(--muted);
+  font-size: .9rem;
+}
+footer img { height: 22px; width: auto; }
+@media (prefers-color-scheme: dark) { footer img { filter: brightness(0) invert(.92); } }
+</style>
+</head>
+<body>
+<main>
+  <div class="carte">
+    <div class="tete">
+      <img src="/ideomes/ideomes-logo.png" alt="" width="64" height="64">
+      <div><b>Idéomès</b><span>Les besoins du quotidien, commune par commune</span></div>
+    </div>
+    <span class="etat">En pause</span>
+    <h1>Idéomès attend son autorisation</h1>
+    <p>Idéomès recueille les difficultés que les Burkinabè rencontrent au quotidien et les situe à la commune, pour savoir quelles applications seraient vraiment utiles.</p>
+    <p>Avant de recevoir des réponses et d'en tirer des statistiques, il nous faut deux autorisations&nbsp;: celle de l'Institut national de la statistique et de la démographie (INSD), et celle de la Commission de l'informatique et des libertés (CIL), l'autorité de protection des données personnelles du Burkina Faso.</p>
+    <p class="discret">Le questionnaire est fermé en attendant. Aucune donnée n'est collectée.</p>
+    <div class="boutons">
+      <a class="principal" href="https://hermes-bit.github.io/portfolio-hermes-barry/#ideomes">Découvrir le projet</a>
+      <a class="secondaire" href="https://github.com/Hermes-bit/ideomes">Voir le code sur GitHub</a>
+    </div>
+  </div>
+</main>
+<footer>
+  <img src="/ideomes/geomessen-wordmark.png" alt="Géomessen Burkina Faso" width="112" height="22">
+  <span>Un projet d'<a href="https://hermes-bit.github.io/portfolio-hermes-barry/#contact" style="color:inherit">Hermès Barry</a></span>
+</footer>
+</body>
+</html>
