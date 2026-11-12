@@ -1294,7 +1294,7 @@ footer.site{margin-top:48px;padding-top:26px;border-top:1px solid var(--line);co
       <p>Vous restez l’auteur de ce que vous écrivez. En envoyant une idée, vous autorisez Geomessen, gratuitement et sans limite de durée, à l’utiliser pour étudier les besoins de la population et concevoir des applications, et à la citer de façon anonyme dans des études, rapports ou présentations. Cette autorisation ne donne lieu à aucune rémunération. Geomessen ne publie jamais votre nom ni votre contact sans votre accord.</p>
       <h2 id="cgu-7">7. Propriété intellectuelle</h2>
       <p>Le nom Idéomès, le nom et le logo Geomessen, les textes, le design et le code de l’application sont la propriété de Geomessen. © 2026 Geomessen. Tous droits réservés. Toute reproduction sans autorisation écrite est interdite.</p>
-      <p>Les limites administratives de la carte proviennent de geoBoundaries (domaine public).</p>
+      <p>Les limites administratives de la carte proviennent de geoBoundaries : régions et provinces de la Banque mondiale (licence CC BY 4.0), communes dans le domaine public.</p>
       <h2 id="cgu-8">8. Données personnelles</h2>
       <p>La collecte et l’utilisation de vos données sont décrites dans la page <button class="linkbtn" type="button" data-page="donnees">Protection des données</button>. Vous pouvez demander à tout moment l’accès, la correction ou la suppression de vos réponses.</p>
       <h2 id="cgu-9">9. Responsabilité</h2>
@@ -2135,7 +2135,7 @@ function rowsTrace(){
     {"Élément":"Nombre de participants connectés","Valeur":cnx.length},
     {"Élément":"Système de coordonnées","Valeur":"WGS 84 (EPSG:4326), degrés décimaux"},
     {"Élément":"Méthode de localisation","Valeur":"Point intérieur (pôle d’inaccessibilité) du polygone de la commune, sinon de la province, choisie par le participant. Aucune position GPS n’est collectée."},
-    {"Élément":"Contours administratifs","Valeur":"geoBoundaries gbOpen BFA ADM1-ADM3 (domaine public) : 13 régions, 45 provinces, 351 communes"},
+    {"Élément":"Contours administratifs","Valeur":"geoBoundaries gbOpen BFA ADM1-ADM3 : 13 régions, 45 provinces (Banque mondiale, CC BY 4.0), 351 communes (domaine public)"},
     {"Élément":"Consentement RGPD","Valeur":"Recueilli avant chaque envoi, version " + CONSENT_VERSION},
     {"Élément":"Jointure attributaire (QGIS)","Valeur":"Clés communes à toutes les feuilles : HASC (ex. BF.CT.KA.OU), GID GADM (ex. BFA.7.1.4_1), shapeID geoBoundaries (champ shapeID des couches gbOpen BFA ADM1-3), code ISO 3166-2 des régions (BF-01 à BF-13)."},
     {"Élément":"Jointure spatiale (QGIS)","Valeur":"Colonnes Latitude / Longitude (EPSG:4326) ou WKT ; ou fichier GeoJSON des points. Les points sont à l’intérieur de leur polygone : une jointure « intersecte » avec la couche communale retrouve la bonne commune."},

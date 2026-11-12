@@ -1,6 +1,7 @@
 """Référentiel territorial du Burkina Faso (13 régions, 45 provinces, 351 communes).
 
-Source des contours : geoBoundaries gbOpen BFA ADM1-ADM3 (domaine public), noms rattachés
+Source des contours : geoBoundaries gbOpen BFA ADM1-ADM3 (ADM1 et ADM2 : Banque mondiale,
+CC BY 4.0 ; ADM3 : domaine public), noms rattachés
 par jointure spatiale ; codes HASC et GID GADM pour les jointures SIG.
 """
 
